@@ -1,0 +1,24 @@
+{
+  "expo": {
+    "name": "PublicanDo",
+    "slug": "publicando",
+    "scheme": "publicando",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.publicando.app"
+    },
+    "android": {
+      "package": "com.publicando.app"
+    },
+    "extra": {
+      "googleWebClientId": "524623060357-qksijhnnrj19cs5e64ajgb8qv5gln3l5.apps.googleusercontent.com",
+      "googleAndroidClientId": "524623060357-n8d67nv4v4v59cst3thepo1a9api8hd7.apps.googleusercontent.com"
+    },
+    "plugins": [
+      "expo-web-browser"
+    ]
+  }
+}
