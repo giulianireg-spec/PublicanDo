@@ -1,36 +1,38 @@
 // src/utils/imageUtils.ts
-// REEMPLAZAR TODO EL CONTENIDO DEL ARCHIVO CON ESTE CÓDIGO
-
 import * as FileSystem from 'expo-file-system/legacy';
+import * as ImageManipulator from 'expo-image-manipulator';
 
 /**
- * Convierte una imagen local a base64
- * @param uri URI local de la imagen (file://)
- * @returns String base64 con formato data:image/jpeg;base64,...
+ * Comprime y convierte una imagen local a base64
  */
 export const convertImageToBase64 = async (uri: string): Promise<string> => {
   try {
-    console.log('🔄 URI de imagen:', uri);
-    
-    const base64 = await FileSystem.readAsStringAsync(uri, {
+    console.log('🔄 Comprimiendo imagen:', uri);
+
+    // Comprimir la imagen antes de convertir
+    const compressed = await ImageManipulator.manipulateAsync(
+      uri,
+      [{ resize: { width: 1200 } }], // máximo 1200px de ancho
+      {
+        compress: 0.7, // 70% de calidad
+        format: ImageManipulator.SaveFormat.JPEG,
+        base64: true,  // pedir base64 directamente
+      }
+    );
+
+    if (compressed.base64) {
+      console.log('✅ Imagen comprimida, tamaño base64:', compressed.base64.length);
+      return `data:image/jpeg;base64,${compressed.base64}`;
+    }
+
+    // Fallback: leer el archivo comprimido
+    const base64 = await FileSystem.readAsStringAsync(compressed.uri, {
       encoding: FileSystem.EncodingType.Base64,
     });
-    
-    console.log('✅ Conversión exitosa, tamaño:', base64.length);
-    
-    // Determinar el tipo MIME basado en la extensión
-    let mimeType = 'image/jpeg';
-    if (uri.toLowerCase().endsWith('.png')) {
-      mimeType = 'image/png';
-    } else if (uri.toLowerCase().endsWith('.gif')) {
-      mimeType = 'image/gif';
-    } else if (uri.toLowerCase().endsWith('.webp')) {
-      mimeType = 'image/webp';
-    }
-    
-    return `data:${mimeType};base64,${base64}`;
+    return `data:image/jpeg;base64,${base64}`;
+
   } catch (error) {
-    console.error('❌ Error convirtiendo imagen a base64:', error);
+    console.error('❌ Error procesando imagen:', error);
     throw new Error('No se pudo procesar la imagen');
   }
 };

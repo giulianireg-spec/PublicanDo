@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "874917514965",
+    "project_id": "guiando-appl",
+    "storage_bucket": "guiando-appl.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:874917514965:android:0c4fb054fcd3ae28191c5c",
+        "android_client_info": {
+          "package_name": "com.guiando.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "874917514965-a0g7b2h8p2f0fsb9tect83uk2pu4bol2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.guiando.app",
+            "certificate_hash": "114c776589d3f8bcf485366cfe6d3fd876aec369"
+          }
+        },
+        {
+          "client_id": "874917514965-ret4df42vdod3auu1gm9u1epl9q2g8m2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA20WqRScQGozaZ9y8TfmPxxqkn3GEzZxo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "874917514965-ret4df42vdod3auu1gm9u1epl9q2g8m2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
