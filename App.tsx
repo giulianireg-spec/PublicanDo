@@ -1,7 +1,7 @@
 // App.tsx
 // CORREGIDO: Manejo seguro de notificaciones para evitar crashes
 
-import '../src/utils/logger';
+import './src/utils/logger';
 import React, { useEffect, useRef } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
