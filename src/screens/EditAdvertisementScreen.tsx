@@ -410,11 +410,10 @@ const styles = StyleSheet.create({
   );
 
   // Helpers
-  const isPremium = advertisement.isPremium || false;
-  const isUserPremium = user?.isPremium || false;
-  const isBusinessUser = user?.subscriptionTier === 'business';
-  // ✅ CORREGIDO: Verificar si es seeder
-  const isSeeder = user?.role === 'seeder_free' || user?.role === 'seeder_business';
+  const isPremium = true;
+  const isUserPremium = true;
+  const isBusinessUser = true;
+  const isSeeder = user?.role === 'seeder';
 
   // ==================== EFFECTS ====================
 
