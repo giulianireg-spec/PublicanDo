@@ -15,7 +15,7 @@
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#7B2CBF"
+        "backgroundColor": "#7C3AED"
       }
     },
     "extra": {
@@ -39,6 +39,12 @@
       "expo-web-browser",
       "expo-video"
     ],
-    "owner": "rgiuliani3612"
+    "owner": "rgiuliani3612",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#7C3AED"
+    }
   }
 }
