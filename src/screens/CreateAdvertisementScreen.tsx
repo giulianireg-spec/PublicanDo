@@ -448,7 +448,7 @@ const styles = StyleSheet.create({
   const [showEndPicker, setShowEndPicker] = useState(false);
 
   // Helpers
-  const isSeeder = user?.role === 'seeder';
+  const isSeeder = ['seeder', 'admin', 'moderator'].includes(user?.role || '');
   const categoryConfig = getCategoryConfig(category);
   const availableSubcategories = getSubcategories(category);
   const categoryHasSubcategories = hasSubcategories(category);

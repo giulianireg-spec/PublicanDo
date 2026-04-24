@@ -413,7 +413,7 @@ const styles = StyleSheet.create({
   const isPremium = true;
   const isUserPremium = true;
   const isBusinessUser = true;
-  const isSeeder = user?.role === 'seeder';
+  const isSeeder = ['seeder', 'admin', 'moderator'].includes(user?.role || '');
 
   // ==================== EFFECTS ====================
 
