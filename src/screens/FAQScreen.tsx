@@ -300,7 +300,7 @@ const FAQScreen = ({ navigation }: any) => {
 
       <View style={styles.introContainer}>
         <Ionicons name="compass" size={40} color={COLORS.primary} />
-        <Text style={styles.introTitle}>Descubrí. Compartí. GuianDo.</Text>
+        <Text style={styles.introTitle}>Descubrí. Compartí. Guiá.</Text>
         <Text style={styles.introSubtitle}>
           Para quienes viajan a lo desconocido{'\n'}y para quienes redescubren lo propio
         </Text>
