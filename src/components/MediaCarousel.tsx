@@ -115,7 +115,11 @@ const MediaCarousel: React.FC<MediaCarouselProps> = ({
     if (item.type === 'image') {
       return (
         <View key={index} style={[styles.mediaContainer, { width: SCREEN_WIDTH, height }]}>
-          <Image source={{ uri: item.url }} style={styles.image} resizeMode="cover" />
+          <Image 
+            source={{ uri: item.url }} 
+            style={styles.image} 
+            resizeMode={item.url?.includes('disclaimer') ? 'contain' : 'cover'} 
+          />
         </View>
       );
     }
