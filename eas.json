@@ -38,7 +38,7 @@
         "EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID": "509198716878-fnic4uc0mde4q6v7hq04ugfsr5c8pmn0.apps.googleusercontent.com"
       },
       "android": {
-        "buildType": "apk",
+        "buildType": "app-bundle",
         "image": "ubuntu-22.04-jdk-17-ndk-r26b"
       }
     }
