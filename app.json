@@ -11,7 +11,7 @@
       "bundleIdentifier": "com.guiando.app"
     },
     "android": {
-      "package": "com.guiando.app",
+      "package": "com.guiando.apparg",
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
