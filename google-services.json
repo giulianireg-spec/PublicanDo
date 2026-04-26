@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:874917514965:android:0c4fb054fcd3ae28191c5c",
         "android_client_info": {
-          "package_name": "com.guiando.app"
+          "package_name": "com.guiando.apparg"
         }
       },
       "oauth_client": [
@@ -17,7 +17,7 @@
           "client_id": "874917514965-a0g7b2h8p2f0fsb9tect83uk2pu4bol2.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.guiando.app",
+            "package_name": "com.guiando.apparg",
             "certificate_hash": "114c776589d3f8bcf485366cfe6d3fd876aec369"
           }
         },
