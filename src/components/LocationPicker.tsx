@@ -227,47 +227,71 @@ const styles = StyleSheet.create({
   const searchAddress = async (query: string) => {
     setLoading(true);
     try {
-      // Agregar contexto de provincia/ciudad para mejores resultados locales
-      let searchQuery = query;
-      if (initialCity && initialProvince) {
-        searchQuery = `${query}, ${initialCity}, ${initialProvince}, Argentina`;
-      } else if (initialProvince) {
-        searchQuery = `${query}, ${initialProvince}, Argentina`;
-      } else {
-        searchQuery = `${query}, Argentina`;
-      }
-      
-      const response = await axios.get(
-        'https://nominatim.openstreetmap.org/search',
+      const PLACES_API_KEY = process.env.EXPO_PUBLIC_GOOGLE_PLACES_API_KEY;
+      const locationBias = initialCity
+        ? `${initialCity}, ${initialProvince}, Argentina`
+        : initialProvince
+        ? `${initialProvince}, Argentina`
+        : 'Argentina';
+
+      const autocompleteResponse = await axios.get(
+        'https://maps.googleapis.com/maps/api/place/autocomplete/json',
         {
           params: {
-            format: 'json',
-            q: searchQuery,
-            addressdetails: 1,
-            limit: 8,
-            'accept-language': 'es',
-            countrycodes: 'ar',
-          },
-          headers: {
-            'User-Agent': 'GuianDo/1.0',
+            input: `${query}, ${locationBias}`,
+            key: PLACES_API_KEY,
+            language: 'es',
+            components: 'country:ar',
+            types: 'address',
           },
         }
       );
 
-      const locations: LocationResult[] = response.data.map((item: any) => {
-        const addr = item.address || {};
-        return {
-          displayName: item.display_name,
-          address: [addr.road, addr.house_number].filter(Boolean).join(' ') || 
-                   addr.suburb || addr.neighbourhood || '',
-          city: addr.city || addr.town || addr.village || addr.municipality || '',
-          province: addr.state || '',
-          lat: parseFloat(item.lat),
-          lon: parseFloat(item.lon),
-        };
-      });
+      const predictions = autocompleteResponse.data.predictions || [];
 
-      setResults(locations);
+      const locations: LocationResult[] = await Promise.all(
+        predictions.slice(0, 6).map(async (prediction: any) => {
+          try {
+            const detailsResponse = await axios.get(
+              'https://maps.googleapis.com/maps/api/place/details/json',
+              {
+                params: {
+                  place_id: prediction.place_id,
+                  key: PLACES_API_KEY,
+                  language: 'es',
+                  fields: 'geometry,address_components,formatted_address',
+                },
+              }
+            );
+            const result = detailsResponse.data.result;
+            const components = result.address_components || [];
+            const getComponent = (type: string) =>
+              components.find((c: any) => c.types.includes(type))?.long_name || '';
+            const streetNumber = getComponent('street_number');
+            const route = getComponent('route');
+            const locality = getComponent('locality') || getComponent('sublocality') || getComponent('administrative_area_level_2');
+            const province = getComponent('administrative_area_level_1');
+            return {
+              displayName: result.formatted_address || prediction.description,
+              address: [route, streetNumber].filter(Boolean).join(' '),
+              city: locality,
+              province: province,
+              lat: result.geometry?.location?.lat || 0,
+              lon: result.geometry?.location?.lng || 0,
+            };
+          } catch {
+            return {
+              displayName: prediction.description,
+              address: prediction.description,
+              city: initialCity || '',
+              province: initialProvince || '',
+              lat: 0,
+              lon: 0,
+            };
+          }
+        })
+      );
+      setResults(locations.filter(l => l.lat !== 0));
     } catch (error) {
       console.error('Error buscando direcciones:', error);
       setResults([]);
@@ -275,7 +299,6 @@ const styles = StyleSheet.create({
       setLoading(false);
     }
   };
-
   // Usar ubicación actual
   const useCurrentLocation = async () => {
     setGettingLocation(true);
