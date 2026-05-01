@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
       clearTimeout(searchTimeout);
     }
 
-    if (query.length < 3) {
+    if (query.length < 5) {
       setResults([]);
       return;
     }
@@ -459,7 +459,7 @@ const styles = StyleSheet.create({
             keyExtractor={(item, index) => `${item.lat}-${item.lon}-${index}`}
             renderItem={renderResultItem}
             ListEmptyComponent={
-              searchQuery.length >= 3 ? (
+              searchQuery.length >= 5 ? (
                 <View style={styles.emptyContainer}>
                   <Ionicons name="location-outline" size={48} color={COLORS.grayLight} />
                   <Text style={styles.emptyText}>No se encontraron resultados</Text>
