@@ -234,55 +234,57 @@ const styles = StyleSheet.create({
         ? `${initialProvince}, Argentina`
         : 'Argentina';
 
-      const autocompleteResponse = await axios.get(
-        'https://maps.googleapis.com/maps/api/place/autocomplete/json',
+      // Places API (New)
+      const autocompleteResponse = await axios.post(
+        'https://places.googleapis.com/v1/places:autocomplete',
         {
-          params: {
-            input: `${query}, ${locationBias}`,
-            key: PLACES_API_KEY,
-            language: 'es',
-            components: 'country:ar',
-            types: 'address',
+          input: `${query}, ${locationBias}`,
+          includedRegionCodes: ['ar'],
+          languageCode: 'es',
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Goog-Api-Key': PLACES_API_KEY,
           },
         }
       );
 
-      const predictions = autocompleteResponse.data.predictions || [];
+      const suggestions = autocompleteResponse.data.suggestions || [];
 
       const locations: LocationResult[] = await Promise.all(
-        predictions.slice(0, 6).map(async (prediction: any) => {
+        suggestions.slice(0, 6).map(async (suggestion: any) => {
+          const prediction = suggestion.placePrediction;
           try {
             const detailsResponse = await axios.get(
-              'https://maps.googleapis.com/maps/api/place/details/json',
+              `https://places.googleapis.com/v1/${prediction.place}`,
               {
-                params: {
-                  place_id: prediction.place_id,
-                  key: PLACES_API_KEY,
-                  language: 'es',
-                  fields: 'geometry,address_components,formatted_address',
+                headers: {
+                  'X-Goog-Api-Key': PLACES_API_KEY,
+                  'X-Goog-FieldMask': 'location,addressComponents,formattedAddress',
                 },
               }
             );
-            const result = detailsResponse.data.result;
-            const components = result.address_components || [];
+            const result = detailsResponse.data;
+            const components = result.addressComponents || [];
             const getComponent = (type: string) =>
-              components.find((c: any) => c.types.includes(type))?.long_name || '';
+              components.find((c: any) => c.types?.includes(type))?.longText || '';
             const streetNumber = getComponent('street_number');
             const route = getComponent('route');
             const locality = getComponent('locality') || getComponent('sublocality') || getComponent('administrative_area_level_2');
             const province = getComponent('administrative_area_level_1');
             return {
-              displayName: result.formatted_address || prediction.description,
+              displayName: result.formattedAddress || prediction.text?.text || '',
               address: [route, streetNumber].filter(Boolean).join(' '),
               city: locality,
               province: province,
-              lat: result.geometry?.location?.lat || 0,
-              lon: result.geometry?.location?.lng || 0,
+              lat: result.location?.latitude || 0,
+              lon: result.location?.longitude || 0,
             };
           } catch {
             return {
-              displayName: prediction.description,
-              address: prediction.description,
+              displayName: prediction.text?.text || '',
+              address: prediction.text?.text || '',
               city: initialCity || '',
               province: initialProvince || '',
               lat: 0,
