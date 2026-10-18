@@ -8,6 +8,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import { useTheme } from '../context/ThemeContext';
 import { getNotifications, markNotificationRead, markAllNotificationsRead } from '../services/api';
+import { navigateFromNotificationData } from '../utils/notificationNavigation';
 
 const TYPE_CONFIG: Record<string, { icon: string; color: string }> = {
   approval:  { icon: 'checkmark-circle', color: '#4CAF50' },
@@ -72,6 +73,15 @@ const NotificationsScreen = ({ navigation }: any) => {
     setNotifications(prev => prev.map(n => n._id === id ? { ...n, read: true } : n));
   };
 
+  const handlePress = (item: any) => {
+    handleMarkRead(item._id).catch(e => console.error(e));
+    // Las notificaciones de guía llevan a la guía o a "Mis Guías"
+    const data = item.targetType === 'guide'
+      ? { ...item.data, targetType: 'guide', guideId: item.data?.guideId || item.relatedGuide }
+      : item.data;
+    navigateFromNotificationData(data);
+  };
+
   const handleMarkAllRead = async () => {
     await markAllNotificationsRead();
     setNotifications(prev => prev.map(n => ({ ...n, read: true })));
@@ -95,7 +105,7 @@ const NotificationsScreen = ({ navigation }: any) => {
     return (
       <TouchableOpacity
         style={[styles.item, !item.read && styles.itemUnread]}
-        onPress={() => handleMarkRead(item._id)}
+        onPress={() => handlePress(item)}
         activeOpacity={0.7}
       >
         <View style={[styles.iconContainer, { backgroundColor: config.color + '20' }]}>

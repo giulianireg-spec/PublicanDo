@@ -8,6 +8,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AuthProvider } from './src/context/AuthContext';
 import AppNavigator from './src/navigation/AppNavigator';
 import Toast from 'react-native-toast-message';
+import { navigateFromNotificationData } from './src/utils/notificationNavigation';
 
 // ✅ Importar notificaciones de forma segura
 let Notifications: any = null;
@@ -30,6 +31,9 @@ try {
 } catch (error) {
   console.warn('⚠️ Sistema de notificaciones no disponible:', error);
 }
+
+// Evita repetir la navegación de arranque si el efecto se vuelve a ejecutar
+let handledColdStartId: string | undefined;
 
 export default function App() {
   const notificationListener = useRef<any>(null);
@@ -94,15 +98,7 @@ export default function App() {
                 console.log('👆 Notificación tocada:', response);
                 
                 // ✅ Verificar que response.notification existe
-                if (response?.notification?.request?.content?.data) {
-                  const data = response.notification.request.content.data;
-                  
-                  if (data?.type === 'approved' || data?.type === 'rejected') {
-                    console.log('→ Navegar a Mis Publicidades');
-                  } else if (data?.type === 'new_pending') {
-                    console.log('→ Navegar a AdminDashboard');
-                  }
-                }
+                navigateFromNotificationData(response?.notification?.request?.content?.data);
               } catch (err) {
                 console.warn('⚠️ Error procesando respuesta de notificación:', err);
               }
@@ -111,6 +107,20 @@ export default function App() {
         }
       } catch (error) {
         console.warn('⚠️ Error configurando listener de respuestas:', error);
+      }
+
+      try {
+        // Si la app se abrió desde cerrada tocando una notificación
+        if (typeof Notifications.getLastNotificationResponseAsync === 'function') {
+          const lastResponse = await Notifications.getLastNotificationResponseAsync();
+          const lastId = lastResponse?.notification?.request?.identifier;
+          if (lastResponse && lastId !== handledColdStartId) {
+            handledColdStartId = lastId;
+            navigateFromNotificationData(lastResponse.notification?.request?.content?.data);
+          }
+        }
+      } catch (error) {
+        console.warn('⚠️ Error leyendo la última notificación tocada:', error);
       }
     };
 

@@ -5,6 +5,7 @@ import React, { useState, useLayoutEffect } from 'react';
 import { TouchableOpacity, View, StyleSheet, Modal, ScrollView, Text, Alert, Image, StatusBar, Platform } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
+import { navigationRef, flushPendingNavigation } from './navigationRef';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
@@ -215,7 +216,6 @@ const AppNavigatorInner = () => {
   const [registerModalVisible, setRegisterModalVisible] = useState(false);
   const [forgotPasswordModalVisible, setForgotPasswordModalVisible] = useState(false);
   const [userMenuVisible, setUserMenuVisible] = useState(false);
-  const navigationRef = React.useRef<any>(null);
 
   const isSeeder = user?.role === 'seeder';
 
@@ -269,7 +269,7 @@ const AppNavigatorInner = () => {
   });
 
   return (
-    <NavigationContainer ref={navigationRef}>
+    <NavigationContainer ref={navigationRef} onReady={flushPendingNavigation}>
       <StatusBar barStyle="light-content" backgroundColor={COLORS.primary} />
       <Stack.Navigator
         screenOptions={{
