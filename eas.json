@@ -10,7 +10,8 @@
       "env": {
         "EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID": "509198716878-nvuvkcpnfb74s171pegi81cee10c7h0m.apps.googleusercontent.com",
         "EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID": "509198716878-fnic4uc0mde4q6v7hq04ugfsr5c8pmn0.apps.googleusercontent.com",
-        "EXPO_PUBLIC_GOOGLE_PLACES_API_KEY": "AIzaSyBhjayZ1_w3W7yCvu6gbG5DJj9-IOCJDEU"
+        "EXPO_PUBLIC_GOOGLE_PLACES_API_KEY": "AIzaSyBhjayZ1_w3W7yCvu6gbG5DJj9-IOCJDEU",
+        "EXPO_PUBLIC_API_URL": "https://guiando-backend-509198716878.us-east1.run.app/api"
       },
       "android": {
         "buildType": "apk",
@@ -26,7 +27,8 @@
       "env": {
         "EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID": "509198716878-nvuvkcpnfb74s171pegi81cee10c7h0m.apps.googleusercontent.com",
         "EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID": "509198716878-fnic4uc0mde4q6v7hq04ugfsr5c8pmn0.apps.googleusercontent.com",
-        "EXPO_PUBLIC_GOOGLE_PLACES_API_KEY": "AIzaSyBhjayZ1_w3W7yCvu6gbG5DJj9-IOCJDEU"
+        "EXPO_PUBLIC_GOOGLE_PLACES_API_KEY": "AIzaSyBhjayZ1_w3W7yCvu6gbG5DJj9-IOCJDEU",
+        "EXPO_PUBLIC_API_URL": "https://guiando-backend-509198716878.us-east1.run.app/api"
       },
       "android": {
         "buildType": "apk",
@@ -38,7 +40,8 @@
       "env": {
         "EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID": "509198716878-nvuvkcpnfb74s171pegi81cee10c7h0m.apps.googleusercontent.com",
         "EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID": "509198716878-fnic4uc0mde4q6v7hq04ugfsr5c8pmn0.apps.googleusercontent.com",
-        "EXPO_PUBLIC_GOOGLE_PLACES_API_KEY": "AIzaSyBhjayZ1_w3W7yCvu6gbG5DJj9-IOCJDEU"
+        "EXPO_PUBLIC_GOOGLE_PLACES_API_KEY": "AIzaSyBhjayZ1_w3W7yCvu6gbG5DJj9-IOCJDEU",
+        "EXPO_PUBLIC_API_URL": "https://guiando-backend-509198716878.us-east1.run.app/api"
       },
       "android": {
         "buildType": "app-bundle",

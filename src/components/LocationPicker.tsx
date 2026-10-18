@@ -1,7 +1,7 @@
 // src/components/LocationPicker.tsx
 // Componente para seleccionar ubicación con autocomplete y GPS
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
   View,
   Text,
@@ -19,7 +19,10 @@ import { useTheme } from '../context/ThemeContext';
 import { reverseGeocode } from '../services/geoService';
 import axios from 'axios';
 
+const PLACES_API_KEY = process.env.EXPO_PUBLIC_GOOGLE_PLACES_API_KEY;
+
 interface LocationResult {
+  placeId?: string;
   displayName: string;
   address: string;
   city: string;
@@ -223,11 +226,15 @@ const styles = StyleSheet.create({
     setSearchTimeout(timeout);
   }, [searchTimeout]);
 
-  // Buscar direcciones con Nominatim
+  // Token de sesión de Places: agrupa autocompletado + detalle en una sola sesión facturable
+  const newSessionToken = () =>
+    Date.now().toString(36) + Math.random().toString(36).slice(2, 12);
+  const sessionTokenRef = useRef<string>(newSessionToken());
+
+  // Buscar direcciones con Google Places (solo autocompletado; el detalle se pide al seleccionar)
   const searchAddress = async (query: string) => {
     setLoading(true);
     try {
-      const PLACES_API_KEY = process.env.EXPO_PUBLIC_GOOGLE_PLACES_API_KEY;
       const locationBias = initialCity
         ? `${initialCity}, ${initialProvince}, Argentina`
         : initialProvince
@@ -241,6 +248,7 @@ const styles = StyleSheet.create({
           input: `${query}, ${locationBias}`,
           includedRegionCodes: ['ar'],
           languageCode: 'es',
+          sessionToken: sessionTokenRef.current,
         },
         {
           headers: {
@@ -252,48 +260,22 @@ const styles = StyleSheet.create({
 
       const suggestions = autocompleteResponse.data.suggestions || [];
 
-      const locations: LocationResult[] = await Promise.all(
-        suggestions.slice(0, 6).map(async (suggestion: any) => {
+      const locations: LocationResult[] = suggestions
+        .filter((suggestion: any) => suggestion.placePrediction)
+        .slice(0, 6)
+        .map((suggestion: any) => {
           const prediction = suggestion.placePrediction;
-          try {
-            const detailsResponse = await axios.get(
-              `https://places.googleapis.com/v1/${prediction.place}`,
-              {
-                headers: {
-                  'X-Goog-Api-Key': PLACES_API_KEY,
-                  'X-Goog-FieldMask': 'location,addressComponents,formattedAddress',
-                },
-              }
-            );
-            const result = detailsResponse.data;
-            const components = result.addressComponents || [];
-            const getComponent = (type: string) =>
-              components.find((c: any) => c.types?.includes(type))?.longText || '';
-            const streetNumber = getComponent('street_number');
-            const route = getComponent('route');
-            const locality = getComponent('locality') || getComponent('sublocality') || getComponent('administrative_area_level_2');
-            const province = getComponent('administrative_area_level_1');
-            return {
-              displayName: result.formattedAddress || prediction.text?.text || '',
-              address: [route, streetNumber].filter(Boolean).join(' '),
-              city: locality,
-              province: province,
-              lat: result.location?.latitude || 0,
-              lon: result.location?.longitude || 0,
-            };
-          } catch {
-            return {
-              displayName: prediction.text?.text || '',
-              address: prediction.text?.text || '',
-              city: initialCity || '',
-              province: initialProvince || '',
-              lat: 0,
-              lon: 0,
-            };
-          }
-        })
-      );
-      setResults(locations.filter(l => l.lat !== 0));
+          return {
+            placeId: prediction.place,
+            displayName: prediction.structuredFormat?.mainText?.text || prediction.text?.text || '',
+            address: prediction.structuredFormat?.mainText?.text || prediction.text?.text || '',
+            city: prediction.structuredFormat?.secondaryText?.text || '',
+            province: '',
+            lat: 0,
+            lon: 0,
+          };
+        });
+      setResults(locations);
     } catch (error) {
       console.error('Error buscando direcciones:', error);
       setResults([]);
@@ -301,6 +283,45 @@ const styles = StyleSheet.create({
       setLoading(false);
     }
   };
+
+  // Obtener coordenadas y componentes de la dirección elegida (cierra la sesión de Places)
+  const fetchPlaceDetails = async (result: LocationResult): Promise<LocationResult | null> => {
+    try {
+      const detailsResponse = await axios.get(
+        `https://places.googleapis.com/v1/${result.placeId}`,
+        {
+          params: { sessionToken: sessionTokenRef.current, languageCode: 'es' },
+          headers: {
+            'X-Goog-Api-Key': PLACES_API_KEY,
+            'X-Goog-FieldMask': 'location,addressComponents,formattedAddress',
+          },
+        }
+      );
+      const details = detailsResponse.data;
+      const components = details.addressComponents || [];
+      const getComponent = (type: string) =>
+        components.find((c: any) => c.types?.includes(type))?.longText || '';
+      const streetNumber = getComponent('street_number');
+      const route = getComponent('route');
+      const locality = getComponent('locality') || getComponent('sublocality') || getComponent('administrative_area_level_2');
+      const province = getComponent('administrative_area_level_1');
+      if (!details.location) return null;
+      return {
+        displayName: details.formattedAddress || result.displayName,
+        address: [route, streetNumber].filter(Boolean).join(' ') || result.address,
+        city: locality || initialCity || '',
+        province: province || initialProvince || '',
+        lat: details.location.latitude,
+        lon: details.location.longitude,
+      };
+    } catch (error) {
+      console.error('Error obteniendo detalle de dirección:', error);
+      return null;
+    } finally {
+      sessionTokenRef.current = newSessionToken();
+    }
+  };
+
   // Usar ubicación actual
   const useCurrentLocation = async () => {
     setGettingLocation(true);
@@ -363,7 +384,18 @@ const styles = StyleSheet.create({
   };
 
   // Seleccionar resultado
-  const handleSelectResult = (result: LocationResult) => {
+  const handleSelectResult = async (selected: LocationResult) => {
+    let result = selected;
+    if (selected.placeId) {
+      setLoading(true);
+      const details = await fetchPlaceDetails(selected);
+      setLoading(false);
+      if (!details) {
+        Alert.alert('Error', 'No pudimos obtener la ubicación de esa dirección. Probá con otra.');
+        return;
+      }
+      result = details;
+    }
     onSelect({
       address: result.address,
       city: result.city,
