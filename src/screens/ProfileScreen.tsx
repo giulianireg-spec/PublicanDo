@@ -14,6 +14,7 @@ import {
   Platform,
   Image,
   Switch,
+  Modal,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
@@ -21,7 +22,7 @@ import Toast from 'react-native-toast-message';
 import { useAuth } from '../context/AuthContext';
 import { useTheme, ThemeMode } from '../context/ThemeContext';
 import { CATEGORIES } from '../constants/categories';
-import { getProfile, updateProfile, changePassword, UserProfile } from '../services/profileApi';
+import { getProfile, updateProfile, changePassword, UserProfile, deleteAccount, DELETE_ACCOUNT_CONFIRMATION } from '../services/profileApi';
 import { uploadImage } from '../services/api';
 import { convertImageToBase64 } from '../utils/imageUtils';
 
@@ -72,6 +73,14 @@ const styles = StyleSheet.create({
   // ── Guardar ───────────────────────────────────────────────────────────────
   saveButton: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', margin: 16, padding: 16, borderRadius: 12, gap: 8, shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 8, elevation: 8 },
   saveButtonDisabled: { opacity: 0.6 },
+  deleteAccountButton: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, padding: 14, borderRadius: 10, borderWidth: 1.5 },
+  deleteAccountButtonText: { fontSize: 16, fontWeight: '700' },
+  deleteModalBackdrop: { flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.6)', justifyContent: 'center', padding: 24 },
+  deleteModalCard: { borderRadius: 16, padding: 20, gap: 12 },
+  deleteModalText: { fontSize: 14, lineHeight: 20 },
+  deleteModalActions: { flexDirection: 'row', gap: 12, marginTop: 4 },
+  deleteModalButton: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingVertical: 14, borderRadius: 10 },
+  deleteModalButtonText: { fontSize: 16, fontWeight: '700' },
   saveButtonText: { fontSize: 18, fontWeight: '700' },
   // ── Contraseña ────────────────────────────────────────────────────────────
   passwordToggle: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
@@ -87,7 +96,10 @@ const styles = StyleSheet.create({
   bottomPadding: { height: 20 },
 });
 
-  const { user, updateUser } = useAuth();
+  const { user, updateUser, logout } = useAuth();
+  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+  const [deleteConfirmText, setDeleteConfirmText] = useState('');
+  const [deletingAccount, setDeletingAccount] = useState(false);
   const { colors: COLORS, themeMode, isDark, setThemeMode } = useTheme();
   
   // Estados de carga
@@ -269,6 +281,26 @@ const styles = StyleSheet.create({
   };
 
   const handleNavigateToLegal = () => navigation.navigate('Legal');
+
+  const handleDeleteAccount = async () => {
+    if (deleteConfirmText.trim().toUpperCase() !== DELETE_ACCOUNT_CONFIRMATION) return;
+    setDeletingAccount(true);
+    try {
+      await deleteAccount();
+      setDeleteModalVisible(false);
+      Toast.show({ type: 'success', text1: 'Cuenta eliminada', text2: 'Tu cuenta y tus datos fueron eliminados', position: 'bottom' });
+      await logout();
+    } catch (error: any) {
+      Toast.show({
+        type: 'error',
+        text1: 'No se pudo eliminar la cuenta',
+        text2: error?.response?.data?.message || 'Intentá de nuevo más tarde',
+        position: 'bottom',
+      });
+    } finally {
+      setDeletingAccount(false);
+    }
+  };
 
   // ── Opciones de tema ────────────────────────────────────────────────────────
   const themeOptions: { mode: ThemeMode; label: string; icon: string; desc: string }[] = [
@@ -570,9 +602,77 @@ const styles = StyleSheet.create({
             </View>
           )}
         </View>
-        
+
+        {/* Eliminar cuenta (requerido por Google Play) */}
+        {user?.role !== 'admin' && (
+          <View style={[styles.section, { backgroundColor: COLORS.white, shadowColor: COLORS.shadow }]}>
+            <Text style={[styles.sectionTitle, { color: COLORS.text }]}>🗑️ Eliminar cuenta</Text>
+            <Text style={[styles.sectionSubtitle, { color: COLORS.gray }]}>
+              Se borran tu cuenta, tus publicaciones, tus guías y tus valoraciones. No se puede deshacer.
+            </Text>
+            <TouchableOpacity
+              style={[styles.deleteAccountButton, { borderColor: COLORS.error }]}
+              onPress={() => {
+                setDeleteConfirmText('');
+                setDeleteModalVisible(true);
+              }}
+            >
+              <Ionicons name="trash-outline" size={20} color={COLORS.error} />
+              <Text style={[styles.deleteAccountButtonText, { color: COLORS.error }]}>Eliminar mi cuenta</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+
         <View style={styles.bottomPadding} />
       </ScrollView>
+
+      <Modal visible={deleteModalVisible} transparent animationType="fade" onRequestClose={() => !deletingAccount && setDeleteModalVisible(false)}>
+        <View style={styles.deleteModalBackdrop}>
+          <View style={[styles.deleteModalCard, { backgroundColor: COLORS.cardBackground }]}>
+            <Text style={[styles.sectionTitle, { color: COLORS.text }]}>¿Eliminar tu cuenta?</Text>
+            <Text style={[styles.deleteModalText, { color: COLORS.textSecondary }]}>
+              Vamos a borrar tu cuenta y todo tu contenido: publicaciones, guías, fotos y valoraciones. Esta acción no se puede deshacer.
+            </Text>
+            <Text style={[styles.label, { color: COLORS.text }]}>
+              Escribí {DELETE_ACCOUNT_CONFIRMATION} para confirmar
+            </Text>
+            <TextInput
+              value={deleteConfirmText}
+              onChangeText={setDeleteConfirmText}
+              autoCapitalize="characters"
+              autoCorrect={false}
+              editable={!deletingAccount}
+              placeholder={DELETE_ACCOUNT_CONFIRMATION}
+              placeholderTextColor={COLORS.gray}
+              style={[styles.input, { backgroundColor: COLORS.inputBackground, color: COLORS.text }]}
+            />
+            <View style={styles.deleteModalActions}>
+              <TouchableOpacity
+                style={[styles.deleteModalButton, { backgroundColor: COLORS.inputBackground }]}
+                onPress={() => setDeleteModalVisible(false)}
+                disabled={deletingAccount}
+              >
+                <Text style={[styles.deleteModalButtonText, { color: COLORS.text }]}>Cancelar</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[
+                  styles.deleteModalButton,
+                  { backgroundColor: COLORS.error },
+                  deleteConfirmText.trim().toUpperCase() !== DELETE_ACCOUNT_CONFIRMATION && styles.saveButtonDisabled,
+                ]}
+                onPress={handleDeleteAccount}
+                disabled={deletingAccount || deleteConfirmText.trim().toUpperCase() !== DELETE_ACCOUNT_CONFIRMATION}
+              >
+                {deletingAccount ? (
+                  <ActivityIndicator color="#FFFFFF" />
+                ) : (
+                  <Text style={[styles.deleteModalButtonText, { color: '#FFFFFF' }]}>Eliminar</Text>
+                )}
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </KeyboardAvoidingView>
   );
 };

@@ -64,3 +64,9 @@ export const uploadAvatar = async (base64Image: string): Promise<{ avatarUrl: st
   const response = await api.post('/profile/avatar', { image: base64Image });
   return response.data;
 };
+// Eliminar la cuenta y todos sus datos (requiere confirmación explícita)
+export const DELETE_ACCOUNT_CONFIRMATION = 'ELIMINAR';
+export const deleteAccount = async (): Promise<{ message: string }> => {
+  const response = await api.delete('/profile', { data: { confirm: DELETE_ACCOUNT_CONFIRMATION } });
+  return response.data;
+};
