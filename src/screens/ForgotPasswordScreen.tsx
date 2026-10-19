@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   emailHighlight: {
-    color: COLORS.primary,
+    color: COLORS.primaryText,
     fontWeight: '600',
   },
   // ✅ NUEVO: Estilos para el infoBox
@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
     opacity: 0.6,
   },
   primaryButtonText: {
-    color: COLORS.white,
+    color: COLORS.onPrimary,
     fontSize: 18,
     fontWeight: '700',
   },
@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   resendButtonText: {
-    color: COLORS.primary,
+    color: COLORS.primaryText,
     fontSize: 14,
     fontWeight: '600',
   },
@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   loginLinkText: {
-    color: COLORS.primary,
+    color: COLORS.primaryText,
     fontSize: 16,
     fontWeight: '600',
   },
@@ -447,7 +447,7 @@ const styles = StyleSheet.create({
         {/* Header */}
         <View style={styles.header}>
           <View style={styles.iconContainer}>
-            <Ionicons name="key" size={48} color={COLORS.primary} />
+            <Ionicons name="key" size={48} color={COLORS.primaryText} />
           </View>
           <Text style={styles.title}>Recuperar Contraseña</Text>
           <Text style={styles.subtitle}>
@@ -490,10 +490,10 @@ const styles = StyleSheet.create({
               disabled={loading}
             >
               {loading ? (
-                <ActivityIndicator color={COLORS.white} />
+                <ActivityIndicator color={COLORS.onPrimary} />
               ) : (
                 <>
-                  <Ionicons name="send" size={20} color={COLORS.white} />
+                  <Ionicons name="send" size={20} color={COLORS.onPrimary} />
                   <Text style={styles.primaryButtonText}>Enviar Código</Text>
                 </>
               )}
@@ -536,10 +536,10 @@ const styles = StyleSheet.create({
               disabled={loading}
             >
               {loading ? (
-                <ActivityIndicator color={COLORS.white} />
+                <ActivityIndicator color={COLORS.onPrimary} />
               ) : (
                 <>
-                  <Ionicons name="checkmark-circle" size={20} color={COLORS.white} />
+                  <Ionicons name="checkmark-circle" size={20} color={COLORS.onPrimary} />
                   <Text style={styles.primaryButtonText}>Verificar Código</Text>
                 </>
               )}
@@ -623,10 +623,10 @@ const styles = StyleSheet.create({
               disabled={loading}
             >
               {loading ? (
-                <ActivityIndicator color={COLORS.white} />
+                <ActivityIndicator color={COLORS.onPrimary} />
               ) : (
                 <>
-                  <Ionicons name="checkmark-done" size={20} color={COLORS.white} />
+                  <Ionicons name="checkmark-done" size={20} color={COLORS.onPrimary} />
                   <Text style={styles.primaryButtonText}>Cambiar Contraseña</Text>
                 </>
               )}
@@ -640,7 +640,7 @@ const styles = StyleSheet.create({
           onPress={onBackToLogin}
           disabled={loading}
         >
-          <Ionicons name="arrow-back" size={16} color={COLORS.primary} />
+          <Ionicons name="arrow-back" size={16} color={COLORS.primaryText} />
           <Text style={styles.loginLinkText}>Volver a iniciar sesión</Text>
         </TouchableOpacity>
       </ScrollView>

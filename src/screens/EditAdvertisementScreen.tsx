@@ -186,7 +186,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   businessTitle: {
-    color: '#6C5CE7',
+    color: '#4D7C0F',
     marginBottom: 0,
   },
   businessField: {
@@ -343,7 +343,7 @@ const styles = StyleSheet.create({
   },
   submitButtonText: {
     marginLeft: 8,
-    color: COLORS.white,
+    color: COLORS.onPrimary,
     fontSize: 18,
     fontWeight: '700',
   },
@@ -766,7 +766,7 @@ const styles = StyleSheet.create({
                 if (!value) setSchedule({});
               }}
               trackColor={{ false: COLORS.grayLight, true: COLORS.secondary }}
-              thumbColor={hasSchedule ? COLORS.primary : COLORS.gray}
+              thumbColor={hasSchedule ? COLORS.primaryDark : COLORS.gray}
             />
           </View>
           {hasSchedule && (
@@ -781,7 +781,7 @@ const styles = StyleSheet.create({
         {isBusinessUser && (
           <View style={styles.section}>
             <View style={styles.businessHeader}>
-              <Ionicons name="briefcase" size={20} color="#6C5CE7" />
+              <Ionicons name="briefcase" size={20} color="#4D7C0F" />
               <Text style={[styles.sectionTitle, styles.businessTitle]}>Organización Business</Text>
             </View>
             <Text style={styles.helperText}>
@@ -852,7 +852,7 @@ const styles = StyleSheet.create({
               onFocus={() => setShowLocalitySuggestions(true)}
             />
             {loadingLocalities && (
-              <ActivityIndicator size="small" color={COLORS.primary} style={styles.loadingIndicator} />
+              <ActivityIndicator size="small" color={COLORS.primaryText} style={styles.loadingIndicator} />
             )}
 
             {/* ✅ CORREGIDO: Usar ScrollView con map en lugar de FlatList para evitar warning */}
@@ -869,7 +869,7 @@ const styles = StyleSheet.create({
                       style={styles.suggestionItem} 
                       onPress={() => handleSelectLocality(item)}
                     >
-                      <Ionicons name="location" size={16} color={COLORS.primary} />
+                      <Ionicons name="location" size={16} color={COLORS.primaryText} />
                       <Text style={styles.suggestionText}>{item}</Text>
                     </TouchableOpacity>
                   ))}
@@ -887,7 +887,7 @@ const styles = StyleSheet.create({
               value={hasSpecificAddress}
               onValueChange={setHasSpecificAddress}
               trackColor={{ false: COLORS.grayLight, true: COLORS.secondary }}
-              thumbColor={hasSpecificAddress ? COLORS.primary : COLORS.gray}
+              thumbColor={hasSpecificAddress ? COLORS.primaryDark : COLORS.gray}
             />
           </View>
 
@@ -913,7 +913,7 @@ const styles = StyleSheet.create({
               value={hasTemporalPeriod}
               onValueChange={setHasTemporalPeriod}
               trackColor={{ false: COLORS.grayLight, true: COLORS.secondary }}
-              thumbColor={hasTemporalPeriod ? COLORS.primary : COLORS.gray}
+              thumbColor={hasTemporalPeriod ? COLORS.primaryDark : COLORS.gray}
             />
           </View>
 
@@ -923,7 +923,7 @@ const styles = StyleSheet.create({
                 <View style={styles.datePickerColumn}>
                   <Text style={styles.label}>Fecha de inicio</Text>
                   <TouchableOpacity style={styles.dateButton} onPress={() => setShowStartPicker(true)}>
-                    <Ionicons name="calendar" size={20} color={COLORS.primary} />
+                    <Ionicons name="calendar" size={20} color={COLORS.primaryText} />
                     <Text style={styles.dateText}>{formatDate(startDate)}</Text>
                   </TouchableOpacity>
                 </View>
@@ -931,7 +931,7 @@ const styles = StyleSheet.create({
                 <View style={styles.datePickerColumn}>
                   <Text style={styles.label}>Fecha de fin</Text>
                   <TouchableOpacity style={styles.dateButton} onPress={() => setShowEndPicker(true)}>
-                    <Ionicons name="calendar" size={20} color={COLORS.primary} />
+                    <Ionicons name="calendar" size={20} color={COLORS.primaryText} />
                     <Text style={styles.dateText}>{formatDate(endDate)}</Text>
                   </TouchableOpacity>
                 </View>
@@ -975,14 +975,14 @@ const styles = StyleSheet.create({
                 value={hasProfessionalLicense}
                 onValueChange={setHasProfessionalLicense}
                 trackColor={{ false: COLORS.grayLight, true: COLORS.secondary }}
-                thumbColor={hasProfessionalLicense ? COLORS.primary : COLORS.gray}
+                thumbColor={hasProfessionalLicense ? COLORS.primaryDark : COLORS.gray}
               />
             </View>
 
             {hasProfessionalLicense && (
               <View style={styles.licenseInputContainer}>
                 <View style={styles.licenseHeader}>
-                  <Ionicons name="document-text" size={20} color={COLORS.primary} />
+                  <Ionicons name="document-text" size={20} color={COLORS.primaryText} />
                   <Text style={styles.licenseLabel}>Número de Matrícula *</Text>
                 </View>
 
@@ -1011,7 +1011,7 @@ const styles = StyleSheet.create({
         {/* Uploading Indicator */}
         {uploadingMedia && (
           <View style={styles.uploadingContainer}>
-            <ActivityIndicator size="large" color={COLORS.primary} />
+            <ActivityIndicator size="large" color={COLORS.primaryText} />
             <Text style={styles.uploadingText}>Subiendo imágenes y video...</Text>
             <Text style={styles.uploadingSubtext}>Esto puede tardar unos segundos</Text>
           </View>
@@ -1024,10 +1024,10 @@ const styles = StyleSheet.create({
           disabled={loading}
         >
           {loading ? (
-            <ActivityIndicator color={COLORS.white} />
+            <ActivityIndicator color={COLORS.onPrimary} />
           ) : (
             <>
-              <Ionicons name="checkmark-circle" size={24} color={COLORS.white} />
+              <Ionicons name="checkmark-circle" size={24} color={COLORS.onPrimary} />
               <Text style={styles.submitButtonText}>Guardar Cambios</Text>
             </>
           )}

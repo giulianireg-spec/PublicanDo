@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
   previewDay: {
     fontSize: 12,
     fontWeight: '700',
-    color: COLORS.primary,
+    color: COLORS.primaryText,
   },
   previewTime: {
     fontSize: 12,
@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
   },
   quickButtonText: {
     fontSize: 13,
-    color: COLORS.primary,
+    color: COLORS.primaryText,
     fontWeight: '600',
   },
   // Custom picker
@@ -251,7 +251,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   hourOptionTextActive: {
-    color: COLORS.white,
+    color: COLORS.onPrimary,
   },
   customTimeSeparator: {
     paddingHorizontal: 12,
@@ -260,7 +260,7 @@ const styles = StyleSheet.create({
   customPreview: {
     fontSize: 20,
     fontWeight: '700',
-    color: COLORS.primary,
+    color: COLORS.primaryText,
     textAlign: 'center',
     marginVertical: 12,
   },
@@ -284,10 +284,10 @@ const styles = StyleSheet.create({
   customActionText: {
     fontSize: 13,
     fontWeight: '600',
-    color: COLORS.primary,
+    color: COLORS.primaryText,
   },
   customActionTextPrimary: {
-    color: COLORS.white,
+    color: COLORS.onPrimary,
   },
   closeCustomButton: {
     marginTop: 12,
@@ -326,7 +326,7 @@ const styles = StyleSheet.create({
   },
   dayValueText: {
     fontSize: 14,
-    color: COLORS.primary,
+    color: COLORS.primaryText,
     fontWeight: '500',
   },
   dayValueClosed: {
@@ -374,10 +374,10 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   timeOptionTextActive: {
-    color: COLORS.white,
+    color: COLORS.onPrimary,
   },
   timeOptionTextCustom: {
-    color: COLORS.primary,
+    color: COLORS.primaryText,
   },
   modalFooter: {
     flexDirection: 'row',
@@ -399,7 +399,7 @@ const styles = StyleSheet.create({
   cancelButtonText: {
     fontSize: 16,
     fontWeight: '700',
-    color: COLORS.primary,
+    color: COLORS.primaryText,
   },
   saveButton: {
     flex: 1,
@@ -414,7 +414,7 @@ const styles = StyleSheet.create({
   saveButtonText: {
     fontSize: 16,
     fontWeight: '700',
-    color: COLORS.white,
+    color: COLORS.onPrimary,
   },
 });
 
@@ -542,7 +542,7 @@ const styles = StyleSheet.create({
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.titleRow}>
-          <Ionicons name="time-outline" size={20} color={COLORS.primary} />
+          <Ionicons name="time-outline" size={20} color={COLORS.primaryText} />
           <Text style={styles.title}>Horarios de atención</Text>
         </View>
         <Text style={styles.helperText}>Opcional: indica cuándo está abierto tu lugar</Text>
@@ -776,7 +776,7 @@ const styles = StyleSheet.create({
                           style={[styles.timeOption, styles.timeOptionCustom]}
                           onPress={() => handleOpenCustomPicker(day.key)}
                         >
-                          <Ionicons name="create-outline" size={16} color={COLORS.primary} />
+                          <Ionicons name="create-outline" size={16} color={COLORS.primaryText} />
                           <Text style={[styles.timeOptionText, styles.timeOptionTextCustom]}>
                             Personalizado
                           </Text>
@@ -815,7 +815,7 @@ const styles = StyleSheet.create({
                 <Text style={styles.cancelButtonText}>Cancelar</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
-                <Ionicons name="checkmark" size={20} color={COLORS.white} />
+                <Ionicons name="checkmark" size={20} color={COLORS.onPrimary} />
                 <Text style={styles.saveButtonText}>Guardar</Text>
               </TouchableOpacity>
             </View>

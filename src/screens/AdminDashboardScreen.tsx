@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: COLORS.white,
+    color: COLORS.onPrimary,
   },
   usersButton: {
     padding: 8,
@@ -130,10 +130,10 @@ const styles = StyleSheet.create({
   contentSelectorText: {
     fontSize: 15,
     fontWeight: '700',
-    color: COLORS.primary,
+    color: COLORS.primaryText,
   },
   contentSelectorTextActive: {
-    color: COLORS.white,
+    color: COLORS.onPrimary,
   },
   statsContainer: {
     flexDirection: 'row',
@@ -237,7 +237,7 @@ const styles = StyleSheet.create({
     color: COLORS.text,
   },
   tabTextActive: {
-    color: COLORS.white,
+    color: COLORS.onPrimary,
   },
   listContainer: {
     padding: 16,
@@ -271,7 +271,7 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   guideBadgeText: {
-    color: COLORS.white,
+    color: '#FFFFFF',
     fontSize: 12,
     fontWeight: '600',
   },
@@ -392,7 +392,7 @@ const styles = StyleSheet.create({
   featuredText: {
     fontSize: 10,
     fontWeight: '600',
-    color: COLORS.secondary,
+    color: COLORS.primaryText,
   },
   cardActions: {
     flexDirection: 'column',
@@ -667,12 +667,12 @@ const styles = StyleSheet.create({
     return (
       <View style={styles.statsContainer}>
         <View style={styles.statCard}>
-          <Ionicons name="newspaper" size={24} color={COLORS.primary} />
+          <Ionicons name="newspaper" size={24} color={COLORS.primaryText} />
           <Text style={styles.statNumber}>{stats.advertisements.total}</Text>
           <Text style={styles.statLabel}>Total</Text>
         </View>
         <View style={[styles.statCard, styles.statPending]}>
-          <Ionicons name="time" size={24} color={COLORS.secondary} />
+          <Ionicons name="time" size={24} color={COLORS.primaryText} />
           <Text style={styles.statNumber}>{stats.advertisements.pending}</Text>
           <Text style={styles.statLabel}>Pendientes</Text>
         </View>
@@ -751,13 +751,30 @@ const styles = StyleSheet.create({
 
               {item.featured && (
                 <View style={styles.featuredBadge}>
-                  <Ionicons name="star" size={12} color={COLORS.secondary} />
+                  <Ionicons name="star" size={12} color={COLORS.primaryText} />
                   <Text style={styles.featuredText}>Destacada</Text>
                 </View>
               )}
             </View>
 
             <View style={styles.cardActions}>
+              {/* Botón previsualizar */}
+              <TouchableOpacity
+                style={[styles.actionButton, { backgroundColor: COLORS.primary + '20' }]}
+                onPress={() =>
+                  navigation.navigate('Detail', {
+                    advertisement: {
+                      ...item,
+                      contact: (item as any).contactInfo || {},
+                      location: item.location || { city: '', province: '', coordinates: [0, 0] },
+                    },
+                    preview: true,
+                  })
+                }
+              >
+                <Ionicons name="eye-outline" size={20} color={COLORS.primaryText} />
+              </TouchableOpacity>
+
               {item.status === 'pending' && (
                 <>
                   <TouchableOpacity
@@ -784,7 +801,7 @@ const styles = StyleSheet.create({
                     <Ionicons
                       name={item.featured ? 'star' : 'star-outline'}
                       size={20}
-                      color={COLORS.secondary}
+                      color={COLORS.primaryText}
                     />
                   </TouchableOpacity>
 
@@ -855,7 +872,7 @@ const styles = StyleSheet.create({
 
         {/* Badge de guía */}
         <View style={styles.guideBadge}>
-          <Ionicons name="map" size={12} color={COLORS.white} />
+          <Ionicons name="map" size={12} color="#FFFFFF" />
           <Text style={styles.guideBadgeText}>{item.points?.length || 0} puntos</Text>
         </View>
 
@@ -923,7 +940,7 @@ const styles = StyleSheet.create({
                 style={[styles.actionButton, { backgroundColor: COLORS.primary + '20' }]}
                 onPress={() => navigation.navigate('GuideDetail', { guideId: item._id })}
               >
-                <Ionicons name="eye-outline" size={20} color={COLORS.primary} />
+                <Ionicons name="eye-outline" size={20} color={COLORS.primaryText} />
               </TouchableOpacity>
 
               {item.status === 'pending' && (
@@ -965,7 +982,7 @@ const styles = StyleSheet.create({
             </View>
             {item.ratingCount > 0 && (
               <View style={styles.statItem}>
-                <Ionicons name="star" size={14} color={COLORS.secondary} />
+                <Ionicons name="star" size={14} color={COLORS.primaryText} />
                 <Text style={styles.statItemText}>
                   {item.averageRating?.toFixed(1)} ({item.ratingCount})
                 </Text>
@@ -993,7 +1010,7 @@ const styles = StyleSheet.create({
   if (loading && !refreshing) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color={COLORS.primary} />
+        <ActivityIndicator size="large" color={COLORS.primaryText} />
         <Text style={styles.loadingText}>Cargando panel...</Text>
       </View>
     );
@@ -1003,7 +1020,7 @@ const styles = StyleSheet.create({
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-          <Ionicons name="arrow-back" size={24} color={COLORS.white} />
+          <Ionicons name="arrow-back" size={24} color={COLORS.onPrimary} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>
           {user?.role === 'admin' ? 'Panel Admin' : 'Panel Moderador'}
@@ -1013,7 +1030,7 @@ const styles = StyleSheet.create({
             style={styles.usersButton}
             onPress={() => navigation.navigate('UsersManagement')}
           >
-            <Ionicons name="people" size={24} color={COLORS.white} />
+            <Ionicons name="people" size={24} color={COLORS.onPrimary} />
           </TouchableOpacity>
         ) : (
           <View style={styles.placeholder} />
@@ -1120,8 +1137,8 @@ const styles = StyleSheet.create({
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-            colors={[COLORS.primary]}
-            tintColor={COLORS.primary}
+            colors={[COLORS.primaryText]}
+            tintColor={COLORS.primaryText}
           />
         }
         ListEmptyComponent={

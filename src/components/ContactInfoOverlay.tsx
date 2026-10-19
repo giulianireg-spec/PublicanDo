@@ -109,7 +109,7 @@ export const ContactInfoOverlay: React.FC<ContactInfoOverlayProps> = ({
       fontWeight: '600',
     },
     licenseNumber: {
-      color: COLORS.white,
+      color: COLORS.onPrimary,
       fontSize: 13,
       fontWeight: '700',
     },
@@ -256,11 +256,11 @@ export const ContactInfoOverlay: React.FC<ContactInfoOverlayProps> = ({
         {hasLocation && (
           <View style={styles.fullWidthItem}>
             <TouchableOpacity style={styles.contactItem} onPress={handleMapsPress}>
-              <Ionicons name="location" size={18} color={COLORS.secondary} />
+              <Ionicons name="location" size={18} color={COLORS.primaryText} />
               <Text style={styles.contactLabel} numberOfLines={1}>
                 {getLocationDisplayText()}
               </Text>
-              <Ionicons name="open-outline" size={14} color={COLORS.white} style={styles.openIcon} />
+              <Ionicons name="open-outline" size={14} color={COLORS.onPrimary} style={styles.openIcon} />
             </TouchableOpacity>
           </View>
         )}
@@ -272,7 +272,7 @@ export const ContactInfoOverlay: React.FC<ContactInfoOverlayProps> = ({
               style={styles.contactItem}
               onPress={() => handlePhonePress(contactInfo.phone)}
             >
-              <Ionicons name="call" size={18} color={COLORS.secondary} />
+              <Ionicons name="call" size={18} color={COLORS.primaryText} />
               <Text style={styles.contactLabel} numberOfLines={1}>{contactInfo.phone}</Text>
             </TouchableOpacity>
           </View>
@@ -298,7 +298,7 @@ export const ContactInfoOverlay: React.FC<ContactInfoOverlayProps> = ({
               style={styles.contactItem}
               onPress={() => handleEmailPress(contactInfo.email)}
             >
-              <Ionicons name="mail" size={18} color={COLORS.secondary} />
+              <Ionicons name="mail" size={18} color={COLORS.primaryText} />
               <Text style={styles.contactLabel} numberOfLines={1}>{contactInfo.email}</Text>
             </TouchableOpacity>
           </View>

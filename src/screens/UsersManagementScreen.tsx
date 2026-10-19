@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: COLORS.white,
+    color: COLORS.onPrimary,
   },
   placeholder: {
     width: 40,
@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
     color: COLORS.text,
   },
   filterTextActive: {
-    color: COLORS.white,
+    color: COLORS.onPrimary,
   },
   // ✅ NUEVO: Estilos del contador de resultados
   resultsInfo: {
@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
   youText: {
     fontSize: 10,
     fontWeight: '700',
-    color: COLORS.white,
+    color: COLORS.onPrimary,
   },
   userEmail: {
     fontSize: 14,
@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
   bannedText: {
     fontSize: 12,
     fontWeight: '600',
-    color: COLORS.white,
+    color: '#FFFFFF',
   },
   banInfo: {
     marginTop: 8,
@@ -362,7 +362,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   clearSearchText: {
-    color: COLORS.white,
+    color: COLORS.onPrimary,
     fontWeight: '600',
   },
 });
@@ -621,7 +621,7 @@ const styles = StyleSheet.create({
       <View style={styles.card}>
         <View style={styles.cardHeader}>
           <View style={styles.userIcon}>
-            <Ionicons name="person" size={24} color={COLORS.primary} />
+            <Ionicons name="person" size={24} color={COLORS.primaryText} />
           </View>
           <View style={styles.cardInfo}>
             <View style={styles.nameRow}>
@@ -650,7 +650,7 @@ const styles = StyleSheet.create({
 
               {item.isBanned && (
                 <View style={styles.bannedBadge}>
-                  <Ionicons name="ban" size={12} color={COLORS.white} />
+                  <Ionicons name="ban" size={12} color="#FFFFFF" />
                   <Text style={styles.bannedText}>Baneado</Text>
                 </View>
               )}
@@ -703,7 +703,7 @@ const styles = StyleSheet.create({
                       style={styles.actionButton}
                       onPress={() => handlePromoteToModerator(item._id)}
                     >
-                      <Ionicons name="arrow-up-circle" size={18} color={COLORS.secondary} />
+                      <Ionicons name="arrow-up-circle" size={18} color={COLORS.primaryText} />
                       <Text style={styles.actionText}>Promover a Mod</Text>
                     </TouchableOpacity>
                   </>
@@ -753,7 +753,7 @@ const styles = StyleSheet.create({
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color={COLORS.primary} />
+        <ActivityIndicator size="large" color={COLORS.primaryText} />
         <Text style={styles.loadingText}>Cargando usuarios...</Text>
       </View>
     );
@@ -763,7 +763,7 @@ const styles = StyleSheet.create({
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-          <Ionicons name="arrow-back" size={24} color={COLORS.white} />
+          <Ionicons name="arrow-back" size={24} color={COLORS.onPrimary} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Gestión de Usuarios</Text>
         <View style={styles.placeholder} />
@@ -824,8 +824,8 @@ const styles = StyleSheet.create({
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-            colors={[COLORS.primary]}
-            tintColor={COLORS.primary}
+            colors={[COLORS.primaryText]}
+            tintColor={COLORS.primaryText}
           />
         }
         ListEmptyComponent={

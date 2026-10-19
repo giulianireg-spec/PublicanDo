@@ -60,7 +60,7 @@ const TagSearchInput = React.memo(({ selectedTag, onTagSelect, COLORS }: {
       />
       {selectedTag && (
         <TouchableOpacity onPress={handleClear}>
-          <Ionicons name="close-circle" size={20} color={COLORS.primary} />
+          <Ionicons name="close-circle" size={20} color={COLORS.primaryText} />
         </TouchableOpacity>
       )}
     </View>
@@ -100,25 +100,25 @@ const GuidesListScreen = ({ navigation }: any) => {
     featuredCard: { width: 200, height: 150, marginHorizontal: 4, borderRadius: 12, overflow: 'hidden' },
     featuredImage: { width: '100%', height: '100%' },
     featuredOverlay: { position: 'absolute', bottom: 0, left: 0, right: 0, padding: 10, backgroundColor: 'rgba(0,0,0,0.6)' },
-    featuredTitle: { color: COLORS.white, fontWeight: '600', fontSize: 14, marginBottom: 4 },
+    featuredTitle: { color: '#FFFFFF', fontWeight: '600', fontSize: 14, marginBottom: 4 },
     featuredStats: { flexDirection: 'row', alignItems: 'center' },
-    featuredRating: { color: COLORS.white, fontSize: 12, marginLeft: 4 },
+    featuredRating: { color: '#FFFFFF', fontSize: 12, marginLeft: 4 },
     filtersSection: { backgroundColor: COLORS.white, paddingVertical: 12 },
     categoriesContainer: { paddingHorizontal: 12, paddingVertical: 8 },
     categoryChip: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, paddingVertical: 8, marginHorizontal: 4, borderRadius: 16, backgroundColor: COLORS.background, borderWidth: 1, borderColor: COLORS.grayLight },
     categoryChipActive: { backgroundColor: COLORS.primary, borderColor: COLORS.primary },
     categoryChipIcon: { marginRight: 4 },
     categoryChipText: { fontSize: 13, color: COLORS.text },
-    categoryChipTextActive: { color: COLORS.white, fontWeight: '600' },
+    categoryChipTextActive: { color: COLORS.onPrimary, fontWeight: '600' },
     sortContainer: { flexDirection: 'row', paddingHorizontal: 16, paddingTop: 8, gap: 8 },
     sortOption: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 12, backgroundColor: COLORS.background },
     sortOptionActive: { backgroundColor: COLORS.secondary + '20' },
     sortOptionText: { fontSize: 12, color: COLORS.gray },
-    sortOptionTextActive: { color: COLORS.secondary, fontWeight: '600' },
+    sortOptionTextActive: { color: COLORS.primaryText, fontWeight: '600' },
     guideCard: { backgroundColor: COLORS.white, marginHorizontal: 16, marginTop: 12, borderRadius: 16, overflow: 'hidden', shadowColor: COLORS.shadow, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 4, elevation: 3 },
     cardImage: { width: '100%', height: 160, backgroundColor: COLORS.grayLight },
     categoryBadge: { position: 'absolute', top: 12, left: 12, paddingHorizontal: 10, paddingVertical: 4, borderRadius: 12 },
-    categoryBadgeText: { color: COLORS.white, fontSize: 11, fontWeight: '600' },
+    categoryBadgeText: { color: '#FFFFFF', fontSize: 11, fontWeight: '600' },
     featuredBadge: { position: 'absolute', top: 12, right: 12, width: 28, height: 28, borderRadius: 14, backgroundColor: 'rgba(0,0,0,0.6)', justifyContent: 'center', alignItems: 'center' },
     cardContent: { padding: 14 },
     cardTitle: { fontSize: 16, fontWeight: '700', color: COLORS.text, marginBottom: 8 },
@@ -129,13 +129,13 @@ const GuidesListScreen = ({ navigation }: any) => {
     statItem: { flexDirection: 'row', alignItems: 'center', gap: 4 },
     statText: { fontSize: 12, color: COLORS.gray },
     locationRow: { flexDirection: 'row', alignItems: 'center' },
-    locationText: { fontSize: 12, color: COLORS.primary, fontWeight: '500', flex: 1, marginLeft: 4 },
+    locationText: { fontSize: 12, color: COLORS.primaryText, fontWeight: '500', flex: 1, marginLeft: 4 },
     difficultyBadge: { paddingHorizontal: 8, paddingVertical: 2, borderRadius: 8 },
     difficultyText: { fontSize: 11, fontWeight: '600' },
     emptyContainer: { alignItems: 'center', paddingVertical: 60 },
     emptyText: { marginTop: 16, fontSize: 16, color: COLORS.gray },
     createFirstButton: { flexDirection: 'row', alignItems: 'center', marginTop: 20, paddingHorizontal: 20, paddingVertical: 12, backgroundColor: COLORS.primary, borderRadius: 24, gap: 8 },
-    createFirstText: { color: COLORS.white, fontWeight: '600' },
+    createFirstText: { color: COLORS.onPrimary, fontWeight: '600' },
     footerLoader: { paddingVertical: 20 },
   });
 
@@ -318,7 +318,7 @@ const GuidesListScreen = ({ navigation }: any) => {
             </View>
           </View>
           <View style={styles.locationRow}>
-            <Ionicons name="navigate" size={12} color={COLORS.primary} />
+            <Ionicons name="navigate" size={12} color={COLORS.primaryText} />
             <Text style={styles.locationText}>{item.mainLocation.city}, {item.mainLocation.province}</Text>
             <View style={[styles.difficultyBadge, { backgroundColor: difficultyConfig.color + '20' }]}>
               <Text style={[styles.difficultyText, { color: difficultyConfig.color }]}>
@@ -403,7 +403,7 @@ const GuidesListScreen = ({ navigation }: any) => {
       {selectedTag && (
         <View style={{ paddingHorizontal: 16, paddingBottom: 8 }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: COLORS.primary + '20', alignSelf: 'flex-start', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 12, gap: 4 }}>
-            <Text style={{ color: COLORS.primary, fontSize: 12, fontWeight: '600' }}>#{selectedTag}</Text>
+            <Text style={{ color: COLORS.primaryText, fontSize: 12, fontWeight: '600' }}>#{selectedTag}</Text>
           </View>
         </View>
       )}
@@ -423,13 +423,13 @@ const GuidesListScreen = ({ navigation }: any) => {
 
   const renderFooter = () => {
     if (!loadingMore) return null;
-    return <View style={styles.footerLoader}><ActivityIndicator size="small" color={COLORS.primary} /></View>;
+    return <View style={styles.footerLoader}><ActivityIndicator size="small" color={COLORS.primaryText} /></View>;
   };
 
   if (loading && guides.length === 0) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color={COLORS.primary} />
+        <ActivityIndicator size="large" color={COLORS.primaryText} />
         <Text style={styles.loadingText}>Cargando guías...</Text>
       </View>
     );
@@ -440,7 +440,7 @@ const GuidesListScreen = ({ navigation }: any) => {
       <View style={styles.header}>
         <Text style={styles.headerTitle}>🗺️ Guías</Text>
         <TouchableOpacity style={styles.createButton} onPress={() => navigation.navigate('CreateGuide')}>
-          <Ionicons name="add" size={24} color={COLORS.white} />
+          <Ionicons name="add" size={24} color={COLORS.onPrimary} />
         </TouchableOpacity>
       </View>
 
@@ -455,12 +455,12 @@ const GuidesListScreen = ({ navigation }: any) => {
             <Ionicons name="map-outline" size={64} color={COLORS.grayLight} />
             <Text style={styles.emptyText}>No hay guías disponibles</Text>
             <TouchableOpacity style={styles.createFirstButton} onPress={() => navigation.navigate('CreateGuide')}>
-              <Ionicons name="add-circle" size={20} color={COLORS.white} />
+              <Ionicons name="add-circle" size={20} color={COLORS.onPrimary} />
               <Text style={styles.createFirstText}>Crear la primera guía</Text>
             </TouchableOpacity>
           </View>
         }
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[COLORS.primary]} tintColor={COLORS.primary} />}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[COLORS.primaryText]} tintColor={COLORS.primaryText} />}
         onEndReached={handleLoadMore}
         onEndReachedThreshold={0.5}
         contentContainerStyle={styles.listContent}
@@ -485,10 +485,10 @@ const GuidesListScreen = ({ navigation }: any) => {
             <Text style={{ fontSize: 12, color: COLORS.gray, textAlign: 'right', marginTop: 4, marginBottom: 16 }}>{rejectReason.length}/200</Text>
             <View style={{ flexDirection: 'row', gap: 12 }}>
               <TouchableOpacity style={{ flex: 1, padding: 14, borderRadius: 8, borderWidth: 2, borderColor: COLORS.primary, alignItems: 'center' }} onPress={() => setShowRejectModal(false)}>
-                <Text style={{ color: COLORS.primary, fontWeight: '700' }}>Cancelar</Text>
+                <Text style={{ color: COLORS.primaryText, fontWeight: '700' }}>Cancelar</Text>
               </TouchableOpacity>
               <TouchableOpacity style={{ flex: 1, padding: 14, borderRadius: 8, backgroundColor: COLORS.primary, alignItems: 'center' }} onPress={confirmReject}>
-                <Text style={{ color: COLORS.white, fontWeight: '700' }}>Enviar</Text>
+                <Text style={{ color: COLORS.onPrimary, fontWeight: '700' }}>Enviar</Text>
               </TouchableOpacity>
             </View>
           </View>

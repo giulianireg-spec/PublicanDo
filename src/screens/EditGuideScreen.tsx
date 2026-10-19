@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     opacity: 0.6,
   },
   submitButtonText: {
-    color: COLORS.white,
+    color: COLORS.onPrimary,
     fontWeight: '600',
   },
   scrollView: {
@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
   },
   totalDuration: {
     fontSize: 14,
-    color: COLORS.primary,
+    color: COLORS.primaryText,
     fontWeight: '600',
   },
   titleInput: {
@@ -261,7 +261,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   pointNumberText: {
-    color: COLORS.white,
+    color: COLORS.onPrimary,
     fontWeight: '700',
     fontSize: 13,
   },
@@ -298,10 +298,10 @@ const styles = StyleSheet.create({
   pointTypeText: {
     fontSize: 13,
     fontWeight: '500',
-    color: COLORS.primary,
+    color: COLORS.primaryText,
   },
   pointTypeTextActive: {
-    color: COLORS.white,
+    color: COLORS.onPrimary,
   },
   placePreview: {
     flexDirection: 'row',
@@ -434,7 +434,7 @@ const styles = StyleSheet.create({
   addPointText: {
     fontSize: 15,
     fontWeight: '600',
-    color: COLORS.primary,
+    color: COLORS.primaryText,
   },
   modalOverlay: {
     flex: 1,
@@ -483,7 +483,7 @@ const styles = StyleSheet.create({
     color: COLORS.text,
   },
   categoryNameSelected: {
-    color: COLORS.primary,
+    color: COLORS.primaryText,
   },
   categoryDescription: {
     fontSize: 12,
@@ -543,7 +543,7 @@ const styles = StyleSheet.create({
   },
   placeCategory: {
     fontSize: 12,
-    color: COLORS.primary,
+    color: COLORS.primaryText,
     marginTop: 2,
   },
   placeLocation: {
@@ -907,7 +907,7 @@ const styles = StyleSheet.create({
                     <Text style={styles.categoryDescription}>{config.description}</Text>
                   </View>
                   {isSelected && (
-                    <Ionicons name="checkmark-circle" size={24} color={COLORS.primary} />
+                    <Ionicons name="checkmark-circle" size={24} color={COLORS.primaryText} />
                   )}
                 </TouchableOpacity>
               );
@@ -943,7 +943,7 @@ const styles = StyleSheet.create({
         </View>
 
         {searchingPlaces ? (
-          <ActivityIndicator style={{ marginTop: 40 }} color={COLORS.primary} />
+          <ActivityIndicator style={{ marginTop: 40 }} color={COLORS.primaryText} />
         ) : (
           <FlatList
             data={searchResults}
@@ -973,7 +973,7 @@ const styles = StyleSheet.create({
                     {item.location?.city}, {item.location?.province}
                   </Text>
                 </View>
-                <Ionicons name="add-circle" size={28} color={COLORS.primary} />
+                <Ionicons name="add-circle" size={28} color={COLORS.primaryText} />
               </TouchableOpacity>
             )}
           />
@@ -1058,7 +1058,7 @@ const styles = StyleSheet.create({
               setEditingPointIndex(index);
               setShowPlaceSearch(true);
             }}>
-              <Ionicons name="swap-horizontal" size={24} color={COLORS.primary} />
+              <Ionicons name="swap-horizontal" size={24} color={COLORS.primaryText} />
             </TouchableOpacity>
           </View>
         ) : (
@@ -1153,7 +1153,7 @@ const styles = StyleSheet.create({
                   estimatedTime: Math.max(5, point.estimatedTime - 15) 
                 })}
               >
-                <Ionicons name="remove" size={18} color={COLORS.primary} />
+                <Ionicons name="remove" size={18} color={COLORS.primaryText} />
               </TouchableOpacity>
               <Text style={styles.timeValue}>{formatDuration(point.estimatedTime)}</Text>
               <TouchableOpacity
@@ -1162,7 +1162,7 @@ const styles = StyleSheet.create({
                   estimatedTime: Math.min(480, point.estimatedTime + 15) 
                 })}
               >
-                <Ionicons name="add" size={18} color={COLORS.primary} />
+                <Ionicons name="add" size={18} color={COLORS.primaryText} />
               </TouchableOpacity>
             </View>
           </View>
@@ -1174,7 +1174,7 @@ const styles = StyleSheet.create({
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color={COLORS.primary} />
+        <ActivityIndicator size="large" color={COLORS.primaryText} />
         <Text style={styles.loadingText}>Cargando guía...</Text>
       </View>
     );
@@ -1197,7 +1197,7 @@ const styles = StyleSheet.create({
           disabled={submitting}
         >
           {submitting ? (
-            <ActivityIndicator size="small" color={COLORS.white} />
+            <ActivityIndicator size="small" color={COLORS.onPrimary} />
           ) : (
             <Text style={styles.submitButtonText}>Guardar</Text>
           )}
@@ -1216,7 +1216,7 @@ const styles = StyleSheet.create({
             </View>
           )}
           <View style={styles.coverEditBadge}>
-            <Ionicons name="camera" size={20} color={COLORS.white} />
+            <Ionicons name="camera" size={20} color={COLORS.onPrimary} />
           </View>
         </TouchableOpacity>
 
@@ -1295,7 +1295,7 @@ const styles = StyleSheet.create({
 
           {points.length < GUIDE_LIMITS.MAX_POINTS && (
             <TouchableOpacity style={styles.addPointButton} onPress={addPoint}>
-              <Ionicons name="add-circle" size={24} color={COLORS.primary} />
+              <Ionicons name="add-circle" size={24} color={COLORS.primaryText} />
               <Text style={styles.addPointText}>Agregar punto</Text>
             </TouchableOpacity>
           )}

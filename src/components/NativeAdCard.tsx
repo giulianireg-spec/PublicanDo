@@ -73,14 +73,14 @@ const styles = StyleSheet.create({
     zIndex: 10,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(138, 43, 226, 0.9)',
+    backgroundColor: 'rgba(0, 0, 0, 0.75)',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
     gap: 4,
   },
   adBadgeText: {
-    color: COLORS.white,
+    color: COLORS.onPrimary,
     fontSize: 10,
     fontWeight: '700',
   },
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
     return (
       <View style={styles.errorContainer}>
         <View style={styles.adBadge}>
-          <Ionicons name="megaphone" size={10} color={COLORS.white} />
+          <Ionicons name="megaphone" size={10} color="#FFFFFF" />
           <Text style={styles.adBadgeText}>Publicidad</Text>
         </View>
         <View style={styles.placeholderContent}>
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
     <View style={styles.container}>
       {/* Badge de publicidad */}
       <View style={styles.adBadge}>
-        <Ionicons name="megaphone" size={10} color={COLORS.white} />
+        <Ionicons name="megaphone" size={10} color={COLORS.onPrimary} />
         <Text style={styles.adBadgeText}>Publicidad</Text>
       </View>
 

@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
   confirmButtonText: {
     fontSize: 16,
     fontWeight: '700',
-    color: COLORS.white,
+    color: '#FFFFFF',
   },
 });
 
@@ -222,7 +222,7 @@ const styles = StyleSheet.create({
               style={[styles.button, styles.confirmButton]}
               onPress={handleConfirm}
             >
-              <Ionicons name="checkmark" size={20} color={COLORS.white} />
+              <Ionicons name="checkmark" size={20} color={COLORS.onPrimary} />
               <Text style={styles.confirmButtonText}>Rechazar</Text>
             </TouchableOpacity>
           </View>

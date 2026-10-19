@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   limitText: {
-    color: COLORS.white,
+    color: COLORS.onPrimary,
     fontSize: 12,
     fontWeight: '600',
   },
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
   infoText: {
     flex: 1,
     fontSize: 12,
-    color: COLORS.primary,
+    color: COLORS.primaryText,
     lineHeight: 16,
   },
   mediaGrid: {
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
   },
   mainBadgeText: {
-    color: COLORS.white,
+    color: '#FFFFFF',
     fontSize: 10,
     fontWeight: '600',
     textAlign: 'center',
@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   videoPlaceholderText: {
-    color: COLORS.white,
+    color: COLORS.onPrimary,
     fontSize: 12,
     fontWeight: '600',
     marginTop: 4,
@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
   addButtonText: {
     marginTop: 4,
     fontSize: 11,
-    color: COLORS.primary,
+    color: COLORS.primaryText,
     fontWeight: '600',
     textAlign: 'center',
   },
@@ -475,11 +475,11 @@ const styles = StyleSheet.create({
         {video && (
           <View style={styles.mediaItem}>
             <View style={[styles.thumbnail, styles.videoPlaceholder]}>
-              <Ionicons name="videocam" size={40} color={COLORS.white} />
+              <Ionicons name="videocam" size={40} color="#FFFFFF" />
               <Text style={styles.videoPlaceholderText}>Video</Text>
             </View>
             <View style={styles.videoBadge}>
-              <Ionicons name="videocam" size={16} color={COLORS.white} />
+              <Ionicons name="videocam" size={16} color={COLORS.onPrimary} />
             </View>
             <TouchableOpacity
               style={styles.removeButton}
@@ -498,10 +498,10 @@ const styles = StyleSheet.create({
             disabled={loadingImage}
           >
             {loadingImage ? (
-              <ActivityIndicator color={COLORS.primary} />
+              <ActivityIndicator color={COLORS.primaryText} />
             ) : (
               <>
-                <Ionicons name="images" size={32} color={COLORS.primary} />
+                <Ionicons name="images" size={32} color={COLORS.primaryText} />
                 <Text style={styles.addButtonText}>
                   Agregar{'\n'}imagen
                 </Text>
@@ -518,10 +518,10 @@ const styles = StyleSheet.create({
             disabled={loadingImage}
           >
             {loadingImage ? (
-              <ActivityIndicator color={COLORS.primary} />
+              <ActivityIndicator color={COLORS.primaryText} />
             ) : (
               <>
-                <Ionicons name="camera" size={32} color={COLORS.primary} />
+                <Ionicons name="camera" size={32} color={COLORS.primaryText} />
                 <Text style={styles.addButtonText}>
                   Tomar{'\n'}foto
                 </Text>
@@ -541,7 +541,7 @@ const styles = StyleSheet.create({
           disabled={loadingVideo || !!video}
         >
           {loadingVideo ? (
-            <ActivityIndicator color={COLORS.primary} />
+            <ActivityIndicator color={COLORS.primaryText} />
           ) : (
             <>
               <View style={styles.videoIconContainer}>

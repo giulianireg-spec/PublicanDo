@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: COLORS.white,
+    color: COLORS.onPrimary,
   },
   addButton: {
     padding: 4,
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
   premiumBannerText: {
     flex: 1,
     fontSize: 13,
-    color: COLORS.secondary,
+    color: COLORS.primaryText,
     fontWeight: '500',
   },
   listContainer: {
@@ -207,7 +207,7 @@ const styles = StyleSheet.create({
   },
   viewStatsText: {
     fontSize: 13,
-    color: COLORS.primary,
+    color: COLORS.primaryText,
     fontWeight: '600',
   },
   rejectionReason: {
@@ -249,7 +249,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   createButtonText: {
-    color: COLORS.white,
+    color: COLORS.onPrimary,
     fontSize: 16,
     fontWeight: '700',
   },
@@ -467,7 +467,7 @@ const styles = StyleSheet.create({
                 style={[styles.actionButton, styles.statsButton]}
                 onPress={() => handleViewStats(item)}
               >
-                <Ionicons name="stats-chart" size={20} color={COLORS.white} />
+                <Ionicons name="stats-chart" size={20} color={COLORS.onPrimary} />
               </TouchableOpacity>
             )}
 
@@ -477,7 +477,7 @@ const styles = StyleSheet.create({
                   style={styles.actionButton}
                   onPress={() => handleEdit(item)}
                 >
-                  <Ionicons name="create" size={20} color={COLORS.primary} />
+                  <Ionicons name="create" size={20} color={COLORS.primaryText} />
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.actionButton}
@@ -493,7 +493,7 @@ const styles = StyleSheet.create({
                 style={[styles.actionButton, styles.editButton]}
                 onPress={() => handleEdit(item)}
               >
-                <Ionicons name="create" size={20} color={COLORS.secondary} />
+                <Ionicons name="create" size={20} color={COLORS.primaryText} />
               </TouchableOpacity>
             )}
 
@@ -503,7 +503,7 @@ const styles = StyleSheet.create({
                   style={styles.actionButton}
                   onPress={() => handleReactivate(item)}
                 >
-                  <Ionicons name="refresh" size={20} color={COLORS.secondary} />
+                  <Ionicons name="refresh" size={20} color={COLORS.primaryText} />
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.actionButton}
@@ -536,7 +536,7 @@ const styles = StyleSheet.create({
               onPress={() => handleViewStats(item)}
             >
               <Text style={styles.viewStatsText}>Ver estadísticas detalladas</Text>
-              <Ionicons name="chevron-forward" size={16} color={COLORS.primary} />
+              <Ionicons name="chevron-forward" size={16} color={COLORS.primaryText} />
             </TouchableOpacity>
           )}
         </View>
@@ -554,7 +554,7 @@ const styles = StyleSheet.create({
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color={COLORS.primary} />
+        <ActivityIndicator size="large" color={COLORS.primaryText} />
         <Text style={styles.loadingText}>Cargando publicidades...</Text>
       </View>
     );
@@ -567,21 +567,21 @@ const styles = StyleSheet.create({
           style={styles.backButton}
           onPress={() => navigation.goBack()}
         >
-          <Ionicons name="arrow-back" size={24} color={COLORS.white} />
+          <Ionicons name="arrow-back" size={24} color={COLORS.onPrimary} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Mis Lugares Publicados</Text>
         <TouchableOpacity
           style={styles.addButton}
           onPress={() => navigation.navigate('CreateAdvertisement')}
         >
-          <Ionicons name="add-circle" size={28} color={COLORS.white} />
+          <Ionicons name="add-circle" size={28} color={COLORS.onPrimary} />
         </TouchableOpacity>
       </View>
 
       {/* ✅ NUEVO: Banner informativo para usuarios premium */}
       {canViewStats && advertisements.length > 0 && (
         <View style={styles.premiumBanner}>
-          <Ionicons name="analytics" size={20} color={COLORS.secondary} />
+          <Ionicons name="analytics" size={20} color={COLORS.primaryText} />
           <Text style={styles.premiumBannerText}>
             Tocá el ícono 📊 o "Ver estadísticas" para analizar el rendimiento
           </Text>
@@ -597,8 +597,8 @@ const styles = StyleSheet.create({
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-            colors={[COLORS.primary]}
-            tintColor={COLORS.primary}
+            colors={[COLORS.primaryText]}
+            tintColor={COLORS.primaryText}
           />
         }
         ListEmptyComponent={
@@ -611,7 +611,7 @@ const styles = StyleSheet.create({
               style={styles.createButton}
               onPress={() => navigation.navigate('CreateAdvertisement')}
             >
-              <Ionicons name="add-circle" size={20} color={COLORS.white} />
+              <Ionicons name="add-circle" size={20} color={COLORS.onPrimary} />
               <Text style={styles.createButtonText}>Crear mi primera publicidad</Text>
             </TouchableOpacity>
           </View>

@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
     >
       <View style={styles.header}>
         <View style={styles.headerLeft}>
-          <Ionicons name="create" size={20} color={COLORS.primary} />
+          <Ionicons name="create" size={20} color={COLORS.primaryText} />
           <Text style={styles.headerTitle}>Descripción Detallada</Text>
         </View>
         <Text style={[

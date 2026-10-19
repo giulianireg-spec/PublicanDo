@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   retryButtonText: {
-    color: COLORS.white,
+    color: COLORS.onPrimary,
     fontSize: 16,
     fontWeight: '600',
   },
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     color: COLORS.gray,
   },
   periodButtonTextActive: {
-    color: COLORS.white,
+    color: COLORS.onPrimary,
   },
   summaryContainer: {
     marginBottom: 16,
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
   summaryNumber: {
     fontSize: 32,
     fontWeight: '700',
-    color: COLORS.white,
+    color: COLORS.onPrimary,
     marginTop: 8,
   },
   summaryLabel: {
@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
   conversionNumber: {
     fontSize: 36,
     fontWeight: '700',
-    color: COLORS.white,
+    color: COLORS.onPrimary,
   },
   conversionLabel: {
     fontSize: 14,
@@ -419,13 +419,13 @@ const styles = StyleSheet.create({
       <View style={styles.summaryContainer}>
         <View style={styles.summaryRow}>
           <View style={[styles.summaryCard, styles.summaryCardPrimary]}>
-            <Ionicons name="eye" size={28} color={COLORS.white} />
+            <Ionicons name="eye" size={28} color={COLORS.onPrimary} />
             <Text style={styles.summaryNumber}>{summary.totalViews}</Text>
             <Text style={styles.summaryLabel}>Vistas</Text>
           </View>
           
           <View style={[styles.summaryCard, styles.summaryCardSecondary]}>
-            <Ionicons name="heart" size={28} color={COLORS.white} />
+            <Ionicons name="heart" size={28} color={COLORS.onPrimary} />
             <Text style={styles.summaryNumber}>{summary.totalInterested}</Text>
             <Text style={styles.summaryLabel}>Interesados</Text>
           </View>
@@ -433,7 +433,7 @@ const styles = StyleSheet.create({
 
         <View style={[styles.summaryCard, styles.summaryCardAccent, styles.summaryCardFull]}>
           <View style={styles.conversionContent}>
-            <Ionicons name="trending-up" size={32} color={COLORS.white} />
+            <Ionicons name="trending-up" size={32} color={COLORS.onPrimary} />
             <View style={styles.conversionText}>
               <Text style={styles.conversionNumber}>{summary.conversionRate}%</Text>
               <Text style={styles.conversionLabel}>Tasa de Conversión</Text>
@@ -480,7 +480,7 @@ const styles = StyleSheet.create({
               <Ionicons 
                 name={getEventTypeIcon(eventType as EventType) as any} 
                 size={20} 
-                color={COLORS.primary} 
+                color={COLORS.primaryText} 
               />
               <Text style={styles.barLabelText}>
                 {getEventTypeLabel(eventType as EventType)}
@@ -562,7 +562,7 @@ const styles = StyleSheet.create({
         <View style={styles.hourSlots}>
           {slotCounts.map((slot) => (
             <View key={slot.label} style={styles.hourSlot}>
-              <Ionicons name={slot.icon as any} size={24} color={COLORS.primary} />
+              <Ionicons name={slot.icon as any} size={24} color={COLORS.primaryText} />
               <Text style={styles.hourSlotLabel}>{slot.label}</Text>
               <View style={styles.hourSlotBarContainer}>
                 <View 
@@ -598,7 +598,7 @@ const styles = StyleSheet.create({
         {provinces.map(([province, count]) => (
           <View key={province} style={styles.barItem}>
             <View style={styles.barLabel}>
-              <Ionicons name="location" size={18} color={COLORS.primary} />
+              <Ionicons name="location" size={18} color={COLORS.primaryText} />
               <Text style={styles.barLabelText}>{province}</Text>
             </View>
             <View style={styles.barContainer}>
@@ -620,7 +620,7 @@ const styles = StyleSheet.create({
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color={COLORS.primary} />
+        <ActivityIndicator size="large" color={COLORS.primaryText} />
         <Text style={styles.loadingText}>Cargando estadísticas...</Text>
       </View>
     );
@@ -646,7 +646,7 @@ const styles = StyleSheet.create({
         <RefreshControl
           refreshing={refreshing}
           onRefresh={onRefresh}
-          colors={[COLORS.primary]}
+          colors={[COLORS.primaryText]}
         />
       }
     >

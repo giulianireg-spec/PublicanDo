@@ -16,7 +16,7 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundImage": "./assets/adaptive-background.png",
-        "backgroundColor": "#7B2CBF"
+        "backgroundColor": "#84CC16"
       }
     },
     "extra": {
@@ -45,7 +45,7 @@
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#7B2CBF"
+      "backgroundColor": "#84CC16"
     }
   }
 }

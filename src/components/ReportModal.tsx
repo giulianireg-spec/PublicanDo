@@ -105,7 +105,7 @@ export const ReportModal: React.FC<ReportModalProps> = ({
       flex: 1,
     },
     reasonTextActive: {
-      color: COLORS.white,
+      color: COLORS.onPrimary,
     },
     checkIcon: {
       marginLeft: 'auto',
@@ -152,7 +152,7 @@ export const ReportModal: React.FC<ReportModalProps> = ({
     infoText: {
       flex: 1,
       fontSize: 12,
-      color: COLORS.primary,
+      color: COLORS.primaryText,
       lineHeight: 18,
     },
     buttonContainer: {
@@ -188,7 +188,7 @@ export const ReportModal: React.FC<ReportModalProps> = ({
     confirmButtonText: {
       fontSize: 16,
       fontWeight: '700',
-      color: COLORS.white,
+      color: '#FFFFFF',
     },
   });
 
@@ -284,7 +284,7 @@ export const ReportModal: React.FC<ReportModalProps> = ({
                   <Ionicons
                     name="checkmark-circle"
                     size={20}
-                    color={COLORS.white}
+                    color={COLORS.onPrimary}
                     style={styles.checkIcon}
                   />
                 )}
@@ -322,7 +322,7 @@ export const ReportModal: React.FC<ReportModalProps> = ({
             )}
 
             <View style={styles.infoBox}>
-              <Ionicons name="information-circle" size={16} color={COLORS.primary} />
+              <Ionicons name="information-circle" size={16} color={COLORS.primaryText} />
               <Text style={styles.infoText}>
                 Tu reporte será revisado por un moderador. El anunciante no verá tu
                 identidad.
@@ -347,7 +347,7 @@ export const ReportModal: React.FC<ReportModalProps> = ({
                 onPress={handleConfirm}
                 disabled={!selectedReason || !description.trim()}
               >
-                <Ionicons name="flag" size={20} color={COLORS.white} />
+                <Ionicons name="flag" size={20} color={COLORS.onPrimary} />
                 <Text style={styles.confirmButtonText}>Enviar reporte</Text>
               </TouchableOpacity>
             </View>

@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   durationTextActive: {
-    color: COLORS.white,
+    color: '#FFFFFF',
   },
   checkIcon: {
     marginLeft: 'auto',
@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
   confirmButtonText: {
     fontSize: 16,
     fontWeight: '700',
-    color: COLORS.white,
+    color: '#FFFFFF',
   },
 });
 
@@ -289,7 +289,7 @@ const styles = StyleSheet.create({
                     <Ionicons
                       name="checkmark-circle"
                       size={20}
-                      color={COLORS.white}
+                      color={COLORS.onPrimary}
                       style={styles.checkIcon}
                     />
                   )}
@@ -352,7 +352,7 @@ const styles = StyleSheet.create({
                 onPress={handleConfirm}
                 disabled={!selectedDuration || !reason.trim()}
               >
-                <Ionicons name="ban" size={20} color={COLORS.white} />
+                <Ionicons name="ban" size={20} color="#FFFFFF" />
                 <Text style={styles.confirmButtonText}>Confirmar Ban</Text>
               </TouchableOpacity>
             </View>

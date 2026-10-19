@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   actionButtonText: {
-    color: COLORS.white,
+    color: COLORS.onPrimary,
     fontSize: 18,
     fontWeight: '700',
   },
@@ -260,13 +260,13 @@ const styles = StyleSheet.create({
           <View style={styles.topButtons}>
             <TouchableOpacity style={styles.reportButton} onPress={handleReport}>
               <View style={styles.reportButtonCircle}>
-                <Ionicons name="flag" size={24} color={COLORS.white} />
+                <Ionicons name="flag" size={24} color={COLORS.onPrimary} />
               </View>
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.closeButton} onPress={onClose}>
               <View style={styles.closeButtonCircle}>
-                <Ionicons name="close" size={28} color={COLORS.white} />
+                <Ionicons name="close" size={28} color={COLORS.onPrimary} />
               </View>
             </TouchableOpacity>
           </View>
@@ -302,7 +302,7 @@ const styles = StyleSheet.create({
               <Ionicons
                 name={getButtonIcon()}
                 size={24}
-                color={COLORS.white}
+                color={COLORS.onPrimary}
                 style={styles.buttonIcon}
               />
               <Text style={styles.actionButtonText}>

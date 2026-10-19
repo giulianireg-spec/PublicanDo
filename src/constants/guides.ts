@@ -110,7 +110,7 @@ export const GUIDE_LIMITS = {
 export const getGuideCategoryConfig = (category: string) => {
   return GUIDE_CATEGORY_CONFIG[category as GuideCategory] || {
     icon: '📍',
-    color: '#7B2CBF',
+    color: '#4D7C0F',
     description: '',
   };
 };

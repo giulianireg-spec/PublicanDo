@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
           value={showContactForm}
           onValueChange={handleToggleContactForm}
           trackColor={{ false: COLORS.grayLight, true: COLORS.secondary }}
-          thumbColor={showContactForm ? COLORS.primary : COLORS.gray}
+          thumbColor={showContactForm ? COLORS.primaryDark : COLORS.gray}
         />
       </View>
 
@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
           {/* Teléfono */}
           <View style={styles.formGroup}>
             <View style={styles.fieldHeader}>
-              <Ionicons name="call" size={18} color={COLORS.primary} />
+              <Ionicons name="call" size={18} color={COLORS.primaryText} />
               <Text style={styles.fieldLabel}>Teléfono</Text>
             </View>
             <TextInput
@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
           {/* Email */}
           <View style={styles.formGroup}>
             <View style={styles.fieldHeader}>
-              <Ionicons name="mail" size={18} color={COLORS.primary} />
+              <Ionicons name="mail" size={18} color={COLORS.primaryText} />
               <Text style={styles.fieldLabel}>Email</Text>
             </View>
             <TextInput

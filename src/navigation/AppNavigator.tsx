@@ -65,20 +65,20 @@ const HomeScreenWrapper = ({
       headerStyle: { backgroundColor: COLORS.primary },
       headerLeft: () => (
         <TouchableOpacity style={headerStyles.guidesButton} onPress={onGuidesPress}>
-          <Ionicons name="compass" size={28} color={COLORS.white} />
+          <Ionicons name="compass" size={28} color={COLORS.onPrimary} />
         </TouchableOpacity>
       ),
       headerRight: () => (
         <View style={headerStyles.container}>
           {!user && (
             <TouchableOpacity style={headerStyles.faqButton} onPress={onFAQPress}>
-              <Ionicons name="help-circle-outline" size={26} color={COLORS.white} />
+              <Ionicons name="help-circle-outline" size={26} color={COLORS.onPrimary} />
             </TouchableOpacity>
           )}
           {user && (
             <TouchableOpacity style={headerStyles.createButton} onPress={() => navigation.navigate('Notifications')} >
               <View>
-                <Ionicons name="notifications-outline" size={26} color={COLORS.white} />
+                <Ionicons name="notifications-outline" size={26} color={COLORS.onPrimary} />
                 {unreadCount > 0 && (
                   <View style={{ position: 'absolute', top: -4, right: -4, backgroundColor: '#F44336', borderRadius: 8, minWidth: 16, height: 16, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 2 }}>
                     <Text style={{ color: '#FFFFFF', fontSize: 10, fontWeight: '700' }}>{unreadCount > 9 ? '9+' : unreadCount}</Text>
@@ -89,7 +89,7 @@ const HomeScreenWrapper = ({
           )}
           {user && (
             <TouchableOpacity style={headerStyles.createButton} onPress={onCreatePress}>
-              <Ionicons name="add-circle" size={28} color={COLORS.white} />
+              <Ionicons name="add-circle" size={28} color={COLORS.onPrimary} />
             </TouchableOpacity>
           )}
           <TouchableOpacity
@@ -106,9 +106,9 @@ const HomeScreenWrapper = ({
             {hasAvatar ? (
               <Image key={user.avatar} source={{ uri: user.avatar }} style={headerStyles.avatar} resizeMode="cover" />
             ) : user ? (
-              <Ionicons name="person" size={24} color={COLORS.primary} />
+              <Ionicons name="person" size={24} color={COLORS.primaryText} />
             ) : (
-              <Ionicons name="person-outline" size={22} color={COLORS.white} />
+              <Ionicons name="person-outline" size={22} color={COLORS.onPrimary} />
             )}
           </TouchableOpacity>
         </View>
@@ -156,7 +156,7 @@ const TabNavigator = ({
           paddingBottom: insets.bottom,
           paddingTop: 8,
         },
-        tabBarActiveTintColor: COLORS.primary,
+        tabBarActiveTintColor: COLORS.primaryText,
         tabBarInactiveTintColor: COLORS.gray,
       })}
     >
@@ -270,11 +270,11 @@ const AppNavigatorInner = () => {
 
   return (
     <NavigationContainer ref={navigationRef} onReady={flushPendingNavigation}>
-      <StatusBar barStyle="light-content" backgroundColor={COLORS.primary} />
+      <StatusBar barStyle="dark-content" backgroundColor={COLORS.primary} />
       <Stack.Navigator
         screenOptions={{
           headerStyle:      { backgroundColor: COLORS.primary },
-          headerTintColor:  COLORS.white,
+          headerTintColor:  COLORS.onPrimary,
           headerTitleStyle: { fontWeight: '700', fontSize: 20 },
           contentStyle: { paddingTop: 0 },
         }}
@@ -367,7 +367,7 @@ const AppNavigatorInner = () => {
             {user?.avatar ? (
               <Image source={{ uri: user.avatar }} style={dynStyles.menuAvatar} />
             ) : (
-              <Ionicons name="person-circle" size={80} color={COLORS.primary} />
+              <Ionicons name="person-circle" size={80} color={COLORS.primaryText} />
             )}
             <Text style={dynStyles.userName}>{user?.name}</Text>
             <Text style={dynStyles.userEmail}>{user?.email}</Text>
@@ -388,24 +388,24 @@ const AppNavigatorInner = () => {
           <ScrollView style={dynStyles.menuOptionsScroll}>
             <View style={dynStyles.menuOptions}>
               <TouchableOpacity style={[dynStyles.menuOption, dynStyles.profileOption]} onPress={() => { setUserMenuVisible(false); navigationRef.current?.navigate('Profile'); }}>
-                <Ionicons name="person" size={24} color={COLORS.secondary} />
+                <Ionicons name="person" size={24} color={COLORS.primaryText} />
                 <Text style={dynStyles.menuOptionText}>Mi Perfil</Text>
                 <Ionicons name="chevron-forward" size={20} color={COLORS.gray} />
               </TouchableOpacity>
 
               <TouchableOpacity style={dynStyles.menuOption} onPress={() => { setUserMenuVisible(false); navigationRef.current?.navigate('MyAdvertisements'); }}>
-                <Ionicons name="list" size={24} color={COLORS.primary} />
+                <Ionicons name="list" size={24} color={COLORS.primaryText} />
                 <Text style={dynStyles.menuOptionText}>Mis Lugares Publicados</Text>
                 <Ionicons name="chevron-forward" size={20} color={COLORS.gray} />
               </TouchableOpacity>
 
               <TouchableOpacity style={dynStyles.menuOption} onPress={() => { setUserMenuVisible(false); navigationRef.current?.navigate('MyGuides'); }}>
-                <Ionicons name="map" size={24} color={COLORS.primary} />
+                <Ionicons name="map" size={24} color={COLORS.primaryText} />
                 <Text style={dynStyles.menuOptionText}>Mis Guías</Text>
                 <Ionicons name="chevron-forward" size={20} color={COLORS.gray} />
               </TouchableOpacity>
               <TouchableOpacity style={dynStyles.menuOption} onPress={() => { setUserMenuVisible(false); navigationRef.current?.navigate('SavedGuides'); }}>
-                <Ionicons name="bookmark" size={24} color={COLORS.primary} />
+                <Ionicons name="bookmark" size={24} color={COLORS.primaryText} />
                 <Text style={dynStyles.menuOptionText}>Guías guardadas</Text>
                 <Ionicons name="chevron-forward" size={20} color={COLORS.gray} />
               </TouchableOpacity>
@@ -429,7 +429,7 @@ const AppNavigatorInner = () => {
               <View style={dynStyles.menuDivider} />
 
               <TouchableOpacity style={dynStyles.menuOption} onPress={() => { setUserMenuVisible(false); navigationRef.current?.navigate('FAQ'); }}>
-                <Ionicons name="help-circle" size={24} color={COLORS.primary} />
+                <Ionicons name="help-circle" size={24} color={COLORS.primaryText} />
                 <Text style={dynStyles.menuOptionText}>Preguntas Frecuentes</Text>
                 <Ionicons name="chevron-forward" size={20} color={COLORS.gray} />
               </TouchableOpacity>

@@ -28,9 +28,9 @@ const NotificationsScreen = ({ navigation }: any) => {
     container: { flex: 1, backgroundColor: COLORS.background },
     header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: COLORS.primary, paddingHorizontal: 16, paddingVertical: 12 },
     backButton: { padding: 8 },
-    headerTitle: { fontSize: 20, fontWeight: '700', color: COLORS.white },
+    headerTitle: { fontSize: 20, fontWeight: '700', color: COLORS.onPrimary },
     readAllButton: { padding: 8 },
-    readAllText: { color: COLORS.white, fontSize: 13, fontWeight: '600' },
+    readAllText: { color: COLORS.onPrimary, fontSize: 13, fontWeight: '600' },
     loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
     listContent: { paddingVertical: 8 },
     item: { flexDirection: 'row', alignItems: 'flex-start', padding: 16, borderBottomWidth: 1, borderBottomColor: COLORS.grayLight, gap: 12 },
@@ -126,13 +126,13 @@ const NotificationsScreen = ({ navigation }: any) => {
       <View style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-            <Ionicons name="arrow-back" size={24} color={COLORS.white} />
+            <Ionicons name="arrow-back" size={24} color={COLORS.onPrimary} />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>🔔 Notificaciones</Text>
           <View style={{ width: 40 }} />
         </View>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={COLORS.primary} />
+          <ActivityIndicator size="large" color={COLORS.primaryText} />
         </View>
       </View>
     );
@@ -142,7 +142,7 @@ const NotificationsScreen = ({ navigation }: any) => {
     <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-          <Ionicons name="arrow-back" size={24} color={COLORS.white} />
+          <Ionicons name="arrow-back" size={24} color={COLORS.onPrimary} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>🔔 Notificaciones</Text>
         <TouchableOpacity style={styles.readAllButton} onPress={handleMarkAllRead}>
@@ -155,7 +155,7 @@ const NotificationsScreen = ({ navigation }: any) => {
         renderItem={renderItem}
         keyExtractor={(item) => item._id}
         contentContainerStyle={notifications.length === 0 ? { flex: 1 } : styles.listContent}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[COLORS.primary]} />}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[COLORS.primaryText]} />}
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
             <Ionicons name="notifications-off-outline" size={64} color={COLORS.grayLight} />

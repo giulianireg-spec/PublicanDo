@@ -1,71 +1,84 @@
 // src/constants/colors.ts
-// Paleta de Colores GuianDo - Con modo nocturno automático (20:00hs)
+// Paleta de Colores GuianDo - Verde lima sobre blanco (claro) y sobre negro (nocturno)
+//
+// Reglas de uso:
+// - primary / secondary: rellenos (botones, encabezados, chips activos). Siempre con texto `onPrimary` encima.
+// - primaryText: texto e íconos de marca sobre el fondo de la pantalla (en claro, un lima más oscuro para que se lea).
+// - onPrimary: texto e íconos encima de un relleno lima. Negro en ambos modos: el blanco no se lee sobre lima.
 
-// Colores base (compartidos entre modos)
+// Colores compartidos entre modos
 const BASE_COLORS = {
-  // Colores principales
-  primary: '#7B2CBF',        // Violeta intenso
-  secondary: '#FF6B35',      // Naranja Coral
-  accent: '#FFD166',         // Amarillo brillante
-
-  // Variantes de violeta
-  primaryLight: '#9D4EDD',
-  primaryDark: '#5A189A',
-
-  // Variantes de naranja
-  secondaryLight: '#FF8C61',
-  secondaryDark: '#E85A2A',
+  accent: '#FACC15',         // Amarillo (estrellas, destacados)
 
   // Estados
-  success: '#06D6A0',
-  error: '#EF476F',
-  warning: '#FFD166',
-  info: '#118AB2',
+  success: '#16A34A',
+  error: '#EF4444',
+  warning: '#F59E0B',
+  info: '#0EA5E9',
+
+  // Texto sobre lima
+  onPrimary: '#0A0A0A',
 
   // Transparencias
   overlay: 'rgba(0, 0, 0, 0.5)',
 };
 
-// Tema claro (antes de las 20:00)
+// Tema claro: lima y blanco
 export const LIGHT_THEME = {
   ...BASE_COLORS,
-  background: '#F9F9F9',     // Blanco humo
-  text: '#1E1E1E',           // Gris carbón
-  textSecondary: '#6C757D',  // Gris medio
-  
+  primary: '#84CC16',        // Verde lima
+  primaryText: '#4D7C0F',    // Lima oscuro para texto/íconos sobre blanco
+  primaryLight: '#D9F99D',
+  primaryDark: '#4D7C0F',
+  secondary: '#84CC16',
+  secondaryLight: '#BEF264',
+  secondaryDark: '#65A30D',
+
+  background: '#FFFFFF',
+  text: '#0A0A0A',
+  textSecondary: '#525252',
+
   // Grises y neutros
-  gray: '#6C757D',
-  grayLight: '#E0E0E0',
-  grayDark: '#495057',
+  gray: '#737373',
+  grayLight: '#E5E5E5',
+  grayDark: '#404040',
 
   // Fondos
   white: '#FFFFFF',
   cardBackground: '#FFFFFF',
-  inputBackground: '#F3F4F6',
+  inputBackground: '#F5F5F5',
 
   // Sombras
-  shadow: 'rgba(123, 44, 191, 0.2)',
+  shadow: 'rgba(77, 124, 15, 0.18)',
 };
 
-// Tema oscuro (a partir de las 20:00)
+// Tema oscuro: lima y negro
 export const DARK_THEME = {
   ...BASE_COLORS,
-  background: '#0D0D0D',     // Negro profundo
-  text: '#F5F5F5',           // Blanco suave
-  textSecondary: '#A0A0A0',  // Gris claro
-  
+  primary: '#A3E635',        // Verde lima brillante
+  primaryText: '#A3E635',
+  primaryLight: '#BEF264',
+  primaryDark: '#65A30D',
+  secondary: '#A3E635',
+  secondaryLight: '#D9F99D',
+  secondaryDark: '#84CC16',
+
+  background: '#0A0A0A',
+  text: '#F5F5F5',
+  textSecondary: '#A3A3A3',
+
   // Grises y neutros
-  gray: '#888888',
-  grayLight: '#333333',
-  grayDark: '#CCCCCC',
+  gray: '#8A8A8A',
+  grayLight: '#2A2A2A',
+  grayDark: '#D4D4D4',
 
   // Fondos
-  white: '#1A1A1A',
-  cardBackground: '#1A1A1A',
-  inputBackground: '#252525',
+  white: '#161616',
+  cardBackground: '#161616',
+  inputBackground: '#1F1F1F',
 
   // Sombras
-  shadow: 'rgba(0, 0, 0, 0.4)',
+  shadow: 'rgba(0, 0, 0, 0.5)',
 };
 
 // Función para determinar si es modo nocturno
@@ -79,38 +92,9 @@ export const getTheme = () => {
   return isNightMode() ? DARK_THEME : LIGHT_THEME;
 };
 
-// Export por defecto (para compatibilidad con código existente)
-// Se actualizará dinámicamente según la hora
-export const COLORS = {
-  // Colores principales (siempre iguales)
-  primary: '#7B2CBF',
-  secondary: '#FF6B35',
-  accent: '#FFD166',
-  primaryLight: '#9D4EDD',
-  primaryDark: '#5A189A',
-  secondaryLight: '#FF8C61',
-  secondaryDark: '#E85A2A',
-  
-  // Estados (siempre iguales)
-  success: '#06D6A0',
-  error: '#EF476F',
-  warning: '#FFD166',
-  info: '#118AB2',
-  
-  // Colores dinámicos - usar getTheme() para obtener los correctos
-  // Estos son los valores por defecto (tema claro)
-  background: '#F9F9F9',
-  text: '#1E1E1E',
-  textSecondary: '#6C757D',
-  gray: '#6C757D',
-  grayLight: '#E0E0E0',
-  grayDark: '#495057',
-  white: '#FFFFFF',
-  cardBackground: '#FFFFFF',
-  inputBackground: '#F3F4F6',
-  shadow: 'rgba(123, 44, 191, 0.2)',
-  overlay: 'rgba(0, 0, 0, 0.5)',
-};
+// Export por defecto (para compatibilidad con código existente): valores del tema claro.
+// Las pantallas usan useTheme() para obtener los del modo activo.
+export const COLORS = { ...LIGHT_THEME };
 
 // Tipo para los colores
 export type ThemeColors = typeof LIGHT_THEME;

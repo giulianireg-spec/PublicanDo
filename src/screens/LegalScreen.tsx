@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: COLORS.white,
+    color: COLORS.onPrimary,
   },
   placeholder: {
     width: 40,
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     color: COLORS.gray,
   },
   activeTabText: {
-    color: COLORS.primary,
+    color: COLORS.primaryText,
   },
   scrollView: {
     flex: 1,
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: COLORS.primary,
+    color: COLORS.primaryText,
     marginTop: 20,
     marginBottom: 10,
   },
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
   contactButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: COLORS.white,
+    color: COLORS.onPrimary,
   },
   footer: {
     fontSize: 12,
@@ -347,7 +347,7 @@ const styles = StyleSheet.create({
           style={styles.backButton} 
           onPress={() => navigation.goBack()}
         >
-          <Ionicons name="arrow-back" size={24} color={COLORS.white} />
+          <Ionicons name="arrow-back" size={24} color={COLORS.onPrimary} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Información Legal</Text>
         <View style={styles.placeholder} />
@@ -397,7 +397,7 @@ const styles = StyleSheet.create({
           style={styles.contactButton}
           onPress={handleContactSupport}
         >
-          <Ionicons name="mail" size={20} color={COLORS.white} />
+          <Ionicons name="mail" size={20} color={COLORS.onPrimary} />
           <Text style={styles.contactButtonText}>¿Tenés dudas? Contactanos</Text>
         </TouchableOpacity>
 

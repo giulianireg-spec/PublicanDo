@@ -132,7 +132,7 @@ export default function LoginScreen({ onLoginSuccess, onRegisterPress, onForgotP
       backgroundColor: COLORS.primary, borderRadius: 12, paddingVertical: 16, marginTop: 8, gap: 8,
     },
     loginButtonDisabled: { opacity: 0.6 },
-    loginButtonText: { color: COLORS.white, fontSize: 16, fontWeight: '700' },
+    loginButtonText: { color: COLORS.onPrimary, fontSize: 16, fontWeight: '700' },
     divider: { flexDirection: 'row', alignItems: 'center', marginVertical: 24 },
     dividerLine: { flex: 1, height: 1, backgroundColor: COLORS.grayLight },
     dividerText: { marginHorizontal: 16, fontSize: 14, color: COLORS.gray },
@@ -144,9 +144,9 @@ export default function LoginScreen({ onLoginSuccess, onRegisterPress, onForgotP
     googleButtonText: { color: COLORS.text, fontSize: 16, fontWeight: '600' },
     registerContainer: { flexDirection: 'row', justifyContent: 'center', marginTop: 24 },
     registerText: { fontSize: 14, color: COLORS.gray },
-    registerLink: { fontSize: 14, color: COLORS.primary, fontWeight: '700' },
+    registerLink: { fontSize: 14, color: COLORS.primaryText, fontWeight: '700' },
     forgotPasswordLink: { alignItems: 'center', marginTop: 16 },
-    forgotPasswordText: { fontSize: 14, color: COLORS.primary, fontWeight: '600' },
+    forgotPasswordText: { fontSize: 14, color: COLORS.primaryText, fontWeight: '600' },
   });
 
   return (
@@ -154,7 +154,7 @@ export default function LoginScreen({ onLoginSuccess, onRegisterPress, onForgotP
       <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
         <View style={styles.content}>
           <View style={styles.header}>
-            <Ionicons name="compass" size={64} color={COLORS.primary} />
+            <Ionicons name="compass" size={64} color={COLORS.primaryText} />
             <Text style={styles.title}>Iniciar Sesión</Text>
             <Text style={styles.subtitle}>Descubrí lugares increíbles en tu ciudad</Text>
           </View>
@@ -196,10 +196,10 @@ export default function LoginScreen({ onLoginSuccess, onRegisterPress, onForgotP
               disabled={loading}
             >
               {loading ? (
-                <ActivityIndicator color={COLORS.white} />
+                <ActivityIndicator color={COLORS.onPrimary} />
               ) : (
                 <>
-                  <Ionicons name="log-in" size={20} color={COLORS.white} />
+                  <Ionicons name="log-in" size={20} color={COLORS.onPrimary} />
                   <Text style={styles.loginButtonText}>Iniciar Sesión</Text>
                 </>
               )}

@@ -111,7 +111,7 @@ const ClientSelector: React.FC<ClientSelectorProps> = ({
         )}
       </View>
       {selectedClient?._id === item._id && (
-        <Ionicons name="checkmark-circle" size={24} color="#6C5CE7" />
+        <Ionicons name="checkmark-circle" size={24} color="#4D7C0F" />
       )}
     </TouchableOpacity>
   );
@@ -184,7 +184,7 @@ const ClientSelector: React.FC<ClientSelectorProps> = ({
 
             {loading ? (
               <View style={styles.loadingContainer}>
-                <ActivityIndicator size="large" color="#6C5CE7" />
+                <ActivityIndicator size="large" color="#4D7C0F" />
               </View>
             ) : error ? (
               <View style={styles.errorContainer}>
@@ -218,7 +218,7 @@ const ClientSelector: React.FC<ClientSelectorProps> = ({
                     </Text>
                   </View>
                   {!selectedClient && (
-                    <Ionicons name="checkmark-circle" size={24} color="#6C5CE7" />
+                    <Ionicons name="checkmark-circle" size={24} color="#4D7C0F" />
                   )}
                 </TouchableOpacity>
 
@@ -347,7 +347,7 @@ const styles = StyleSheet.create({
   },
   retryButton: {
     marginTop: 16,
-    backgroundColor: '#6C5CE7',
+    backgroundColor: '#4D7C0F',
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 8,
@@ -389,7 +389,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F8F9FA',
   },
   clientItemSelected: {
-    borderColor: '#6C5CE7',
+    borderColor: '#4D7C0F',
     backgroundColor: '#F8F5FF',
   },
   clientColor: {

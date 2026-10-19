@@ -113,7 +113,7 @@ const MediaCarouselSimple: React.FC<MediaCarouselSimpleProps> = ({
     counterText: {
       fontSize: 12,
       fontWeight: '600',
-      color: COLORS.white,
+      color: '#FFFFFF',
     },
   });
 
@@ -173,7 +173,7 @@ const MediaCarouselSimple: React.FC<MediaCarouselSimpleProps> = ({
 
       <View style={styles.counter}>
         <View style={styles.counterBadge}>
-          <Ionicons name="images" size={12} color={COLORS.white} />
+          <Ionicons name="images" size={12} color="#FFFFFF" />
           <Text style={styles.counterText}>{activeIndex + 1}/{allMedia.length}</Text>
         </View>
       </View>

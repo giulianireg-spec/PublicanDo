@@ -43,6 +43,7 @@ interface DetailScreenProps {
   route: {
     params: {
       advertisement: Advertisement;
+      preview?: boolean;
     };
   };
   navigation: any;
@@ -101,7 +102,7 @@ const styles = StyleSheet.create({
   logoText: {
     fontSize: 16,
     fontWeight: '900',
-    color: COLORS.white,
+    color: COLORS.onPrimary,
     letterSpacing: 1,
   },
   rightSection: {
@@ -155,7 +156,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   videoBadgeText: {
-    color: COLORS.white,
+    color: '#FFFFFF',
     fontSize: 14,
     fontWeight: '600',
   },
@@ -172,7 +173,7 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   mediaCounterText: {
-    color: COLORS.white,
+    color: '#FFFFFF',
     fontSize: 12,
     fontWeight: '600',
   },
@@ -212,7 +213,7 @@ const styles = StyleSheet.create({
   },
   category: {
     fontSize: 16,
-    color: COLORS.primary,
+    color: COLORS.primaryText,
     fontWeight: '600',
   },
   licenseBadgeTop: {
@@ -285,7 +286,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   linkText: {
-    color: COLORS.primary,
+    color: COLORS.primaryText,
     textDecorationLine: 'underline',
   },
   contactButton: {
@@ -311,7 +312,7 @@ const styles = StyleSheet.create({
   xLogo: {
     fontSize: 24,
     fontWeight: '900',
-    color: COLORS.white,
+    color: '#FFFFFF',
   },
   locationInfo: {
     flexDirection: 'row',
@@ -334,13 +335,14 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   openMapButtonText: {
-    color: COLORS.white,
+    color: COLORS.onPrimary,
     fontSize: 16,
     fontWeight: '600',
   },
 });
 
-  const { advertisement } = route.params;
+  // preview: abierta desde el panel de moderación; no cuenta visitas ni estadísticas
+  const { advertisement, preview = false } = route.params;
   const { user } = useAuth();
   const hasIncrementedView = useRef(false);
   const [currentMediaIndex, setCurrentMediaIndex] = useState(0);
@@ -354,12 +356,12 @@ const styles = StyleSheet.create({
   useEffect(() => {
     navigation.setOptions({ headerShown: false });
     loadVisitorLocation();
-    registerViewOnMount();
+    if (!preview) registerViewOnMount();
     
     return () => {
-      endViewSession(advertisement._id);
+      if (!preview) endViewSession(advertisement._id);
     };
-  }, [navigation, advertisement._id]);
+  }, [navigation, advertisement._id, preview]);
 
   const loadVisitorLocation = async () => {
     try {
@@ -518,7 +520,7 @@ const styles = StyleSheet.create({
           <VideoPlayerItem uri={item.uri} />
           <View style={styles.videoOverlay}>
             <View style={styles.videoBadge}>
-              <Ionicons name="play-circle" size={24} color={COLORS.white} />
+              <Ionicons name="play-circle" size={24} color="#FFFFFF" />
               <Text style={styles.videoBadgeText}>Video</Text>
             </View>
           </View>
@@ -544,13 +546,13 @@ const styles = StyleSheet.create({
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" translucent backgroundColor="transparent" />
+      <StatusBar barStyle="dark-content" translucent backgroundColor="transparent" />
       
       {/* Header */}
       <View style={styles.topBar}>
         <View style={styles.leftSection}>
           <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-            <Ionicons name="arrow-back" size={24} color={COLORS.white} />
+            <Ionicons name="arrow-back" size={24} color={COLORS.onPrimary} />
           </TouchableOpacity>
           <View style={styles.logoCircle}>
             <View style={styles.logoInner}>
@@ -561,16 +563,16 @@ const styles = StyleSheet.create({
         <View style={styles.rightSection}>
           {isOwner && (
             <TouchableOpacity style={styles.topBarButton} onPress={() => navigation.navigate('EditAdvertisement', { advertisement })}>
-              <Ionicons name="create" size={22} color={COLORS.white} />
+              <Ionicons name="create" size={22} color={COLORS.onPrimary} />
             </TouchableOpacity>
           )}
-          {!isOwner && user && (
+          {!isOwner && user && !preview && (
             <TouchableOpacity style={styles.topBarButton} onPress={handleReport}>
-              <Ionicons name="flag" size={22} color={COLORS.white} />
+              <Ionicons name="flag" size={22} color={COLORS.onPrimary} />
             </TouchableOpacity>
           )}
           <TouchableOpacity style={styles.topBarButton} onPress={handleShare}>
-            <Ionicons name="share-social" size={22} color={COLORS.white} />
+            <Ionicons name="share-social" size={22} color={COLORS.onPrimary} />
           </TouchableOpacity>
         </View>
       </View>
@@ -593,7 +595,7 @@ const styles = StyleSheet.create({
           {allMedia.length > 1 && (
             <>
               <View style={styles.mediaCounterIcon}>
-                <Ionicons name="images" size={14} color={COLORS.white} />
+                <Ionicons name="images" size={14} color="#FFFFFF" />
                 <Text style={styles.mediaCounterText}>{currentMediaIndex + 1}/{allMedia.length}</Text>
               </View>
               <View style={styles.paginationDots}>
@@ -637,13 +639,13 @@ const styles = StyleSheet.create({
               {advertisement.contactInfo?.phone && (
                 <View style={styles.contactGroup}>
                   <View style={styles.contactHeader}>
-                    <Ionicons name="call" size={20} color={COLORS.primary} />
+                    <Ionicons name="call" size={20} color={COLORS.primaryText} />
                     <Text style={styles.contactGroupTitle}>Teléfono</Text>
                   </View>
                   <View style={styles.contactItem}>
                     <Text style={styles.contactText}>{formatContactPhone(advertisement.contactInfo.phone)}</Text>
                     <TouchableOpacity style={styles.contactButton} onPress={() => handleCall(advertisement.contactInfo!.phone!)}>
-                      <Ionicons name="call" size={20} color={COLORS.white} />
+                      <Ionicons name="call" size={20} color={COLORS.onPrimary} />
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -665,12 +667,12 @@ const styles = StyleSheet.create({
               {advertisement.contactInfo?.email && (
                 <View style={styles.contactGroup}>
                   <View style={styles.contactHeader}>
-                    <Ionicons name="mail" size={20} color={COLORS.primary} />
+                    <Ionicons name="mail" size={20} color={COLORS.primaryText} />
                     <Text style={styles.contactGroupTitle}>Email</Text>
                   </View>
                   <TouchableOpacity style={styles.contactItem} onPress={() => handleEmail(advertisement.contactInfo!.email!)}>
                     <Text style={[styles.contactText, styles.linkText]}>{advertisement.contactInfo.email}</Text>
-                    <Ionicons name="chevron-forward" size={20} color={COLORS.primary} />
+                    <Ionicons name="chevron-forward" size={20} color={COLORS.primaryText} />
                   </TouchableOpacity>
                 </View>
               )}
@@ -678,18 +680,18 @@ const styles = StyleSheet.create({
               {(advertisement.contactInfo?.instagram || advertisement.contactInfo?.facebook || advertisement.contactInfo?.twitter) && (
                 <View style={styles.contactGroup}>
                   <View style={styles.contactHeader}>
-                    <Ionicons name="share-social" size={20} color={COLORS.primary} />
+                    <Ionicons name="share-social" size={20} color={COLORS.primaryText} />
                     <Text style={styles.contactGroupTitle}>Redes Sociales</Text>
                   </View>
                   <View style={styles.socialMediaContainer}>
                     {advertisement.contactInfo.facebook && (
                       <TouchableOpacity style={[styles.socialButton, { backgroundColor: '#1877F2' }]} onPress={() => handleSocialMedia('facebook', advertisement.contactInfo!.facebook!)}>
-                        <Ionicons name="logo-facebook" size={24} color={COLORS.white} />
+                        <Ionicons name="logo-facebook" size={24} color="#FFFFFF" />
                       </TouchableOpacity>
                     )}
                     {advertisement.contactInfo.instagram && (
                       <TouchableOpacity style={[styles.socialButton, { backgroundColor: '#E4405F' }]} onPress={() => handleSocialMedia('instagram', advertisement.contactInfo!.instagram!)}>
-                        <Ionicons name="logo-instagram" size={24} color={COLORS.white} />
+                        <Ionicons name="logo-instagram" size={24} color="#FFFFFF" />
                       </TouchableOpacity>
                     )}
                     {advertisement.contactInfo.twitter && (
@@ -706,7 +708,7 @@ const styles = StyleSheet.create({
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Ubicación</Text>
             <View style={styles.locationInfo}>
-              <Ionicons name="location" size={20} color={COLORS.primary} />
+              <Ionicons name="location" size={20} color={COLORS.primaryText} />
               <View style={{ flex: 1 }}>
                 {advertisement.location.address && (
                   <Text style={styles.locationText}>{advertisement.location.address}</Text>
@@ -719,7 +721,7 @@ const styles = StyleSheet.create({
 
             {advertisement.location.coordinates && (
               <TouchableOpacity style={styles.openMapButton} onPress={handleOpenMap}>
-                <Ionicons name="navigate" size={20} color={COLORS.white} />
+                <Ionicons name="navigate" size={20} color={COLORS.onPrimary} />
                 <Text style={styles.openMapButtonText}>Abrir en Google Maps</Text>
               </TouchableOpacity>
             )}

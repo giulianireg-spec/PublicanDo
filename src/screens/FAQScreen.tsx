@@ -197,7 +197,7 @@ const FAQScreen = ({ navigation }: any) => {
     container: { flex: 1, backgroundColor: COLORS.background },
     header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: COLORS.primary, paddingHorizontal: 16, paddingVertical: 12 },
     backButton: { padding: 8 },
-    headerTitle: { fontSize: 20, fontWeight: '700', color: COLORS.white },
+    headerTitle: { fontSize: 20, fontWeight: '700', color: COLORS.onPrimary },
     placeholder: { width: 40 },
     introContainer: { alignItems: 'center', paddingVertical: 24, paddingHorizontal: 16, backgroundColor: COLORS.white, borderBottomWidth: 1, borderBottomColor: COLORS.grayLight },
     introTitle: { fontSize: 22, fontWeight: '700', color: COLORS.text, marginTop: 12, textAlign: 'center' },
@@ -207,7 +207,7 @@ const FAQScreen = ({ navigation }: any) => {
     categoryChip: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, paddingVertical: 6, borderRadius: 16, backgroundColor: COLORS.background, marginRight: 8, gap: 4, height: 32 },
     categoryChipActive: { backgroundColor: COLORS.primary },
     categoryChipText: { fontSize: 12, fontWeight: '600', color: COLORS.text },
-    categoryChipTextActive: { color: COLORS.white },
+    categoryChipTextActive: { color: COLORS.onPrimary },
     resultsInfo: { paddingHorizontal: 16, paddingVertical: 8, backgroundColor: COLORS.background },
     resultsText: { fontSize: 12, color: COLORS.gray, fontStyle: 'italic' },
     faqList: { flex: 1 },
@@ -222,7 +222,7 @@ const FAQScreen = ({ navigation }: any) => {
     supportTitle: { fontSize: 18, fontWeight: '700', color: COLORS.text, marginBottom: 4 },
     supportText: { fontSize: 14, color: COLORS.gray, marginBottom: 16, textAlign: 'center' },
     supportButton: { flexDirection: 'row', alignItems: 'center', backgroundColor: COLORS.primary, paddingHorizontal: 24, paddingVertical: 12, borderRadius: 25, gap: 8 },
-    supportButtonText: { fontSize: 16, fontWeight: '600', color: COLORS.white },
+    supportButtonText: { fontSize: 16, fontWeight: '600', color: COLORS.onPrimary },
   });
 
   const [expandedId, setExpandedId] = useState<string | null>(null);
@@ -292,14 +292,14 @@ const FAQScreen = ({ navigation }: any) => {
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-          <Ionicons name="arrow-back" size={24} color={COLORS.white} />
+          <Ionicons name="arrow-back" size={24} color={COLORS.onPrimary} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Preguntas Frecuentes</Text>
         <View style={styles.placeholder} />
       </View>
 
       <View style={styles.introContainer}>
-        <Ionicons name="compass" size={40} color={COLORS.primary} />
+        <Ionicons name="compass" size={40} color={COLORS.primaryText} />
         <Text style={styles.introTitle}>Descubrí. Compartí. Guiá.</Text>
         <Text style={styles.introSubtitle}>
           Para quienes viajan a lo desconocido{'\n'}y para quienes redescubren lo propio
@@ -322,7 +322,7 @@ const FAQScreen = ({ navigation }: any) => {
           <Text style={styles.supportTitle}>¿No encontraste lo que buscabas?</Text>
           <Text style={styles.supportText}>Nuestro equipo está listo para ayudarte</Text>
           <TouchableOpacity style={styles.supportButton} onPress={handleContactSupport}>
-            <Ionicons name="mail" size={20} color={COLORS.white} />
+            <Ionicons name="mail" size={20} color={COLORS.onPrimary} />
             <Text style={styles.supportButtonText}>Contactar Soporte</Text>
           </TouchableOpacity>
         </View>

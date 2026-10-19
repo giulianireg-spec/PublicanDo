@@ -280,7 +280,7 @@ const styles = StyleSheet.create({
   if (loading) {
     return (
       <View style={[styles.loadingContainer, { backgroundColor: COLORS.background }]}>
-        <ActivityIndicator size="large" color={COLORS.primary} />
+        <ActivityIndicator size="large" color={COLORS.primaryText} />
         <Text style={[styles.loadingText, { color: COLORS.gray }]}>Cargando perfil...</Text>
       </View>
     );
@@ -298,7 +298,7 @@ const styles = StyleSheet.create({
           </TouchableOpacity>
           <Text style={[styles.headerTitle, { color: COLORS.text }]}>Mi Perfil</Text>
           <TouchableOpacity onPress={handleNavigateToLegal} style={styles.infoButton}>
-            <Ionicons name="information-circle-outline" size={26} color={COLORS.primary} />
+            <Ionicons name="information-circle-outline" size={26} color={COLORS.primaryText} />
           </TouchableOpacity>
         </View>
         
@@ -307,7 +307,7 @@ const styles = StyleSheet.create({
           <TouchableOpacity style={styles.avatarContainer} onPress={handlePickAvatar} disabled={uploadingAvatar}>
             {uploadingAvatar ? (
               <View style={[styles.avatarPlaceholder, { backgroundColor: COLORS.grayLight }]}>
-                <ActivityIndicator size="large" color={COLORS.primary} />
+                <ActivityIndicator size="large" color={COLORS.primaryText} />
               </View>
             ) : avatar ? (
               <Image source={{ uri: avatar }} style={styles.avatarImage} />
@@ -317,7 +317,7 @@ const styles = StyleSheet.create({
               </View>
             )}
             <View style={[styles.avatarEditBadge, { backgroundColor: COLORS.primary, borderColor: COLORS.white }]}>
-              <Ionicons name="camera" size={16} color={COLORS.white} />
+              <Ionicons name="camera" size={16} color={COLORS.onPrimary} />
             </View>
           </TouchableOpacity>
           <Text style={[styles.avatarHint, { color: COLORS.gray }]}>Toca para cambiar foto</Text>
@@ -374,8 +374,8 @@ const styles = StyleSheet.create({
               <Text style={[styles.label, { color: COLORS.text }]}>WhatsApp</Text>
               {phone.trim() && (
                 <TouchableOpacity onPress={copyPhoneToWhatsapp} style={styles.copyButton}>
-                  <Ionicons name="copy-outline" size={16} color={COLORS.primary} />
-                  <Text style={[styles.copyButtonText, { color: COLORS.primary }]}>Copiar teléfono</Text>
+                  <Ionicons name="copy-outline" size={16} color={COLORS.primaryText} />
+                  <Text style={[styles.copyButtonText, { color: COLORS.primaryText }]}>Copiar teléfono</Text>
                 </TouchableOpacity>
               )}
             </View>
@@ -426,10 +426,10 @@ const styles = StyleSheet.create({
                   onPress={() => toggleInterest(category)}
                   activeOpacity={0.7}
                 >
-                  <Text style={[styles.interestChipText, { color: COLORS.text }, isSelected && { color: COLORS.white, fontWeight: '600' }]}>
+                  <Text style={[styles.interestChipText, { color: COLORS.text }, isSelected && { color: COLORS.onPrimary, fontWeight: '600' }]}>
                     {category}
                   </Text>
-                  {isSelected && <Ionicons name="checkmark-circle" size={18} color={COLORS.white} />}
+                  {isSelected && <Ionicons name="checkmark-circle" size={18} color={COLORS.onPrimary} />}
                 </TouchableOpacity>
               );
             })}
@@ -466,13 +466,13 @@ const styles = StyleSheet.create({
                     <Ionicons name={icon as any} size={22} color={isActive ? COLORS.white : COLORS.gray} />
                   </View>
                   <View style={styles.themeTextContainer}>
-                    <Text style={[styles.themeLabel, { color: COLORS.text }, isActive && { color: COLORS.primary, fontWeight: '700' }]}>
+                    <Text style={[styles.themeLabel, { color: COLORS.text }, isActive && { color: COLORS.primaryText, fontWeight: '700' }]}>
                       {label}
                     </Text>
                     <Text style={[styles.themeDesc, { color: COLORS.gray }]}>{desc}</Text>
                   </View>
                   {isActive && (
-                    <Ionicons name="checkmark-circle" size={22} color={COLORS.primary} />
+                    <Ionicons name="checkmark-circle" size={22} color={COLORS.primaryText} />
                   )}
                 </TouchableOpacity>
               );
@@ -481,8 +481,8 @@ const styles = StyleSheet.create({
 
           {/* Indicador del estado actual */}
           <View style={[styles.themeStatusBadge, { backgroundColor: isDark ? '#1A1A2E' : '#FFF9E6', borderColor: isDark ? COLORS.primaryLight : COLORS.accent }]}>
-            <Ionicons name={isDark ? 'moon' : 'sunny'} size={16} color={isDark ? COLORS.primaryLight : COLORS.secondary} />
-            <Text style={[styles.themeStatusText, { color: isDark ? COLORS.primaryLight : COLORS.secondary }]}>
+            <Ionicons name={isDark ? 'moon' : 'sunny'} size={16} color={COLORS.primaryText} />
+            <Text style={[styles.themeStatusText, { color: COLORS.primaryText }]}>
               {isDark ? 'Modo oscuro activo' : 'Modo claro activo'}
               {themeMode === 'auto' ? ' · automático' : ''}
             </Text>
@@ -496,11 +496,11 @@ const styles = StyleSheet.create({
           disabled={saving}
         >
           {saving ? (
-            <ActivityIndicator color={COLORS.white} />
+            <ActivityIndicator color={COLORS.onPrimary} />
           ) : (
             <>
-              <Ionicons name="checkmark-circle" size={24} color={COLORS.white} />
-              <Text style={[styles.saveButtonText, { color: COLORS.white }]}>Guardar Cambios</Text>
+              <Ionicons name="checkmark-circle" size={24} color={COLORS.onPrimary} />
+              <Text style={[styles.saveButtonText, { color: COLORS.onPrimary }]}>Guardar Cambios</Text>
             </>
           )}
         </TouchableOpacity>
@@ -509,7 +509,7 @@ const styles = StyleSheet.create({
         <View style={[styles.section, { backgroundColor: COLORS.white, shadowColor: COLORS.shadow }]}>
           <TouchableOpacity style={styles.passwordToggle} onPress={() => setShowPasswordSection(!showPasswordSection)}>
             <View style={styles.passwordToggleLeft}>
-              <Ionicons name="lock-closed" size={24} color={COLORS.primary} />
+              <Ionicons name="lock-closed" size={24} color={COLORS.primaryText} />
               <Text style={[styles.passwordToggleText, { color: COLORS.text }]}>Cambiar Contraseña</Text>
             </View>
             <Ionicons name={showPasswordSection ? 'chevron-up' : 'chevron-down'} size={24} color={COLORS.gray} />
@@ -559,11 +559,11 @@ const styles = StyleSheet.create({
                 onPress={handleChangePassword} disabled={changingPassword}
               >
                 {changingPassword ? (
-                  <ActivityIndicator color={COLORS.white} />
+                  <ActivityIndicator color={COLORS.onPrimary} />
                 ) : (
                   <>
-                    <Ionicons name="key" size={20} color={COLORS.white} />
-                    <Text style={[styles.changePasswordButtonText, { color: COLORS.white }]}>Cambiar Contraseña</Text>
+                    <Ionicons name="key" size={20} color={COLORS.onPrimary} />
+                    <Text style={[styles.changePasswordButtonText, { color: COLORS.onPrimary }]}>Cambiar Contraseña</Text>
                   </>
                 )}
               </TouchableOpacity>

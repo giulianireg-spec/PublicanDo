@@ -47,18 +47,18 @@ const ReportsManagementScreen = ({ navigation }: any) => {
     errorTitle: { fontSize: 20, fontWeight: '700', color: COLORS.text, marginTop: 16, marginBottom: 8 },
     errorText: { fontSize: 14, color: COLORS.gray, textAlign: 'center', marginBottom: 24 },
     retryButton: { flexDirection: 'row', alignItems: 'center', backgroundColor: COLORS.primary, paddingHorizontal: 24, paddingVertical: 12, borderRadius: 24, gap: 8, marginBottom: 16 },
-    retryButtonText: { color: COLORS.white, fontSize: 16, fontWeight: '600' },
+    retryButtonText: { color: COLORS.onPrimary, fontSize: 16, fontWeight: '600' },
     infoButton: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-    infoButtonText: { color: COLORS.primary, fontSize: 14, fontWeight: '600' },
+    infoButtonText: { color: COLORS.primaryText, fontSize: 14, fontWeight: '600' },
     header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: COLORS.primary, paddingHorizontal: 16, paddingVertical: 12 },
     backButton: { padding: 8 },
-    headerTitle: { fontSize: 20, fontWeight: '700', color: COLORS.white },
+    headerTitle: { fontSize: 20, fontWeight: '700', color: COLORS.onPrimary },
     placeholder: { width: 40 },
     tabsContainer: { flexDirection: 'row', padding: 16, gap: 8 },
     tab: { flex: 1, paddingVertical: 8, paddingHorizontal: 4, borderRadius: 20, backgroundColor: COLORS.white, alignItems: 'center' },
     tabActive: { backgroundColor: COLORS.primary },
     tabText: { fontSize: 12, fontWeight: '600', color: COLORS.text },
-    tabTextActive: { color: COLORS.white },
+    tabTextActive: { color: COLORS.onPrimary },
     listContainer: { padding: 16 },
     card: { backgroundColor: COLORS.white, borderRadius: 12, marginBottom: 16, overflow: 'hidden', shadowColor: COLORS.shadow, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 4, elevation: 3 },
     cardHeader: { flexDirection: 'row', padding: 12, borderBottomWidth: 1, borderBottomColor: COLORS.grayLight },
@@ -253,7 +253,7 @@ const ReportsManagementScreen = ({ navigation }: any) => {
       <SafeAreaView style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-            <Ionicons name="arrow-back" size={24} color={COLORS.white} />
+            <Ionicons name="arrow-back" size={24} color={COLORS.onPrimary} />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>Gestión de Reportes</Text>
           <View style={styles.placeholder} />
@@ -263,7 +263,7 @@ const ReportsManagementScreen = ({ navigation }: any) => {
           <Text style={styles.errorTitle}>Error al cargar reportes</Text>
           <Text style={styles.errorText}>{error}</Text>
           <TouchableOpacity style={styles.retryButton} onPress={loadReports}>
-            <Ionicons name="refresh" size={20} color={COLORS.white} />
+            <Ionicons name="refresh" size={20} color={COLORS.onPrimary} />
             <Text style={styles.retryButtonText}>Reintentar</Text>
           </TouchableOpacity>
         </View>
@@ -274,7 +274,7 @@ const ReportsManagementScreen = ({ navigation }: any) => {
   if (loading && !refreshing) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color={COLORS.primary} />
+        <ActivityIndicator size="large" color={COLORS.primaryText} />
         <Text style={styles.loadingText}>Cargando reportes...</Text>
       </View>
     );
@@ -284,7 +284,7 @@ const ReportsManagementScreen = ({ navigation }: any) => {
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-          <Ionicons name="arrow-back" size={24} color={COLORS.white} />
+          <Ionicons name="arrow-back" size={24} color={COLORS.onPrimary} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Gestión de Reportes</Text>
         <View style={styles.placeholder} />
@@ -308,7 +308,7 @@ const ReportsManagementScreen = ({ navigation }: any) => {
         renderItem={renderReportCard}
         keyExtractor={(item) => item._id}
         contentContainerStyle={styles.listContainer}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[COLORS.primary]} tintColor={COLORS.primary} />}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[COLORS.primaryText]} tintColor={COLORS.primaryText} />}
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
             <Ionicons name="folder-open-outline" size={64} color={COLORS.grayLight} />

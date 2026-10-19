@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
   currentLocationText: {
     fontSize: 16,
     fontWeight: '600',
-    color: COLORS.primary,
+    color: COLORS.primaryText,
   },
   separator: {
     flexDirection: 'row',
@@ -410,7 +410,7 @@ const styles = StyleSheet.create({
       style={styles.resultItem}
       onPress={() => handleSelectResult(item)}
     >
-      <Ionicons name="location" size={20} color={COLORS.primary} style={styles.resultIcon} />
+      <Ionicons name="location" size={20} color={COLORS.primaryText} style={styles.resultIcon} />
       <View style={styles.resultInfo}>
         <Text style={styles.resultAddress} numberOfLines={2}>
           {item.displayName}
@@ -444,9 +444,9 @@ const styles = StyleSheet.create({
           disabled={gettingLocation}
         >
           {gettingLocation ? (
-            <ActivityIndicator size="small" color={COLORS.primary} />
+            <ActivityIndicator size="small" color={COLORS.primaryText} />
           ) : (
-            <Ionicons name="navigate" size={22} color={COLORS.primary} />
+            <Ionicons name="navigate" size={22} color={COLORS.primaryText} />
           )}
           <Text style={styles.currentLocationText}>
             {gettingLocation ? 'Obteniendo ubicación...' : 'Usar mi ubicación actual'}
@@ -482,7 +482,7 @@ const styles = StyleSheet.create({
         {/* Resultados */}
         {loading ? (
           <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color={COLORS.primary} />
+            <ActivityIndicator size="large" color={COLORS.primaryText} />
             <Text style={styles.loadingText}>Buscando...</Text>
           </View>
         ) : (

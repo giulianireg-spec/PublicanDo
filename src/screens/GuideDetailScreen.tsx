@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
   },
   categoryBadgeText: {
-    color: COLORS.white,
+    color: '#FFFFFF',
     fontWeight: '600',
     fontSize: 13,
   },
@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
   },
   locationText: {
     fontSize: 12,
-    color: COLORS.primary,
+    color: COLORS.primaryText,
     fontWeight: '500',
   },
   sectionTitle: {
@@ -243,7 +243,7 @@ const styles = StyleSheet.create({
     borderColor: COLORS.white,
   },
   markerText: {
-    color: COLORS.white,
+    color: COLORS.onPrimary,
     fontWeight: '700',
     fontSize: 12,
   },
@@ -280,7 +280,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   pointNumberText: {
-    color: COLORS.white,
+    color: COLORS.onPrimary,
     fontWeight: '700',
     fontSize: 13,
   },
@@ -331,7 +331,7 @@ const styles = StyleSheet.create({
   notesText: {
     flex: 1,
     fontSize: 12,
-    color: COLORS.primary,
+    color: COLORS.primaryText,
     fontStyle: 'italic',
   },
   pointActions: {
@@ -352,7 +352,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.primary + '15',
   },
   pointActionText: {
-    color: COLORS.white,
+    color: COLORS.onPrimary,
     fontWeight: '600',
     fontSize: 13,
   },
@@ -373,7 +373,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   editButtonText: {
-    color: COLORS.white,
+    color: COLORS.onPrimary,
     fontWeight: '600',
   },
   deleteButton: {
@@ -658,7 +658,7 @@ const styles = StyleSheet.create({
             
             {point.notes && (
               <View style={styles.notesContainer}>
-                <Ionicons name="chatbubble-outline" size={14} color={COLORS.primary} />
+                <Ionicons name="chatbubble-outline" size={14} color={COLORS.primaryText} />
                 <Text style={styles.notesText}>{point.notes}</Text>
               </View>
             )}
@@ -668,7 +668,7 @@ const styles = StyleSheet.create({
                 style={styles.pointActionButton}
                 onPress={() => handleOpenMaps(point)}
               >
-                <Ionicons name="navigate" size={16} color={COLORS.white} />
+                <Ionicons name="navigate" size={16} color={COLORS.onPrimary} />
                 <Text style={styles.pointActionText}>Cómo llegar</Text>
               </TouchableOpacity>
 
@@ -677,8 +677,8 @@ const styles = StyleSheet.create({
                   style={[styles.pointActionButton, styles.pointActionSecondary]}
                   onPress={() => navigation.navigate('Detail', { advertisement: (point.placeId as any) })}
                 >
-                  <Ionicons name="information-circle" size={16} color={COLORS.primary} />
-                  <Text style={[styles.pointActionText, { color: COLORS.primary }]}>Ver lugar</Text>
+                  <Ionicons name="information-circle" size={16} color={COLORS.primaryText} />
+                  <Text style={[styles.pointActionText, { color: COLORS.primaryText }]}>Ver lugar</Text>
                 </TouchableOpacity>
               )}
             </View>
@@ -744,7 +744,7 @@ const styles = StyleSheet.create({
         </MapView>
 
         <TouchableOpacity style={styles.expandMapButton}>
-          <Ionicons name="expand" size={20} color={COLORS.white} />
+          <Ionicons name="expand" size={20} color={COLORS.onPrimary} />
         </TouchableOpacity>
       </View>
     );
@@ -753,7 +753,7 @@ const styles = StyleSheet.create({
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color={COLORS.primary} />
+        <ActivityIndicator size="large" color={COLORS.primaryText} />
         <Text style={styles.loadingText}>Cargando guía...</Text>
       </View>
     );
@@ -782,7 +782,7 @@ const styles = StyleSheet.create({
             style={styles.backButton}
             onPress={() => navigation.goBack()}
           >
-            <Ionicons name="arrow-back" size={24} color={COLORS.white} />
+            <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
           </TouchableOpacity>
 
           <View style={styles.coverActions}>
@@ -839,14 +839,14 @@ const styles = StyleSheet.create({
             <View style={styles.statDivider} />
 
             <View style={styles.statItem}>
-              <Ionicons name="time-outline" size={18} color={COLORS.primary} />
+              <Ionicons name="time-outline" size={18} color={COLORS.primaryText} />
               <Text style={styles.statValue}>{formatDuration(guide.estimatedDuration)}</Text>
             </View>
 
             <View style={styles.statDivider} />
 
             <View style={styles.statItem}>
-              <Ionicons name="location-outline" size={18} color={COLORS.primary} />
+              <Ionicons name="location-outline" size={18} color={COLORS.primaryText} />
               <Text style={styles.statValue}>{guide.points.length} puntos</Text>
             </View>
           </View>
@@ -859,7 +859,7 @@ const styles = StyleSheet.create({
               </Text>
             </View>
             <View style={styles.locationBadge}>
-              <Ionicons name="navigate" size={14} color={COLORS.primary} />
+              <Ionicons name="navigate" size={14} color={COLORS.primaryText} />
               <Text style={styles.locationText}>
                 {guide.mainLocation.city}, {guide.mainLocation.province}
               </Text>
@@ -896,7 +896,7 @@ const styles = StyleSheet.create({
                   style={styles.editButton}
                   onPress={() => navigation.navigate('EditGuide', { guideId })}
                 >
-                  <Ionicons name="pencil" size={18} color={COLORS.white} />
+                  <Ionicons name="pencil" size={18} color={COLORS.onPrimary} />
                   <Text style={styles.editButtonText}>Editar guía</Text>
                 </TouchableOpacity>
               )}

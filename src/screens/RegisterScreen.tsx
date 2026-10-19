@@ -141,11 +141,11 @@ export default function RegisterScreen({ onRegisterSuccess, onLoginPress }: Regi
     checkbox: { width: 24, height: 24, borderRadius: 6, borderWidth: 2, borderColor: COLORS.grayLight, backgroundColor: COLORS.white, justifyContent: 'center', alignItems: 'center', marginRight: 12, marginTop: 2 },
     checkboxChecked: { backgroundColor: COLORS.primary, borderColor: COLORS.primary },
     termsText: { flex: 1, fontSize: 14, color: COLORS.text, lineHeight: 20 },
-    termsLink: { color: COLORS.primary, fontWeight: '600', textDecorationLine: 'underline' },
+    termsLink: { color: COLORS.primaryText, fontWeight: '600', textDecorationLine: 'underline' },
     termsHint: { fontSize: 12, color: COLORS.gray, textAlign: 'center', marginTop: 8, fontStyle: 'italic' },
     registerButton: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor: COLORS.secondary, borderRadius: 12, paddingVertical: 16, marginTop: 8, gap: 8 },
     registerButtonDisabled: { opacity: 0.6 },
-    registerButtonText: { color: COLORS.white, fontSize: 16, fontWeight: '700' },
+    registerButtonText: { color: COLORS.onPrimary, fontSize: 16, fontWeight: '700' },
     divider: { flexDirection: 'row', alignItems: 'center', marginVertical: 24 },
     dividerLine: { flex: 1, height: 1, backgroundColor: COLORS.grayLight },
     dividerText: { marginHorizontal: 16, fontSize: 14, color: COLORS.gray },
@@ -155,7 +155,7 @@ export default function RegisterScreen({ onRegisterSuccess, onLoginPress }: Regi
     googleButtonTextDisabled: { color: COLORS.gray },
     loginContainer: { flexDirection: 'row', justifyContent: 'center', marginTop: 24, marginBottom: 20 },
     loginText: { fontSize: 14, color: COLORS.gray },
-    loginLink: { fontSize: 14, color: COLORS.primary, fontWeight: '700' },
+    loginLink: { fontSize: 14, color: COLORS.primaryText, fontWeight: '700' },
   });
 
   return (
@@ -164,7 +164,7 @@ export default function RegisterScreen({ onRegisterSuccess, onLoginPress }: Regi
         <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
           <View style={styles.content}>
             <View style={styles.header}>
-              <Ionicons name="compass" size={64} color={COLORS.primary} />
+              <Ionicons name="compass" size={64} color={COLORS.primaryText} />
               <Text style={styles.title}>Crear Cuenta</Text>
               <Text style={styles.subtitle}>Descubrí y compartí lugares increíbles</Text>
             </View>
@@ -210,7 +210,7 @@ export default function RegisterScreen({ onRegisterSuccess, onLoginPress }: Regi
                 </View>
                 {phone.trim() && !whatsapp.trim() && (
                   <TouchableOpacity onPress={copyPhoneToWhatsapp} style={styles.copyButton}>
-                    <Ionicons name="copy-outline" size={18} color={COLORS.primary} />
+                    <Ionicons name="copy-outline" size={18} color={COLORS.primaryText} />
                   </TouchableOpacity>
                 )}
               </View>
@@ -234,7 +234,7 @@ export default function RegisterScreen({ onRegisterSuccess, onLoginPress }: Regi
               <View style={styles.termsContainer}>
                 <TouchableOpacity style={styles.checkboxContainer} onPress={() => setAcceptedTerms(!acceptedTerms)} activeOpacity={0.7}>
                   <View style={[styles.checkbox, acceptedTerms && styles.checkboxChecked]}>
-                    {acceptedTerms && <Ionicons name="checkmark" size={16} color={COLORS.white} />}
+                    {acceptedTerms && <Ionicons name="checkmark" size={16} color={COLORS.onPrimary} />}
                   </View>
                   <Text style={styles.termsText}>
                     Acepto los{' '}
@@ -250,9 +250,9 @@ export default function RegisterScreen({ onRegisterSuccess, onLoginPress }: Regi
                 onPress={handleRegister}
                 disabled={loading || !acceptedTerms}
               >
-                {loading ? <ActivityIndicator color={COLORS.white} /> : (
+                {loading ? <ActivityIndicator color={COLORS.onPrimary} /> : (
                   <>
-                    <Ionicons name="person-add" size={20} color={COLORS.white} />
+                    <Ionicons name="person-add" size={20} color={COLORS.onPrimary} />
                     <Text style={styles.registerButtonText}>Crear Cuenta</Text>
                   </>
                 )}

@@ -163,10 +163,10 @@ const styles = StyleSheet.create({
   filterModeText: {
     fontSize: 13,
     fontWeight: '600',
-    color: COLORS.primary,
+    color: COLORS.primaryText,
   },
   filterModeTextActive: {
-    color: COLORS.white,
+    color: COLORS.onPrimary,
   },
   filterModeTextDisabled: {
     color: COLORS.gray,
@@ -186,7 +186,7 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   filterChipText: {
-    color: COLORS.white,
+    color: COLORS.onPrimary,
     fontSize: 11,
     fontWeight: '600',
   },
@@ -240,7 +240,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   subcategoryFilterTextActive: {
-    color: COLORS.white,
+    color: COLORS.onPrimary,
     fontWeight: '600',
   },
   categoriesWrapper: {
@@ -277,7 +277,7 @@ const styles = StyleSheet.create({
     borderColor: COLORS.primary,
   },
   categoryTextActive: {
-    color: COLORS.white,
+    color: COLORS.onPrimary,
     fontWeight: '700',
   },
   categoryButtonInterest: {
@@ -286,7 +286,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
   },
   categoryTextInterest: {
-    color: COLORS.secondary,
+    color: COLORS.primaryText,
     fontWeight: '700',
   },
   distanceFilterContainer: {
@@ -309,7 +309,7 @@ const styles = StyleSheet.create({
   },
   distanceFilterText: {
     fontSize: 14,
-    color: COLORS.primary,
+    color: COLORS.primaryText,
     fontWeight: '600',
   },
   distanceDropdown: {
@@ -345,7 +345,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   distanceOptionTextActive: {
-    color: COLORS.white,
+    color: COLORS.onPrimary,
     fontWeight: '700',
   },
   resultsInfo: {
@@ -405,7 +405,7 @@ const styles = StyleSheet.create({
   openBadgeText: {
     fontSize: 10,
     fontWeight: '700',
-    color: COLORS.white,
+    color: COLORS.onPrimary,
   },
   cardContent: {
     padding: 12,
@@ -438,7 +438,7 @@ const styles = StyleSheet.create({
   },
   locationText: {
     fontSize: 11,
-    color: COLORS.primary,
+    color: COLORS.primaryText,
     fontWeight: '600',
     flex: 1,
   },
@@ -466,7 +466,7 @@ const styles = StyleSheet.create({
   },
   distanceText: {
     fontSize: 12,
-    color: COLORS.primary,
+    color: COLORS.primaryText,
     fontWeight: '600',
   },
   adCardContainer: {
@@ -509,7 +509,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   clearFiltersText: {
-    color: COLORS.white,
+    color: COLORS.onPrimary,
     fontWeight: '600',
   },
   modalOverlay: {
@@ -582,11 +582,11 @@ const styles = StyleSheet.create({
   },
   provinceChipText: {
     fontSize: 14,
-    color: COLORS.primary,
+    color: COLORS.primaryText,
     fontWeight: '600',
   },
   provinceChipTextActive: {
-    color: COLORS.white,
+    color: COLORS.onPrimary,
   },
   localityInputContainer: {
     position: 'relative',
@@ -638,7 +638,7 @@ const styles = StyleSheet.create({
   selectedLocalityText: {
     flex: 1,
     fontSize: 14,
-    color: COLORS.primary,
+    color: COLORS.primaryText,
     fontWeight: '600',
   },
   modalFooter: {
@@ -660,7 +660,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   clearButtonText: {
-    color: COLORS.primary,
+    color: COLORS.primaryText,
     fontSize: 16,
     fontWeight: '700',
   },
@@ -672,7 +672,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   applyButtonText: {
-    color: COLORS.white,
+    color: COLORS.onPrimary,
     fontSize: 16,
     fontWeight: '700',
   },
@@ -1240,7 +1240,7 @@ const styles = StyleSheet.create({
         
         {item.hasProfessionalLicense && (
           <View style={styles.licenseBadge}>
-            <Ionicons name="shield-checkmark" size={12} color={COLORS.white} />
+            <Ionicons name="shield-checkmark" size={12} color="#FFFFFF" />
           </View>
         )}
 
@@ -1265,7 +1265,7 @@ const styles = StyleSheet.create({
           </View>
           
           <View style={styles.locationContainer}>
-            <Ionicons name="location" size={12} color={COLORS.primary} />
+            <Ionicons name="location" size={12} color={COLORS.primaryText} />
             <Text style={styles.locationText} numberOfLines={1}>
               {item.location?.city}, {item.location?.province}
             </Text>
@@ -1280,7 +1280,7 @@ const styles = StyleSheet.create({
           
           {item.distance !== null && item.distance !== undefined && (
             <View style={styles.distanceContainer}>
-              <Ionicons name="navigate" size={14} color={COLORS.primary} />
+              <Ionicons name="navigate" size={14} color={COLORS.primaryText} />
               <Text style={styles.distanceText}>{formatDistance(item.distance)}</Text>
             </View>
           )}
@@ -1329,7 +1329,7 @@ const styles = StyleSheet.create({
     if (!loadingMore) return null;
     return (
       <View style={styles.footerLoader}>
-        <ActivityIndicator size="small" color={COLORS.primary} />
+        <ActivityIndicator size="small" color={COLORS.primaryText} />
         <Text style={styles.footerText}>Cargando más...</Text>
       </View>
     );
@@ -1403,19 +1403,19 @@ const styles = StyleSheet.create({
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {selectedProvince && (
             <View style={styles.filterChip}>
-              <Ionicons name="map" size={14} color={COLORS.white} />
+              <Ionicons name="map" size={14} color={COLORS.onPrimary} />
               <Text style={styles.filterChipText}>{selectedProvince}</Text>
               <TouchableOpacity onPress={() => setSelectedProvince(null)}>
-                <Ionicons name="close-circle" size={16} color={COLORS.white} />
+                <Ionicons name="close-circle" size={16} color={COLORS.onPrimary} />
               </TouchableOpacity>
             </View>
           )}
           {selectedLocality && (
             <View style={styles.filterChip}>
-              <Ionicons name="location" size={14} color={COLORS.white} />
+              <Ionicons name="location" size={14} color={COLORS.onPrimary} />
               <Text style={styles.filterChipText}>{selectedLocality}</Text>
               <TouchableOpacity onPress={() => setSelectedLocality(null)}>
-                <Ionicons name="close-circle" size={16} color={COLORS.white} />
+                <Ionicons name="close-circle" size={16} color={COLORS.onPrimary} />
               </TouchableOpacity>
             </View>
           )}
@@ -1492,7 +1492,7 @@ const styles = StyleSheet.create({
   if (detectingLocation || (loading && !refreshing)) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color={COLORS.primary} />
+        <ActivityIndicator size="large" color={COLORS.primaryText} />
         <Text style={styles.loadingText}>
           {detectingLocation ? 'Detectando ubicación...' : 'Cargando lugares...'}
         </Text>
@@ -1562,9 +1562,9 @@ const styles = StyleSheet.create({
             style={styles.distanceFilterButton}
             onPress={() => setShowDistanceDropdown(!showDistanceDropdown)}
           >
-            <Ionicons name="radio-button-on" size={18} color={COLORS.primary} />
+            <Ionicons name="radio-button-on" size={18} color={COLORS.primaryText} />
             <Text style={styles.distanceFilterText}>Radio: {distanceFilter} km</Text>
-            <Ionicons name={showDistanceDropdown ? 'chevron-up' : 'chevron-down'} size={18} color={COLORS.primary} />
+            <Ionicons name={showDistanceDropdown ? 'chevron-up' : 'chevron-down'} size={18} color={COLORS.primaryText} />
           </TouchableOpacity>
 
           {showDistanceDropdown && (
@@ -1581,7 +1581,7 @@ const styles = StyleSheet.create({
                   <Text style={[styles.distanceOptionText, distanceFilter === km && styles.distanceOptionTextActive]}>
                     {km} km o menos
                   </Text>
-                  {distanceFilter === km && <Ionicons name="checkmark" size={18} color={COLORS.white} />}
+                  {distanceFilter === km && <Ionicons name="checkmark" size={18} color={COLORS.onPrimary} />}
                 </TouchableOpacity>
               ))}
             </View>
@@ -1606,7 +1606,7 @@ const styles = StyleSheet.create({
         numColumns={2}
         contentContainerStyle={styles.listContainer}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[COLORS.primary]} tintColor={COLORS.primary} />
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[COLORS.primaryText]} tintColor={COLORS.primaryText} />
         }
         onEndReached={handleLoadMore}
         onEndReachedThreshold={0.5}
@@ -1712,7 +1712,7 @@ const styles = StyleSheet.create({
                       value={localityQuery}
                       onChangeText={setLocalityQuery}
                     />
-                    {loadingLocalities && <ActivityIndicator size="small" color={COLORS.primary} style={styles.inputLoader} />}
+                    {loadingLocalities && <ActivityIndicator size="small" color={COLORS.primaryText} style={styles.inputLoader} />}
                   </View>
 
                   {localitySuggestions.length > 0 && (
@@ -1732,7 +1732,7 @@ const styles = StyleSheet.create({
                               setLocalitySuggestions([]); 
                             }}
                           >
-                            <Ionicons name="location" size={16} color={COLORS.primary} />
+                            <Ionicons name="location" size={16} color={COLORS.primaryText} />
                             <Text style={styles.localitySuggestionText}>{item}</Text>
                           </TouchableOpacity>
                         ))}
@@ -1742,7 +1742,7 @@ const styles = StyleSheet.create({
 
                   {tempLocality && (
                     <View style={styles.selectedLocalityChip}>
-                      <Ionicons name="location" size={16} color={COLORS.primary} />
+                      <Ionicons name="location" size={16} color={COLORS.primaryText} />
                       <Text style={styles.selectedLocalityText}>{tempLocality}</Text>
                       <TouchableOpacity onPress={() => { setTempLocality(null); setLocalityQuery(''); }}>
                         <Ionicons name="close-circle" size={20} color={COLORS.error} />
@@ -1785,10 +1785,10 @@ const styles = StyleSheet.create({
             <Text style={{ fontSize: 12, color: COLORS.gray, textAlign: 'right', marginTop: 4, marginBottom: 16 }}>{rejectReason.length}/200</Text>
             <View style={{ flexDirection: 'row', gap: 12 }}>
               <TouchableOpacity style={{ flex: 1, padding: 14, borderRadius: 8, borderWidth: 2, borderColor: COLORS.primary, alignItems: 'center' }} onPress={() => setShowRejectModal(false)}>
-                <Text style={{ color: COLORS.primary, fontWeight: '700' }}>Cancelar</Text>
+                <Text style={{ color: COLORS.primaryText, fontWeight: '700' }}>Cancelar</Text>
               </TouchableOpacity>
               <TouchableOpacity style={{ flex: 1, padding: 14, borderRadius: 8, backgroundColor: COLORS.primary, alignItems: 'center' }} onPress={confirmReject}>
-                <Text style={{ color: COLORS.white, fontWeight: '700' }}>Enviar</Text>
+                <Text style={{ color: COLORS.onPrimary, fontWeight: '700' }}>Enviar</Text>
               </TouchableOpacity>
             </View>
           </View>

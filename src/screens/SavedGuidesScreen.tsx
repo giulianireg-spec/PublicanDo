@@ -22,14 +22,14 @@ const SavedGuidesScreen = ({ navigation }: any) => {
     container: { flex: 1, backgroundColor: COLORS.background },
     header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: COLORS.primary, paddingHorizontal: 16, paddingVertical: 12 },
     backButton: { padding: 8 },
-    headerTitle: { fontSize: 20, fontWeight: '700', color: COLORS.white },
+    headerTitle: { fontSize: 20, fontWeight: '700', color: COLORS.onPrimary },
     placeholder: { width: 40 },
     loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
     listContent: { padding: 16, paddingBottom: 32 },
     card: { backgroundColor: COLORS.white, borderRadius: 16, marginBottom: 16, overflow: 'hidden', elevation: 3, shadowColor: COLORS.shadow, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 4 },
     cardImage: { width: '100%', height: 150, backgroundColor: COLORS.grayLight },
     categoryBadge: { position: 'absolute', top: 12, left: 12, paddingHorizontal: 10, paddingVertical: 4, borderRadius: 12 },
-    categoryBadgeText: { color: COLORS.white, fontSize: 11, fontWeight: '600' },
+    categoryBadgeText: { color: '#FFFFFF', fontSize: 11, fontWeight: '600' },
     unsaveButton: { position: 'absolute', top: 12, right: 12, width: 32, height: 32, borderRadius: 16, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', alignItems: 'center' },
     cardContent: { padding: 14 },
     cardTitle: { fontSize: 16, fontWeight: '700', color: COLORS.text, marginBottom: 6 },
@@ -37,14 +37,14 @@ const SavedGuidesScreen = ({ navigation }: any) => {
     statItem: { flexDirection: 'row', alignItems: 'center', gap: 4 },
     statText: { fontSize: 12, color: COLORS.gray },
     locationRow: { flexDirection: 'row', alignItems: 'center' },
-    locationText: { fontSize: 12, color: COLORS.primary, fontWeight: '500', flex: 1, marginLeft: 4 },
+    locationText: { fontSize: 12, color: COLORS.primaryText, fontWeight: '500', flex: 1, marginLeft: 4 },
     difficultyBadge: { paddingHorizontal: 8, paddingVertical: 2, borderRadius: 8 },
     difficultyText: { fontSize: 11, fontWeight: '600' },
     emptyContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', paddingVertical: 60 },
     emptyText: { marginTop: 16, fontSize: 16, fontWeight: '600', color: COLORS.gray },
     emptySubtext: { marginTop: 8, fontSize: 14, color: COLORS.gray, textAlign: 'center', paddingHorizontal: 32 },
     exploreButton: { flexDirection: 'row', alignItems: 'center', marginTop: 20, paddingHorizontal: 20, paddingVertical: 12, backgroundColor: COLORS.primary, borderRadius: 24, gap: 8 },
-    exploreButtonText: { color: COLORS.white, fontWeight: '600' },
+    exploreButtonText: { color: COLORS.onPrimary, fontWeight: '600' },
   });
 
   useFocusEffect(
@@ -115,7 +115,7 @@ const SavedGuidesScreen = ({ navigation }: any) => {
             </View>
           </View>
           <View style={styles.locationRow}>
-            <Ionicons name="navigate" size={12} color={COLORS.primary} />
+            <Ionicons name="navigate" size={12} color={COLORS.primaryText} />
             <Text style={styles.locationText}>{item.mainLocation.city}, {item.mainLocation.province}</Text>
             <View style={[styles.difficultyBadge, { backgroundColor: difficultyConfig.color + '20' }]}>
               <Text style={[styles.difficultyText, { color: difficultyConfig.color }]}>
@@ -133,13 +133,13 @@ const SavedGuidesScreen = ({ navigation }: any) => {
       <View style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-            <Ionicons name="arrow-back" size={24} color={COLORS.white} />
+            <Ionicons name="arrow-back" size={24} color={COLORS.onPrimary} />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>🔖 Guías guardadas</Text>
           <View style={styles.placeholder} />
         </View>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={COLORS.primary} />
+          <ActivityIndicator size="large" color={COLORS.primaryText} />
         </View>
       </View>
     );
@@ -149,7 +149,7 @@ const SavedGuidesScreen = ({ navigation }: any) => {
     <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-          <Ionicons name="arrow-back" size={24} color={COLORS.white} />
+          <Ionicons name="arrow-back" size={24} color={COLORS.onPrimary} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>🔖 Guías guardadas</Text>
         <View style={styles.placeholder} />
@@ -160,14 +160,14 @@ const SavedGuidesScreen = ({ navigation }: any) => {
         renderItem={renderCard}
         keyExtractor={(item) => item._id}
         contentContainerStyle={guides.length === 0 ? { flex: 1 } : styles.listContent}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[COLORS.primary]} tintColor={COLORS.primary} />}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[COLORS.primaryText]} tintColor={COLORS.primaryText} />}
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
             <Ionicons name="bookmark-outline" size={64} color={COLORS.grayLight} />
             <Text style={styles.emptyText}>No tenés guías guardadas</Text>
             <Text style={styles.emptySubtext}>Guardá guías que te interesen para acceder a ellas rápidamente</Text>
             <TouchableOpacity style={styles.exploreButton} onPress={() => navigation.goBack()}>
-              <Ionicons name="compass" size={20} color={COLORS.white} />
+              <Ionicons name="compass" size={20} color={COLORS.onPrimary} />
               <Text style={styles.exploreButtonText}>Explorar guías</Text>
             </TouchableOpacity>
           </View>

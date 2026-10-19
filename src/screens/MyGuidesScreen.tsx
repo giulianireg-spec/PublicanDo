@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: COLORS.white,
+    color: COLORS.onPrimary,
   },
   addButton: {
     padding: 8,
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
   },
   cardCategory: {
     fontSize: 14,
-    color: COLORS.primary,
+    color: COLORS.primaryText,
     marginBottom: 8,
   },
   locationRow: {
@@ -234,7 +234,7 @@ const styles = StyleSheet.create({
   createButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: COLORS.white,
+    color: COLORS.onPrimary,
   },
 });
 
@@ -331,7 +331,7 @@ const styles = StyleSheet.create({
         
         {/* Badge de puntos */}
         <View style={styles.pointsBadge}>
-          <Ionicons name="map" size={12} color={COLORS.white} />
+          <Ionicons name="map" size={12} color="#FFFFFF" />
           <Text style={styles.pointsBadgeText}>{item.points?.length || 0} puntos</Text>
         </View>
 
@@ -374,7 +374,7 @@ const styles = StyleSheet.create({
             </View>
             {item.ratingCount > 0 && (
               <View style={styles.statItem}>
-                <Ionicons name="star" size={14} color={COLORS.secondary} />
+                <Ionicons name="star" size={14} color={COLORS.primaryText} />
                 <Text style={styles.statText}>
                   {item.averageRating?.toFixed(1)} ({item.ratingCount})
                 </Text>
@@ -388,8 +388,8 @@ const styles = StyleSheet.create({
               style={[styles.actionButton, styles.editButton]}
               onPress={() => navigation.navigate('EditGuide', { guideId: item._id })}
             >
-              <Ionicons name="pencil-outline" size={18} color={COLORS.primary} />
-              <Text style={[styles.actionText, { color: COLORS.primary }]}>Editar</Text>
+              <Ionicons name="pencil-outline" size={18} color={COLORS.primaryText} />
+              <Text style={[styles.actionText, { color: COLORS.primaryText }]}>Editar</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.actionButton, styles.deleteButton]}
@@ -409,13 +409,13 @@ const styles = StyleSheet.create({
       <SafeAreaView style={styles.container} edges={['top']}>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-            <Ionicons name="arrow-back" size={24} color={COLORS.white} />
+            <Ionicons name="arrow-back" size={24} color={COLORS.onPrimary} />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>Mis Guías</Text>
           <View style={styles.placeholder} />
         </View>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={COLORS.primary} />
+          <ActivityIndicator size="large" color={COLORS.primaryText} />
           <Text style={styles.loadingText}>Cargando tus guías...</Text>
         </View>
       </SafeAreaView>
@@ -426,14 +426,14 @@ const styles = StyleSheet.create({
     <SafeAreaView style={styles.container} edges={['top']}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color={COLORS.white} />
+          <Ionicons name="arrow-back" size={24} color={COLORS.onPrimary} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Mis Guías</Text>
         <TouchableOpacity
           style={styles.addButton}
           onPress={() => navigation.navigate('CreateGuide')}
         >
-          <Ionicons name="add" size={24} color={COLORS.white} />
+          <Ionicons name="add" size={24} color={COLORS.onPrimary} />
         </TouchableOpacity>
       </View>
 
@@ -446,8 +446,8 @@ const styles = StyleSheet.create({
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-            colors={[COLORS.primary]}
-            tintColor={COLORS.primary}
+            colors={[COLORS.primaryText]}
+            tintColor={COLORS.primaryText}
           />
         }
         ListEmptyComponent={
@@ -461,7 +461,7 @@ const styles = StyleSheet.create({
               style={styles.createButton}
               onPress={() => navigation.navigate('CreateGuide')}
             >
-              <Ionicons name="add" size={20} color={COLORS.white} />
+              <Ionicons name="add" size={20} color={COLORS.onPrimary} />
               <Text style={styles.createButtonText}>Crear guía</Text>
             </TouchableOpacity>
           </View>

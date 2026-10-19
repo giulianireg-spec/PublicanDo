@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
   renewButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: COLORS.white,
+    color: COLORS.onPrimary,
   },
   info: {
     fontSize: 11,
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
 
       {onRenewPress && (
         <TouchableOpacity style={styles.renewButton} onPress={onRenewPress}>
-          <Ionicons name="star" size={16} color={COLORS.white} />
+          <Ionicons name="star" size={16} color={COLORS.onPrimary} />
           <Text style={styles.renewButtonText}>Renovar Premium</Text>
         </TouchableOpacity>
       )}
