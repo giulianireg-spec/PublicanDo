@@ -15,6 +15,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { getTags, Tag } from '../services/api';
 
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 interface TagSelectorProps {
   selectedTagIds?: string[];
   onSelectTags: (tagIds: string[]) => void;
@@ -28,6 +29,7 @@ const TagSelector: React.FC<TagSelectorProps> = ({
   disabled = false,
   maxTags = 10,
 }) => {
+  const insets = useSafeAreaInsets();
   const [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [tags, setTags] = useState<Tag[]>([]);
@@ -218,7 +220,7 @@ const TagSelector: React.FC<TagSelectorProps> = ({
         onRequestClose={closeModal}
       >
         <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
+          <View style={[styles.modalContent, { paddingBottom: insets.bottom }]}>
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>Seleccionar Etiquetas</Text>
               <TouchableOpacity onPress={closeModal}>

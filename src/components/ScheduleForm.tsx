@@ -16,6 +16,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
 
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 interface Schedule {
   monday?: string;
   tuesday?: string;
@@ -65,6 +66,7 @@ const HOURS = Array.from({ length: 24 }, (_, i) => {
 
 const ScheduleForm: React.FC<ScheduleFormProps> = ({ schedule, onScheduleChange }) => {
   const { colors: COLORS } = useTheme();
+  const insets = useSafeAreaInsets();
 const styles = StyleSheet.create({
   container: {
     backgroundColor: COLORS.white,
@@ -382,7 +384,6 @@ const styles = StyleSheet.create({
   modalFooter: {
     flexDirection: 'row',
     padding: 16,
-    paddingBottom: 52,
     gap: 12,
     borderTopWidth: 1,
     borderTopColor: COLORS.grayLight,
@@ -807,7 +808,7 @@ const styles = StyleSheet.create({
               })}
             </ScrollView>
 
-            <View style={styles.modalFooter}>
+            <View style={[styles.modalFooter, { paddingBottom: 16 + insets.bottom }]}>
               <TouchableOpacity
                 style={styles.cancelButton}
                 onPress={() => setShowModal(false)}

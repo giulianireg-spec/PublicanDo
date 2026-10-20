@@ -1664,7 +1664,7 @@ const styles = StyleSheet.create({
             behavior={Platform.OS === 'ios' ? 'padding' : undefined}
             style={styles.modalOverlay}
           >
-          <View style={styles.modalContent}>
+          <View style={[styles.modalContent, { paddingBottom: insets.bottom }]}>
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>📍 Filtrar por localidad</Text>
               <TouchableOpacity onPress={() => setShowFiltersModal(false)}>

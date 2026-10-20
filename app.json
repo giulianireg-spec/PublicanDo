@@ -38,7 +38,16 @@
       "@react-native-google-signin/google-signin",
       "@react-native-community/datetimepicker",
       "expo-web-browser",
-      "expo-video"
+      "expo-video",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "enableMinifyInReleaseBuilds": true,
+            "enableShrinkResourcesInReleaseBuilds": true
+          }
+        }
+      ]
     ],
     "owner": "rgiuliani3612",
     "icon": "./assets/icon.png",

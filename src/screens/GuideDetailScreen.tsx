@@ -30,10 +30,12 @@ import {
   GUIDE_DIFFICULTIES,
 } from '../constants/guides';
 
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 const GuideDetailScreen = ({ navigation, route }: any) => {
   const { colors: COLORS } = useTheme();
+  const insets = useSafeAreaInsets();
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -773,19 +775,19 @@ const styles = StyleSheet.create({
 
   return (
     <View style={styles.container}>
-      <ScrollView>
+      <ScrollView contentContainerStyle={{ paddingBottom: 24 + insets.bottom }}>
         {/* Imagen de portada */}
         <View style={styles.coverContainer}>
           <Image source={{ uri: guide.coverImageUrl }} style={styles.coverImage} />
           
           <TouchableOpacity
-            style={styles.backButton}
+            style={[styles.backButton, { top: 12 + insets.top }]}
             onPress={() => navigation.goBack()}
           >
             <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
           </TouchableOpacity>
 
-          <View style={styles.coverActions}>
+          <View style={[styles.coverActions, { top: 12 + insets.top }]}>
             <TouchableOpacity style={styles.coverActionButton} onPress={handleShare}>
               <Ionicons name="share-social" size={22} color="#FFFFFF" />
             </TouchableOpacity>

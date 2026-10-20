@@ -22,6 +22,7 @@ import { ReportModal } from './ReportModal';
 import { ContactInfoOverlay } from './ContactInfoOverlay';
 import MediaCarousel from './MediaCarousel';
 
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 interface Props {
   visible: boolean;
   advertisement: Advertisement | null;
@@ -36,6 +37,7 @@ export const FullScreenFlyerModal: React.FC<Props> = ({
   onClose,
 }) => {
   const { colors: COLORS } = useTheme();
+  const insets = useSafeAreaInsets();
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -45,7 +47,7 @@ const styles = StyleSheet.create({
   },
   topButtons: {
     position: 'absolute',
-    top: 50,
+    top: 12 + insets.top,
     left: 20,
     right: 20,
     flexDirection: 'row',
@@ -92,7 +94,7 @@ const styles = StyleSheet.create({
   },
   actionButton: {
     position: 'absolute',
-    bottom: 40,
+    bottom: 24 + insets.bottom,
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: COLORS.secondary,

@@ -10,6 +10,7 @@ import { useTheme } from '../context/ThemeContext';
 import { getNotifications, markNotificationRead, markAllNotificationsRead } from '../services/api';
 import { navigateFromNotificationData } from '../utils/notificationNavigation';
 
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 const TYPE_CONFIG: Record<string, { icon: string; color: string }> = {
   approval:  { icon: 'checkmark-circle', color: '#4CAF50' },
   rejection: { icon: 'alert-circle',     color: '#FF9800' },
@@ -20,19 +21,20 @@ const TYPE_CONFIG: Record<string, { icon: string; color: string }> = {
 
 const NotificationsScreen = ({ navigation }: any) => {
   const { colors: COLORS } = useTheme();
+  const insets = useSafeAreaInsets();
   const [notifications, setNotifications] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
   const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: COLORS.background },
-    header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: COLORS.primary, paddingHorizontal: 16, paddingVertical: 12 },
+    header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: COLORS.primary, paddingHorizontal: 16, paddingBottom: 12, paddingTop: 12 + insets.top },
     backButton: { padding: 8 },
     headerTitle: { fontSize: 20, fontWeight: '700', color: COLORS.onPrimary },
     readAllButton: { padding: 8 },
     readAllText: { color: COLORS.onPrimary, fontSize: 13, fontWeight: '600' },
     loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-    listContent: { paddingVertical: 8 },
+    listContent: { paddingTop: 8, paddingBottom: 8 + insets.bottom },
     item: { flexDirection: 'row', alignItems: 'flex-start', padding: 16, borderBottomWidth: 1, borderBottomColor: COLORS.grayLight, gap: 12 },
     itemUnread: { backgroundColor: COLORS.primary + '10' },
     iconContainer: { width: 40, height: 40, borderRadius: 20, justifyContent: 'center', alignItems: 'center' },

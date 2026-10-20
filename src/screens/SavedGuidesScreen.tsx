@@ -12,20 +12,22 @@ import { GuideSummary } from '../types/guide.types';
 import { GUIDE_DIFFICULTIES, formatDuration, getGuideCategoryConfig } from '../constants/guides';
 import Toast from 'react-native-toast-message';
 
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 const SavedGuidesScreen = ({ navigation }: any) => {
   const { colors: COLORS } = useTheme();
+  const insets = useSafeAreaInsets();
   const [guides, setGuides] = useState<GuideSummary[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
   const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: COLORS.background },
-    header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: COLORS.primary, paddingHorizontal: 16, paddingVertical: 12 },
+    header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: COLORS.primary, paddingHorizontal: 16, paddingBottom: 12, paddingTop: 12 + insets.top },
     backButton: { padding: 8 },
     headerTitle: { fontSize: 20, fontWeight: '700', color: COLORS.onPrimary },
     placeholder: { width: 40 },
     loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-    listContent: { padding: 16, paddingBottom: 32 },
+    listContent: { padding: 16, paddingBottom: 32 + insets.bottom },
     card: { backgroundColor: COLORS.white, borderRadius: 16, marginBottom: 16, overflow: 'hidden', elevation: 3, shadowColor: COLORS.shadow, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 4 },
     cardImage: { width: '100%', height: 150, backgroundColor: COLORS.grayLight },
     categoryBadge: { position: 'absolute', top: 12, left: 12, paddingHorizontal: 10, paddingVertical: 4, borderRadius: 12 },

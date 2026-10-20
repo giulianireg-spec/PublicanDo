@@ -36,6 +36,7 @@ import {
 } from '../constants/guides';
 import { PROVINCES } from '../constants/categories';
 
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 interface PointForm {
   type: 'place' | 'custom';
   placeId?: string;
@@ -69,6 +70,7 @@ const emptyPoint: PointForm = {
 
 const CreateGuideScreen = ({ navigation }: any) => {
   const { colors: COLORS } = useTheme();
+  const insets = useSafeAreaInsets();
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -79,7 +81,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingTop: 50,
+    paddingTop: 12 + insets.top,
     paddingBottom: 12,
     backgroundColor: COLORS.white,
     borderBottomWidth: 1,
@@ -500,7 +502,7 @@ const styles = StyleSheet.create({
   searchModal: {
     flex: 1,
     backgroundColor: COLORS.white,
-    paddingTop: 50,
+    paddingTop: 12 + insets.top,
   },
   searchHeader: {
     flexDirection: 'row',
@@ -1165,7 +1167,7 @@ const styles = StyleSheet.create({
         </TouchableOpacity>
       </View>
 
-      <ScrollView ref={scrollRef} style={styles.scrollView} keyboardShouldPersistTaps="handled">
+      <ScrollView ref={scrollRef} style={styles.scrollView} contentContainerStyle={{ paddingBottom: 24 + insets.bottom }} keyboardShouldPersistTaps="handled">
         {/* Imagen de portada */}
         <TouchableOpacity style={styles.coverPicker} onPress={pickCoverImage}>
           {coverImageUri ? (

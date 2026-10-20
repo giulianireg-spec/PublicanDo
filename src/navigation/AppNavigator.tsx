@@ -2,7 +2,7 @@
 // GUIANDO: Sin suscripciones, sin Business, nombre actualizado + ThemeProvider
 
 import React, { useState, useLayoutEffect } from 'react';
-import { TouchableOpacity, View, StyleSheet, Modal, ScrollView, Text, Alert, Image, StatusBar, Platform } from 'react-native';
+import { TouchableOpacity, View, StyleSheet, Modal, ScrollView, Text, Alert, Image, Platform } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { navigationRef, flushPendingNavigation } from './navigationRef';
@@ -270,7 +270,6 @@ const AppNavigatorInner = () => {
 
   return (
     <NavigationContainer ref={navigationRef} onReady={flushPendingNavigation}>
-      <StatusBar barStyle="dark-content" backgroundColor={COLORS.primary} />
       <Stack.Navigator
         screenOptions={{
           headerStyle:      { backgroundColor: COLORS.primary },
@@ -299,7 +298,7 @@ const AppNavigatorInner = () => {
         <Stack.Screen name="MyGuides"            component={MyGuidesScreen}            options={{ headerShown: false }} />
         <Stack.Screen name="SavedGuides"         component={SavedGuidesScreen}         options={{ headerShown: false }} />
         <Stack.Screen name="Notifications"        component={NotificationsScreen}        options={{ headerShown: false }} />
-        <Stack.Screen name="EditGuide"           component={EditGuideScreen}           options={{ title: 'Editar Guía' }} />
+        <Stack.Screen name="EditGuide"           component={EditGuideScreen}           options={{ headerShown: false }} />
         <Stack.Screen name="AdminDashboard"      component={AdminDashboardScreen}      options={{ headerShown: false }} />
         <Stack.Screen name="UsersManagement"     component={UsersManagementScreen}     options={{ title: 'Gestión de Usuarios' }} />
         <Stack.Screen name="ReportsManagement"   component={ReportsManagementScreen}   options={{ headerShown: false }} />

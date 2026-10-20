@@ -15,6 +15,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { getClients, Client } from '../services/api';
 
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 interface ClientSelectorProps {
   selectedClientId?: string | null;
   onSelectClient: (client: Client | null) => void;
@@ -26,6 +27,7 @@ const ClientSelector: React.FC<ClientSelectorProps> = ({
   onSelectClient,
   disabled = false,
 }) => {
+  const insets = useSafeAreaInsets();
   const [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [clients, setClients] = useState<Client[]>([]);
@@ -157,7 +159,7 @@ const ClientSelector: React.FC<ClientSelectorProps> = ({
         onRequestClose={closeModal}
       >
         <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
+          <View style={[styles.modalContent, { paddingBottom: insets.bottom }]}>
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>Seleccionar Cliente</Text>
               <TouchableOpacity onPress={closeModal}>

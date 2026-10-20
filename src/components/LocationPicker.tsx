@@ -19,6 +19,7 @@ import { useTheme } from '../context/ThemeContext';
 import { reverseGeocode } from '../services/geoService';
 import axios from 'axios';
 
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 const PLACES_API_KEY = process.env.EXPO_PUBLIC_GOOGLE_PLACES_API_KEY;
 
 interface LocationResult {
@@ -52,6 +53,7 @@ const LocationPicker: React.FC<LocationPickerProps> = ({
   initialCity = '',
 }) => {
   const { colors: COLORS } = useTheme();
+  const insets = useSafeAreaInsets();
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -62,7 +64,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingTop: 16,
+    paddingTop: 16 + insets.top,
     paddingBottom: 12,
     backgroundColor: COLORS.white,
     borderBottomWidth: 1,

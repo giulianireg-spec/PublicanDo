@@ -29,6 +29,7 @@ import {
 } from '../constants/guides';
 
 
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 const TagSearchInput = React.memo(({ selectedTag, onTagSelect, COLORS }: {
   selectedTag: string | null;
   onTagSelect: (tag: string | null) => void;
@@ -69,6 +70,7 @@ const TagSearchInput = React.memo(({ selectedTag, onTagSelect, COLORS }: {
 
 const GuidesListScreen = ({ navigation }: any) => {
   const { colors: COLORS } = useTheme();
+  const insets = useSafeAreaInsets();
   const { user } = useAuth();
   const [guides, setGuides] = useState<GuideSummary[]>([]);
   const [featuredGuides, setFeaturedGuides] = useState<GuideSummary[]>([]);
@@ -89,9 +91,9 @@ const GuidesListScreen = ({ navigation }: any) => {
     container: { flex: 1, backgroundColor: COLORS.background },
     loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
     loadingText: { marginTop: 12, color: COLORS.gray },
-    header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16, backgroundColor: COLORS.white, borderBottomWidth: 1, borderBottomColor: COLORS.grayLight },
-    headerTitle: { fontSize: 24, fontWeight: '700', color: COLORS.text },
-    createButton: { width: 44, height: 44, borderRadius: 22, backgroundColor: COLORS.primary, justifyContent: 'center', alignItems: 'center' },
+    header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16, paddingTop: 16 + insets.top, backgroundColor: COLORS.primary },
+    headerTitle: { fontSize: 24, fontWeight: '700', color: COLORS.onPrimary },
+    createButton: { width: 44, height: 44, borderRadius: 22, backgroundColor: COLORS.onPrimary, justifyContent: 'center', alignItems: 'center' },
     listContent: { paddingBottom: 20 },
     featuredSection: { marginBottom: 16 },
     sectionHeader: { paddingHorizontal: 16, paddingTop: 16, paddingBottom: 8 },
@@ -440,7 +442,7 @@ const GuidesListScreen = ({ navigation }: any) => {
       <View style={styles.header}>
         <Text style={styles.headerTitle}>🗺️ Guías</Text>
         <TouchableOpacity style={styles.createButton} onPress={() => navigation.navigate('CreateGuide')}>
-          <Ionicons name="add" size={24} color={COLORS.onPrimary} />
+          <Ionicons name="add" size={24} color={COLORS.primary} />
         </TouchableOpacity>
       </View>
 

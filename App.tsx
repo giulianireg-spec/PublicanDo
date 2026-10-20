@@ -151,7 +151,8 @@ export default function App() {
     <SafeAreaProvider>
       <AuthProvider>
         <AppNavigator />
-        <StatusBar style="auto" />
+        {/* Íconos oscuros: la parte superior de las pantallas es lima en ambos modos */}
+        <StatusBar style="dark" />
       </AuthProvider>
     </SafeAreaProvider>
   );

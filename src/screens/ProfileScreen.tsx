@@ -26,6 +26,7 @@ import { getProfile, updateProfile, changePassword, UserProfile, deleteAccount, 
 import { uploadImage } from '../services/api';
 import { convertImageToBase64 } from '../utils/imageUtils';
 
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 const ProfileScreen = ({ navigation }: any) => {
 const styles = StyleSheet.create({
   container: { flex: 1 },
@@ -101,6 +102,7 @@ const styles = StyleSheet.create({
   const [deleteConfirmText, setDeleteConfirmText] = useState('');
   const [deletingAccount, setDeletingAccount] = useState(false);
   const { colors: COLORS, themeMode, isDark, setThemeMode } = useTheme();
+  const insets = useSafeAreaInsets();
   
   // Estados de carga
   const [loading, setLoading] = useState(true);
@@ -321,16 +323,16 @@ const styles = StyleSheet.create({
 
   return (
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={[styles.container, { backgroundColor: COLORS.background }]}>
-      <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
+      <ScrollView contentContainerStyle={[styles.scrollContent, { paddingBottom: 40 + insets.bottom }]} keyboardShouldPersistTaps="handled">
 
         {/* Header */}
-        <View style={[styles.header, { backgroundColor: COLORS.white, borderBottomColor: COLORS.grayLight }]}>
+        <View style={[styles.header, { backgroundColor: COLORS.primary, borderBottomColor: COLORS.primary, paddingTop: 16 + insets.top }]}>
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-            <Ionicons name="arrow-back" size={24} color={COLORS.text} />
+            <Ionicons name="arrow-back" size={24} color={COLORS.onPrimary} />
           </TouchableOpacity>
-          <Text style={[styles.headerTitle, { color: COLORS.text }]}>Mi Perfil</Text>
+          <Text style={[styles.headerTitle, { color: COLORS.onPrimary }]}>Mi Perfil</Text>
           <TouchableOpacity onPress={handleNavigateToLegal} style={styles.infoButton}>
-            <Ionicons name="information-circle-outline" size={26} color={COLORS.primaryText} />
+            <Ionicons name="information-circle-outline" size={26} color={COLORS.onPrimary} />
           </TouchableOpacity>
         </View>
         

@@ -17,7 +17,6 @@ import {
   Alert,
   Dimensions,
   Share,
-  StatusBar,
   NativeScrollEvent,
   NativeSyntheticEvent,
 } from 'react-native';
@@ -33,6 +32,7 @@ import { ReportModal } from '../components/ReportModal';
 import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const IMAGE_HEIGHT = SCREEN_WIDTH * 1.0;
 const HEADER_HEIGHT = 60;
@@ -343,6 +343,7 @@ const styles = StyleSheet.create({
 
   // preview: abierta desde el panel de moderación; no cuenta visitas ni estadísticas
   const { advertisement, preview = false } = route.params;
+  const insets = useSafeAreaInsets();
   const { user } = useAuth();
   const hasIncrementedView = useRef(false);
   const [currentMediaIndex, setCurrentMediaIndex] = useState(0);
@@ -546,10 +547,9 @@ const styles = StyleSheet.create({
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" translucent backgroundColor="transparent" />
       
       {/* Header */}
-      <View style={styles.topBar}>
+      <View style={[styles.topBar, { height: HEADER_HEIGHT + insets.top, paddingTop: 10 + insets.top }]}>
         <View style={styles.leftSection}>
           <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
             <Ionicons name="arrow-back" size={24} color={COLORS.onPrimary} />
@@ -577,7 +577,7 @@ const styles = StyleSheet.create({
         </View>
       </View>
       
-      <ScrollView contentContainerStyle={styles.scrollContent}>
+      <ScrollView contentContainerStyle={[styles.scrollContent, { paddingBottom: 40 + insets.bottom }]}>
         {/* ✅ CORREGIDO: Galería de Medios usando ScrollView horizontal */}
         <View style={styles.carouselContainer}>
           <ScrollView
