@@ -28,6 +28,7 @@ import { useAuth } from '../context/AuthContext';
 import { incrementViews, createReport } from '../services/api';
 import { recordView, recordContactClick, endViewSession } from '../services/statsApi';
 import RichTextViewer from '../components/RichTextViewer';
+import StampButton from '../components/StampButton';
 import { ReportModal } from '../components/ReportModal';
 import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -612,6 +613,8 @@ const styles = StyleSheet.create({
             <Text style={styles.title}>{advertisement.title}</Text>
             <Text style={styles.category}>{advertisement.category}</Text>
           </View>
+
+          {!preview && <StampButton advertisement={advertisement} />}
 
           {advertisement.hasProfessionalLicense && (
             <View style={styles.licenseBadgeTop}>

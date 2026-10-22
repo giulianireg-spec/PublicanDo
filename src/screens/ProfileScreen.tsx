@@ -370,6 +370,19 @@ const styles = StyleSheet.create({
           )}
         </View>
         
+        {/* Lugares visitados (sellos) */}
+        <TouchableOpacity
+          style={[styles.section, { backgroundColor: COLORS.white, shadowColor: COLORS.shadow, flexDirection: 'row', alignItems: 'center', gap: 12 }]}
+          onPress={() => navigation.navigate('VisitedPlaces')}
+        >
+          <Ionicons name="ribbon" size={28} color={COLORS.primaryText} />
+          <View style={{ flex: 1 }}>
+            <Text style={[styles.sectionTitle, { color: COLORS.text, marginBottom: 2 }]}>Lugares visitados</Text>
+            <Text style={{ color: COLORS.gray, fontSize: 13 }}>Tus sellos por categoría, listos para compartir</Text>
+          </View>
+          <Ionicons name="chevron-forward" size={22} color={COLORS.gray} />
+        </TouchableOpacity>
+
         {/* Información personal */}
         <View style={[styles.section, { backgroundColor: COLORS.white, shadowColor: COLORS.shadow }]}>
           <Text style={[styles.sectionTitle, { color: COLORS.text }]}>👤 Información Personal</Text>

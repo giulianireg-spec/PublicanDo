@@ -25,6 +25,7 @@ import EditAdvertisementScreen from '../screens/EditAdvertisementScreen';
 import MyAdvertisementsScreen from '../screens/MyAdvertisementsScreen';
 import MyGuidesScreen from '../screens/MyGuidesScreen';
 import SavedGuidesScreen from '../screens/SavedGuidesScreen';
+import VisitedPlacesScreen from '../screens/VisitedPlacesScreen';
 import NotificationsScreen from '../screens/NotificationsScreen';
 import EditGuideScreen from '../screens/EditGuideScreen';
 import AdminDashboardScreen from '../screens/AdminDashboardScreen';
@@ -297,6 +298,7 @@ const AppNavigatorInner = () => {
         <Stack.Screen name="MyAdvertisements"    component={MyAdvertisementsScreen}    options={{ headerShown: false }} />
         <Stack.Screen name="MyGuides"            component={MyGuidesScreen}            options={{ headerShown: false }} />
         <Stack.Screen name="SavedGuides"         component={SavedGuidesScreen}         options={{ headerShown: false }} />
+        <Stack.Screen name="VisitedPlaces"       component={VisitedPlacesScreen}       options={{ headerShown: false }} />
         <Stack.Screen name="Notifications"        component={NotificationsScreen}        options={{ headerShown: false }} />
         <Stack.Screen name="EditGuide"           component={EditGuideScreen}           options={{ headerShown: false }} />
         <Stack.Screen name="AdminDashboard"      component={AdminDashboardScreen}      options={{ headerShown: false }} />
@@ -406,6 +408,11 @@ const AppNavigatorInner = () => {
               <TouchableOpacity style={dynStyles.menuOption} onPress={() => { setUserMenuVisible(false); navigationRef.current?.navigate('SavedGuides'); }}>
                 <Ionicons name="bookmark" size={24} color={COLORS.primaryText} />
                 <Text style={dynStyles.menuOptionText}>Guías guardadas</Text>
+                <Ionicons name="chevron-forward" size={20} color={COLORS.gray} />
+              </TouchableOpacity>
+              <TouchableOpacity style={dynStyles.menuOption} onPress={() => { setUserMenuVisible(false); navigationRef.current?.navigate('VisitedPlaces'); }}>
+                <Ionicons name="ribbon" size={24} color={COLORS.primaryText} />
+                <Text style={dynStyles.menuOptionText}>Lugares visitados</Text>
                 <Ionicons name="chevron-forward" size={20} color={COLORS.gray} />
               </TouchableOpacity>
 

@@ -35,6 +35,7 @@ import {
   reverseGeocode,
 } from '../services/api';
 import { refreshOfflineCache, getOfflineSnapshot } from '../services/offlineCache';
+import { syncPendingStamps } from '../services/stamps';
 import { Advertisement } from '../types';
 import { useTheme } from '../context/ThemeContext';
 import { FullScreenFlyerModal } from '../components/FullScreenFlyerModal';
@@ -1008,6 +1009,12 @@ const styles = StyleSheet.create({
       setTotalItems(response.pagination.total);
       setCurrentPage(reset ? 1 : currentPage + 1);
       setOfflineSavedAt(null);
+      // Con conexión de nuevo: validar los sellos recolectados sin señal
+      if (user) {
+        syncPendingStamps().then(({ synced }) => {
+          if (synced) Toast.show({ type: 'success', text1: `🏅 ${synced} sello${synced > 1 ? 's' : ''} validado${synced > 1 ? 's' : ''}`, position: 'bottom' });
+        });
+      }
     } catch (error) {
       console.error('Error cargando lugares:', error);
       if (!reset || !(await showOfflineAds())) {

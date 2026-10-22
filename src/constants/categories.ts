@@ -84,7 +84,11 @@ export const CATEGORIES_CONFIG: CategoryConfig[] = [
     name: 'Compras',
     emoji: '🛍️',
     fullName: '🛍️ Compras',
-    subcategories: [],
+    subcategories: [
+      { id: 'shoppings', name: 'Shoppings' },
+      { id: 'galerias', name: 'Galerías Comerciales' },
+      { id: 'ferias_mercados', name: 'Ferias y Mercados' },
+    ],
   },
   {
     id: 'vida_nocturna',

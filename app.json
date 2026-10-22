@@ -47,7 +47,8 @@
             "enableShrinkResourcesInReleaseBuilds": true
           }
         }
-      ]
+      ],
+      "expo-sharing"
     ],
     "owner": "rgiuliani3612",
     "icon": "./assets/icon.png",

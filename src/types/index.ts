@@ -44,6 +44,8 @@ export interface Advertisement {
   imageUrl: string;
   images?: string[];
   videoUrl?: string;
+  // Períodos en que se puede recolectar el sello (festivales y ferias con fecha)
+  stampWindows?: { start: string; end: string; label: string }[];
   location: {
     type?: 'Point';
     coordinates?: [number, number];

@@ -13,6 +13,7 @@ import {
   Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import StampButton from './StampButton';
 import Toast from 'react-native-toast-message';
 import { Advertisement } from '../types';
 import { useTheme } from '../context/ThemeContext';
@@ -292,6 +293,10 @@ const styles = StyleSheet.create({
               hasProfessionalLicense={advertisement.hasProfessionalLicense}
               professionalLicenseNumber={advertisement.professionalLicenseNumber}
             />
+          </View>
+
+          <View style={{ width: width * 0.95, marginTop: 10 }}>
+            <StampButton advertisement={advertisement} />
           </View>
 
           {/* Botón de acción */}
