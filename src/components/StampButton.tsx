@@ -1,8 +1,10 @@
 // src/components/StampButton.tsx
 // Botón "Recolectar sello" de la ficha de un lugar. Solo se puede recolectar estando en el lugar
 // (radio según la categoría) y, en festivales y ferias con fecha, durante los días del evento.
+// Mientras la ficha está abierta se sigue la ubicación (si ya hay permiso) y el sello se ve
+// atenuado hasta que el usuario está en condiciones de recolectarlo.
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as Location from 'expo-location';
@@ -31,6 +33,9 @@ export const StampButton = ({ advertisement }: { advertisement: Advertisement })
   const { user } = useAuth();
   const [stamp, setStamp] = useState<Stamp | null>(null);
   const [working, setWorking] = useState(false);
+  const [ready, setReady] = useState(false);
+  const [hasPermission, setHasPermission] = useState(false);
+  const lastPosition = useRef<Location.LocationObject | null>(null);
 
   const coords = advertisement.location?.coordinates;
   const edition = currentStampEdition(advertisement);
@@ -46,7 +51,44 @@ export const StampButton = ({ advertisement }: { advertisement: Advertisement })
   useFocusEffect(useCallback(() => { loadStatus(); }, [loadStatus]));
   useEffect(() => { loadStatus(); }, [loadStatus]);
 
-  if (!coords || coords.length !== 2 || (coords[0] === 0 && coords[1] === 0)) return null;
+  const hasCoords = !!coords && coords.length === 2 && !(coords[0] === 0 && coords[1] === 0);
+
+  /** ¿Esta lectura de GPS permite recolectar el sello? */
+  const isWithinReach = (position: Location.LocationObject) => {
+    const { latitude, longitude, accuracy } = position.coords;
+    if ((position as any).mocked || !accuracy || accuracy > MAX_GPS_ACCURACY_METERS || !coords) return false;
+    return distanceMeters(latitude, longitude, coords[1], coords[0]) <= radius + Math.min(accuracy, GPS_TOLERANCE_METERS);
+  };
+
+  // Seguir la ubicación mientras la ficha está visible, solo si ya hay permiso (no se lo pide acá)
+  const shouldWatch = !!user && hasCoords && edition !== null && !stamp;
+  useFocusEffect(
+    useCallback(() => {
+      if (!shouldWatch) return;
+      let subscription: Location.LocationSubscription | null = null;
+      let cancelled = false;
+      (async () => {
+        const { status } = await Location.getForegroundPermissionsAsync();
+        if (cancelled) return;
+        setHasPermission(status === 'granted');
+        if (status !== 'granted') return;
+        subscription = await Location.watchPositionAsync(
+          { accuracy: Location.Accuracy.High, distanceInterval: 5, timeInterval: 5000 },
+          (position) => {
+            lastPosition.current = position;
+            setReady(isWithinReach(position));
+          }
+        );
+        if (cancelled) subscription.remove();
+      })().catch(() => setReady(false));
+      return () => {
+        cancelled = true;
+        subscription?.remove();
+      };
+    }, [shouldWatch, hasPermission, coords?.[0], coords?.[1], radius])
+  );
+
+  if (!hasCoords) return null;
 
   const handleCollect = async () => {
     if (!user) {
@@ -54,14 +96,22 @@ export const StampButton = ({ advertisement }: { advertisement: Advertisement })
       return;
     }
     if (edition === null) return;
-    setWorking(true);
-    try {
+    if (!hasPermission) {
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
         Toast.show({ type: 'error', text1: '📍 Necesitamos tu ubicación', text2: 'Activá el permiso de ubicación para recolectar sellos', position: 'bottom' });
-        return;
       }
-      const position = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Highest });
+      setHasPermission(status === 'granted'); // reinicia el seguimiento de la ubicación
+      return;
+    }
+    if (!ready) {
+      Toast.show({ type: 'info', text1: 'Todavía no podés recolectar este sello', text2: 'En Preguntas frecuentes te contamos por qué', position: 'bottom' });
+      return;
+    }
+    setWorking(true);
+    try {
+      const recent = lastPosition.current && Date.now() - lastPosition.current.timestamp < 15000 ? lastPosition.current : null;
+      const position = recent || (await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Highest }));
       const { latitude, longitude, accuracy } = position.coords;
 
       if ((position as any).mocked) {
@@ -74,8 +124,8 @@ export const StampButton = ({ advertisement }: { advertisement: Advertisement })
       }
       const distance = distanceMeters(latitude, longitude, coords[1], coords[0]);
       if (distance > radius + Math.min(accuracy, GPS_TOLERANCE_METERS)) {
-        const away = distance >= 1000 ? `${(distance / 1000).toFixed(1)} km` : `${Math.round(distance)} m`;
-        Toast.show({ type: 'info', text1: '📍 Todavía no llegaste', text2: `Estás a ${away}. Acercate a menos de ${radius} m del lugar.`, position: 'bottom' });
+        setReady(false);
+        Toast.show({ type: 'info', text1: 'Todavía no podés recolectar este sello', text2: 'En Preguntas frecuentes te contamos por qué', position: 'bottom' });
         return;
       }
 
@@ -105,7 +155,10 @@ export const StampButton = ({ advertisement }: { advertisement: Advertisement })
     title: { fontSize: 15, fontWeight: '700', color: COLORS.text },
     subtitle: { fontSize: 12, color: COLORS.gray, marginTop: 2 },
     button: { backgroundColor: COLORS.primary, paddingHorizontal: 14, paddingVertical: 10, borderRadius: 20, minWidth: 96, alignItems: 'center' },
+    buttonDisabled: { backgroundColor: COLORS.grayLight },
     buttonText: { color: COLORS.onPrimary, fontWeight: '700', fontSize: 13 },
+    buttonTextDisabled: { color: COLORS.gray },
+    faded: { opacity: 0.5 },
   });
 
   if (stamp) {
@@ -126,7 +179,7 @@ export const StampButton = ({ advertisement }: { advertisement: Advertisement })
   if (edition === null) {
     const next = nextStampWindow(advertisement);
     return (
-      <View style={[styles.box, { backgroundColor: COLORS.white, borderColor: COLORS.grayLight }]}>
+      <View style={[styles.box, styles.faded, { backgroundColor: COLORS.white, borderColor: COLORS.grayLight }]}>
         <Ionicons name="ribbon-outline" size={32} color={COLORS.gray} />
         <View style={styles.textBox}>
           <Text style={styles.title}>Sello disponible durante el evento</Text>
@@ -140,17 +193,26 @@ export const StampButton = ({ advertisement }: { advertisement: Advertisement })
     );
   }
 
+  const enabled = !!user && ready;
   return (
-    <View style={[styles.box, { backgroundColor: COLORS.white, borderColor: COLORS.primary }]}>
-      <Ionicons name="ribbon-outline" size={32} color={COLORS.primaryText} />
+    <View style={[styles.box, !enabled && styles.faded, { backgroundColor: COLORS.white, borderColor: enabled ? COLORS.primary : COLORS.grayLight }]}>
+      <Ionicons name={enabled ? 'ribbon' : 'ribbon-outline'} size={32} color={enabled ? COLORS.primaryText : COLORS.gray} />
       <View style={styles.textBox}>
         <Text style={styles.title}>Sello de este lugar</Text>
         <Text style={styles.subtitle}>
-          {user ? `Recolectalo cuando estés a menos de ${radius} m` : 'Iniciá sesión para coleccionar los lugares que visitás'}
+          {!user
+            ? 'Iniciá sesión para coleccionar los lugares que visitás'
+            : enabled
+              ? '¡Estás en el lugar! Ya podés recolectarlo'
+              : 'Visitá este lugar para sumarlo a tu colección'}
         </Text>
       </View>
-      <TouchableOpacity style={styles.button} onPress={handleCollect} disabled={working}>
-        {working ? <ActivityIndicator color={COLORS.onPrimary} /> : <Text style={styles.buttonText}>{user ? 'Recolectar' : 'Ingresar'}</Text>}
+      <TouchableOpacity style={[styles.button, !enabled && styles.buttonDisabled]} onPress={handleCollect} disabled={working}>
+        {working ? (
+          <ActivityIndicator color={COLORS.onPrimary} />
+        ) : (
+          <Text style={[styles.buttonText, !enabled && styles.buttonTextDisabled]}>{user ? 'Recolectar' : 'Ingresar'}</Text>
+        )}
       </TouchableOpacity>
     </View>
   );

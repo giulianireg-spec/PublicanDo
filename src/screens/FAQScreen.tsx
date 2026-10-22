@@ -18,7 +18,7 @@ interface FAQItem {
   id: string;
   question: string;
   answer: string;
-  category: 'general' | 'publicar' | 'guias' | 'cuenta' | 'seguridad';
+  category: 'general' | 'publicar' | 'guias' | 'sellos' | 'cuenta' | 'seguridad';
 }
 
 const FAQ_DATA: FAQItem[] = [
@@ -130,6 +130,20 @@ const FAQ_DATA: FAQItem[] = [
     answer: 'Sí, desde "Mis Guías" en tu perfil podés editar cualquiera de tus guías: cambiar puntos, actualizar descripciones, modificar tiempos estimados o agregar nuevas paradas. Si la guía ya estaba aprobada y hacés cambios, volverá a revisión.',
   },
 
+  // ==================== SELLOS ====================
+  {
+    id: '26',
+    category: 'sellos',
+    question: '¿Qué son los sellos?',
+    answer: 'Cada lugar de GuianDo tiene su sello. Cuando estás en el lugar, abrí su ficha y tocá "Recolectar": el sello se suma a "Lugares visitados", en tu perfil, ordenado por categoría y subcategoría. Desde ahí podés compartir tu colección como imagen.\n\nEn los festivales y eventos con fecha hay un sello por cada edición.',
+  },
+  {
+    id: '27',
+    category: 'sellos',
+    question: '¿Por qué no puedo recolectar el sello de un punto?',
+    answer: 'El sello aparece habilitado solo cuando estás en condiciones de recolectarlo. Puede estar deshabilitado por alguno de estos motivos:\n\n• Todavía no estás lo bastante cerca. La distancia depende del tipo de lugar: hasta 200 m en Naturaleza, 150 m en Eventos, 100 m en Experiencias, 60 m en Compras, 40 m en Cultura y 25 m en Gastronomía, Alojamiento y Vida Nocturna.\n\n• La señal GPS es imprecisa. Dentro de edificios o entre construcciones altas el GPS puede errar decenas de metros: probá al aire libre o cerca de una ventana y esperá unos segundos.\n\n• No le diste permiso de ubicación a GuianDo, o el GPS del teléfono está apagado.\n\n• Es un festival o una feria fuera de sus días: esos sellos solo se pueden recolectar mientras el evento está en marcha.\n\n• Tenés activada una aplicación de ubicación simulada.\n\nSi estás sin señal de datos podés recolectarlo igual: queda pendiente y se valida solo cuando vuelvas a tener conexión.',
+  },
+
   // ==================== CUENTA ====================
   {
     id: '18',
@@ -187,6 +201,7 @@ const CATEGORIES_INFO = {
   general: { label: 'General', icon: 'information-circle', color: '#2196F3' },
   publicar: { label: 'Publicar', icon: 'add-circle', color: '#4CAF50' },
   guias: { label: 'Guías', icon: 'map', color: '#FF9800' },
+  sellos: { label: 'Sellos', icon: 'ribbon', color: '#65A30D' },
   cuenta: { label: 'Mi Cuenta', icon: 'person', color: '#9C27B0' },
   seguridad: { label: 'Seguridad', icon: 'shield-checkmark', color: '#F44336' },
 };
