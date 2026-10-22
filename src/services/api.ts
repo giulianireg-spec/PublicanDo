@@ -346,6 +346,19 @@ export const getAdvertisements = async (
   }
 };
 
+// Lugares aprobados más cercanos, ordenados por distancia (para la copia sin conexión)
+export const getNearbyAdvertisements = async (
+  latitude: number,
+  longitude: number,
+  limit: number = 40
+): Promise<Advertisement[]> => {
+  const response = await api.get('/advertisements/nearby', {
+    params: { latitude, longitude, limit },
+    timeout: 30000,
+  });
+  return response.data.data;
+};
+
 export const getAdvertisementById = async (id: string): Promise<Advertisement> => {
   try {
     const response = await api.get(`/advertisements/${id}`);

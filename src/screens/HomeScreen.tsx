@@ -34,6 +34,7 @@ import {
   searchLocalities,
   reverseGeocode,
 } from '../services/api';
+import { refreshOfflineCache, getOfflineSnapshot } from '../services/offlineCache';
 import { Advertisement } from '../types';
 import { useTheme } from '../context/ThemeContext';
 import { FullScreenFlyerModal } from '../components/FullScreenFlyerModal';
@@ -738,6 +739,8 @@ const styles = StyleSheet.create({
 
   const [selectedAd, setSelectedAd] = useState<Advertisement | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
+  // Fecha de la copia guardada que se está mostrando por falta de conexión (null = online)
+  const [offlineSavedAt, setOfflineSavedAt] = useState<number | null>(null);
 
   // Subcategorías disponibles para la categoría seleccionada
   const availableSubcategories = selectedCategory !== 'Todas' ? getSubcategories(selectedCategory) : [];
@@ -767,7 +770,14 @@ const styles = StyleSheet.create({
   }, [selectedCategory, selectedSubcategory, searchQuery, selectedProvince, selectedLocality, filterMode, distanceFilter]);
   useEffect(() => {
     filterAndSortAdvertisements();
-  }, [advertisements, distanceFilter, userLocation, filterMode, openNowFilter]);
+  }, [advertisements, distanceFilter, userLocation, filterMode, openNowFilter, offlineSavedAt]);
+
+  // Mantener actualizada la copia sin conexión de los lugares cercanos
+  useEffect(() => {
+    if (userLocation) {
+      refreshOfflineCache(userLocation.latitude, userLocation.longitude);
+    }
+  }, [userLocation]);
 
   useEffect(() => {
     generateFeedWithAds();
@@ -997,14 +1007,44 @@ const styles = StyleSheet.create({
       setHasMore(response.pagination.hasMore);
       setTotalItems(response.pagination.total);
       setCurrentPage(reset ? 1 : currentPage + 1);
+      setOfflineSavedAt(null);
     } catch (error) {
       console.error('Error cargando lugares:', error);
-      Alert.alert('Error', 'No se pudieron cargar los lugares');
+      if (!reset || !(await showOfflineAds())) {
+        Alert.alert('Error', 'No se pudieron cargar los lugares');
+      }
     } finally {
       setLoading(false);
       setLoadingMore(false);
       loadingRef.current = false;
     }
+  };
+
+  // Sin conexión: muestra los lugares cercanos guardados, con los filtros de categoría y búsqueda
+  const showOfflineAds = async (): Promise<boolean> => {
+    const snapshot = await getOfflineSnapshot();
+    if (!snapshot?.ads.length) return false;
+
+    const query = searchQuery.trim().toLowerCase();
+    const ads = snapshot.ads.filter((ad) =>
+      (selectedCategory === 'Todas' || ad.category === selectedCategory) &&
+      (!selectedSubcategory || ad.subcategory === selectedSubcategory) &&
+      (!query || ad.title.toLowerCase().includes(query) || ad.description?.toLowerCase().includes(query))
+    );
+
+    setAdvertisements(ads);
+    setHasMore(false);
+    setTotalItems(ads.length);
+    if (offlineSavedAt === null) {
+      Toast.show({
+        type: 'info',
+        text1: '📴 Sin conexión',
+        text2: 'Mostrando los lugares cercanos guardados en tu teléfono',
+        position: 'bottom',
+      });
+    }
+    setOfflineSavedAt(snapshot.savedAt);
+    return true;
   };
 
   const onRefresh = async () => {
@@ -1047,8 +1087,8 @@ const styles = StyleSheet.create({
 
     let filtered = adsWithDistance;
 
-    // Filtro por radio
-    if (filterMode === 'radius') {
+    // Filtro por radio (sin conexión se muestran todos los guardados, ordenados por distancia)
+    if (filterMode === 'radius' && offlineSavedAt === null) {
       filtered = adsWithDistance.filter((ad) => {
         if (ad.distance === null) return false; // Excluir lugares sin coordenadas
         return ad.distance <= distanceFilter;
@@ -1591,7 +1631,9 @@ const styles = StyleSheet.create({
 
       <View style={styles.resultsInfo}>
         <Text style={styles.resultsText}>
-          {filterMode === 'radius' 
+          {offlineSavedAt !== null
+            ? `📴 Sin conexión · ${filteredAds.length} lugares guardados el ${new Date(offlineSavedAt).toLocaleDateString('es-AR')}`
+            : filterMode === 'radius'
             ? `${filteredAds.length} lugares en un radio de ${distanceFilter} km`
             : `Mostrando ${filteredAds.length} de ${totalItems} lugares`
           }
