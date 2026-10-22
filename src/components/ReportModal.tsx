@@ -2,6 +2,7 @@
 // CREAR ESTE ARCHIVO NUEVO
 
 import React, { useState } from 'react';
+import type { ReportReason } from '../services/api';
 import {
   Modal,
   View,
@@ -19,11 +20,11 @@ import { useTheme } from '../context/ThemeContext';
 interface ReportModalProps {
   visible: boolean;
   advertisementTitle: string;
-  onConfirm: (reason: string, description: string) => void;
+  onConfirm: (reason: ReportReason, description: string) => void;
   onCancel: () => void;
 }
 
-const REPORT_REASONS = [
+const REPORT_REASONS: { value: ReportReason; label: string; icon: string }[] = [
   { value: 'incorrect_info', label: '❌ Información incorrecta', icon: 'alert-circle' },
   { value: 'wrong_category', label: '📂 Categoría incorrecta', icon: 'folder' },
   { value: 'code_violation', label: '⚠️ Infracción de normas', icon: 'warning' },
@@ -192,7 +193,7 @@ export const ReportModal: React.FC<ReportModalProps> = ({
     },
   });
 
-  const [selectedReason, setSelectedReason] = useState<string>('');
+  const [selectedReason, setSelectedReason] = useState<ReportReason | ''>('');
   const [description, setDescription] = useState('');
   const [error, setError] = useState('');
 

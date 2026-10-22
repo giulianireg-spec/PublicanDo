@@ -24,6 +24,7 @@ import { useTheme, ThemeMode } from '../context/ThemeContext';
 import { CATEGORIES } from '../constants/categories';
 import { getProfile, updateProfile, changePassword, UserProfile, deleteAccount, DELETE_ACCOUNT_CONFIRMATION } from '../services/profileApi';
 import { uploadImage } from '../services/api';
+import { User } from '../types';
 import { convertImageToBase64 } from '../utils/imageUtils';
 
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -240,7 +241,7 @@ const styles = StyleSheet.create({
         name: name.trim(), phone: phone.trim(), whatsapp: whatsapp.trim(),
         address: address.trim(), instagram: instagram.trim(), facebook: facebook.trim(), interests,
       });
-      if (updateUser && result.user) updateUser(result.user);
+      if (updateUser && result.user) updateUser(result.user as Partial<User>);
       Toast.show({ type: 'success', text1: '✅ Perfil actualizado', text2: 'Los cambios se guardaron correctamente', position: 'bottom' });
     } catch (error: any) {
       Toast.show({ type: 'error', text1: 'Error', text2: error.response?.data?.message || 'No se pudo guardar el perfil', position: 'bottom' });

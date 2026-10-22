@@ -34,7 +34,6 @@ import {
   GUIDE_LIMITS,
   formatDuration,
 } from '../constants/guides';
-import { PROVINCES } from '../constants/categories';
 
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 interface PointForm {

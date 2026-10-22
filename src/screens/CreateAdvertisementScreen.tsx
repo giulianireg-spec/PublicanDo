@@ -846,7 +846,7 @@ const styles = StyleSheet.create({
                   return (
                     <Picker.Item 
                       key={cat} 
-                      label={`${config?.icon || ''} ${cat}`}
+                      label={cat}
                       value={cat} 
                       color="#333333"
                       style={styles.pickerItem}

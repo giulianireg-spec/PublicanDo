@@ -38,11 +38,11 @@ const VideoItem = ({ url, isActive, height }: { url: string; isActive: boolean; 
   }, [isActive, player]);
 
   return (
-    <View style={{ width: SCREEN_WIDTH, height, backgroundColor: COLORS.black || '#000' }}>
+    <View style={{ width: SCREEN_WIDTH, height, backgroundColor: '#000' }}>
       <VideoView
         style={{ width: '100%', height: '100%' }}
         player={player}
-        allowsFullscreen
+        fullscreenOptions={{ enable: true }}
         allowsPictureInPicture
       />
       <View style={{

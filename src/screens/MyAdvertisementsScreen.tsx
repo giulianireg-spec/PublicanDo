@@ -261,11 +261,8 @@ const styles = StyleSheet.create({
   const [refreshing, setRefreshing] = useState(false);
 
   // ✅ Verificar si el usuario puede ver estadísticas
-  const canViewStats = user?.isPremium || 
-                       user?.subscriptionTier === 'premium' || 
-                       user?.subscriptionTier === 'business' ||
-                       user?.role === 'seeder_free' ||
-                       user?.role === 'seeder_business';
+  // Las estadísticas eran parte de los planes pagos, que GuianDo ya no tiene: quedan ocultas por ahora.
+  const canViewStats = false;
 
   useFocusEffect(
     useCallback(() => {

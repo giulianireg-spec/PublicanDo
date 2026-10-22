@@ -16,6 +16,8 @@ export interface User {
   facebook?: string;
   twitter?: string;
   interests?: string[];
+  savedGuides?: string[];
+  preferredLocation?: { province?: string; locality?: string };
   // Estadísticas de guías (para futuro)
   guidesCount?: number;
   guidesRating?: number;
@@ -89,6 +91,11 @@ export interface Advertisement {
   claimedBy?: string;
   claimedAt?: string;
   claimVerified?: boolean;
+  // Campos de versiones anteriores que el backend actual no envía; la UI los muestra solo si existen
+  actionButton?: { type: 'whatsapp' | 'maps' | 'website' | 'social' | string; value: string; label: string };
+  hasProfessionalLicense?: boolean;
+  professionalLicenseNumber?: string;
+  premiumDescription?: string;
 }
 
 export interface CreateAdvertisementData {

@@ -2,7 +2,7 @@
 // GUIANDO: Sin suscripciones, sin Business, nombre actualizado + ThemeProvider
 
 import React, { useState, useLayoutEffect } from 'react';
-import { TouchableOpacity, View, StyleSheet, Modal, ScrollView, Text, Alert, Image, Platform } from 'react-native';
+import { TouchableOpacity, TouchableOpacityProps, View, StyleSheet, Modal, ScrollView, Text, Alert, Image, Platform } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { navigationRef, flushPendingNavigation } from './navigationRef';
@@ -80,11 +80,6 @@ const HomeScreenWrapper = ({
             <TouchableOpacity style={headerStyles.createButton} onPress={() => navigation.navigate('Notifications')} >
               <View>
                 <Ionicons name="notifications-outline" size={26} color={COLORS.onPrimary} />
-                {unreadCount > 0 && (
-                  <View style={{ position: 'absolute', top: -4, right: -4, backgroundColor: '#F44336', borderRadius: 8, minWidth: 16, height: 16, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 2 }}>
-                    <Text style={{ color: '#FFFFFF', fontSize: 10, fontWeight: '700' }}>{unreadCount > 9 ? '9+' : unreadCount}</Text>
-                  </View>
-                )}
               </View>
             </TouchableOpacity>
           )}
@@ -198,7 +193,7 @@ const TabNavigator = ({
           ),
           tabBarButton: (props) => (
             <TouchableOpacity
-              {...props}
+              {...(props as unknown as TouchableOpacityProps)}
               onPress={() => user ? onUserPress() : onLoginPress()}
               style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
             />
@@ -276,7 +271,6 @@ const AppNavigatorInner = () => {
           headerStyle:      { backgroundColor: COLORS.primary },
           headerTintColor:  COLORS.onPrimary,
           headerTitleStyle: { fontWeight: '700', fontSize: 20 },
-          contentStyle: { paddingTop: 0 },
         }}
       >
         <Stack.Screen name="Home" options={{ headerShown: false }}>
@@ -292,9 +286,9 @@ const AppNavigatorInner = () => {
           )}
         </Stack.Screen>
 
-        <Stack.Screen name="Detail"              component={DetailScreen}             options={{ title: 'Detalle' }} />
+        <Stack.Screen name="Detail"              component={DetailScreen as React.ComponentType<any>}             options={{ title: 'Detalle' }} />
         <Stack.Screen name="CreateAdvertisement" component={CreateAdvertisementScreen} options={{ title: 'Nuevo Lugar' }} />
-        <Stack.Screen name="EditAdvertisement"   component={EditAdvertisementScreen}   options={{ title: 'Editar Lugar' }} />
+        <Stack.Screen name="EditAdvertisement"   component={EditAdvertisementScreen as React.ComponentType<any>}   options={{ title: 'Editar Lugar' }} />
         <Stack.Screen name="MyAdvertisements"    component={MyAdvertisementsScreen}    options={{ headerShown: false }} />
         <Stack.Screen name="MyGuides"            component={MyGuidesScreen}            options={{ headerShown: false }} />
         <Stack.Screen name="SavedGuides"         component={SavedGuidesScreen}         options={{ headerShown: false }} />
@@ -305,7 +299,7 @@ const AppNavigatorInner = () => {
         <Stack.Screen name="UsersManagement"     component={UsersManagementScreen}     options={{ title: 'Gestión de Usuarios' }} />
         <Stack.Screen name="ReportsManagement"   component={ReportsManagementScreen}   options={{ headerShown: false }} />
         <Stack.Screen name="Profile"             component={ProfileScreen}             options={{ title: 'Mi Perfil', headerShown: false }} />
-        <Stack.Screen name="AdvertisementStats"  component={AdvertisementStatsScreen}  options={{ title: 'Estadísticas' }} />
+        <Stack.Screen name="AdvertisementStats"  component={AdvertisementStatsScreen as React.ComponentType<any>}  options={{ title: 'Estadísticas' }} />
         <Stack.Screen name="FAQ"                 component={FAQScreen}                 options={{ headerShown: false }} />
         <Stack.Screen name="Legal"               component={LegalScreen}               options={{ headerShown: false }} />
         <Stack.Screen name="GuideDetail"         component={GuideDetailScreen}         options={{ headerShown: false }} />

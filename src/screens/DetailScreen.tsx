@@ -26,6 +26,7 @@ import { useTheme } from '../context/ThemeContext';
 import { Advertisement } from '../types';
 import { useAuth } from '../context/AuthContext';
 import { incrementViews, createReport } from '../services/api';
+import type { ReportReason } from '../services/api';
 import { recordView, recordContactClick, endViewSession } from '../services/statsApi';
 import RichTextViewer from '../components/RichTextViewer';
 import StampButton from '../components/StampButton';
@@ -465,7 +466,7 @@ const styles = StyleSheet.create({
     setReportModalVisible(true);
   };
 
-  const handleConfirmReport = async (reason: string, description: string) => {
+  const handleConfirmReport = async (reason: ReportReason, description: string) => {
     try {
       await createReport(advertisement._id, reason, description);
       setReportModalVisible(false);
@@ -509,7 +510,7 @@ const styles = StyleSheet.create({
       <VideoView
         style={styles.video}
         player={player}
-        allowsFullscreen
+        fullscreenOptions={{ enable: true }}
         allowsPictureInPicture
       />
     );

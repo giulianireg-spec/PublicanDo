@@ -48,7 +48,7 @@ export const getSavedGuides = async (): Promise<GuideSummary[]> => {
   return response.data.data;
 };
 
-export const getMyGuides = async (): Promise<GuideSummary[]> => {
+export const getMyGuides = async (): Promise<Guide[]> => {
   const response = await api.get('/guides/user/mine');
   return response.data;
 };

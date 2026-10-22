@@ -531,7 +531,7 @@ export const convertVideoToBase64 = async (videoUri: string): Promise<string> =>
     
     // Obtener el tamaño del archivo
     const fileInfo = await FileSystem.getInfoAsync(fileUri);
-    console.log(`✅ Video convertido, tamaño: ${fileInfo.size || 'desconocido'} bytes`);
+    console.log(`✅ Video convertido, tamaño: ${fileInfo.exists ? fileInfo.size : 'desconocido'} bytes`);
     
     // Retornar con el prefijo data URI
     return `data:video/mp4;base64,${base64}`;
@@ -693,9 +693,11 @@ export const createGuideReport = async (guideId: string, reason: string, descrip
   }
 };
 
+export type ReportReason = 'incorrect_info' | 'wrong_category' | 'code_violation' | 'offensive' | 'other';
+
 export const createReport = async (
   advertisementId: string,
-  reason: 'incorrect_info' | 'wrong_category' | 'code_violation' | 'offensive' | 'other',
+  reason: ReportReason,
   description: string
 ): Promise<void> => {
   try {

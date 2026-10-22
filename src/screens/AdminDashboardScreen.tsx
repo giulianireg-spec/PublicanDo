@@ -13,6 +13,7 @@ import {
   ActivityIndicator,
   SafeAreaView,
   ScrollView,
+  ListRenderItem,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
@@ -1129,8 +1130,8 @@ const styles = StyleSheet.create({
       </View>
 
       <FlatList
-        data={contentType === 'advertisements' ? advertisements : guides}
-        renderItem={contentType === 'advertisements' ? renderAdvertisementCard : renderGuideCard}
+        data={(contentType === 'advertisements' ? advertisements : guides) as (Advertisement | Guide)[]}
+        renderItem={(contentType === 'advertisements' ? renderAdvertisementCard : renderGuideCard) as ListRenderItem<Advertisement | Guide>}
         keyExtractor={(item) => item._id}
         contentContainerStyle={styles.listContainer}
         refreshControl={

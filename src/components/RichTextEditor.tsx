@@ -184,7 +184,6 @@ const styles = StyleSheet.create({
           initialContentHTML={value}
           onChange={handleChange}
           placeholder={placeholder}
-          androidHardwareAccelerationDisabled={true}
           style={styles.editor}
           initialHeight={250}
         />

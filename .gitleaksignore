@@ -1,0 +1,2 @@
+# Hallazgos históricos ya revisados (gitleaks los ignora). Ver README de CI.
+6d6b62b94bd81c7a3c966688ec090bd45d5693f5:src/services/stamps.ts:generic-api-key:54

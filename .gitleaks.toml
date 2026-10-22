@@ -1,0 +1,8 @@
+# Configuración de gitleaks para el CI.
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Claves públicas de cliente: viajan dentro de la app (EXPO_PUBLIC_*) y en google-services.json, y están restringidas en Google Cloud"
+regexTarget = "line"
+regexes = ['''EXPO_PUBLIC_[A-Z_]+''', '''"current_key"''']

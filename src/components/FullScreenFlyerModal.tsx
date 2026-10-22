@@ -18,6 +18,7 @@ import Toast from 'react-native-toast-message';
 import { Advertisement } from '../types';
 import { useTheme } from '../context/ThemeContext';
 import { incrementClicks, createReport } from '../services/api';
+import type { ReportReason } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { ReportModal } from './ReportModal';
 import { ContactInfoOverlay } from './ContactInfoOverlay';
@@ -185,7 +186,7 @@ const styles = StyleSheet.create({
     setReportModalVisible(true);
   };
 
-  const handleConfirmReport = async (reason: string, description: string) => {
+  const handleConfirmReport = async (reason: ReportReason, description: string) => {
     try {
       await createReport(advertisement._id, reason, description);
       setReportModalVisible(false);

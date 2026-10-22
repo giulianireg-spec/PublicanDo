@@ -444,7 +444,7 @@ const styles = StyleSheet.create({
 
     existingMedia.push({ uri: advertisement.imageUrl, type: 'image', isExisting: true });
 
-    if (advertisement.images?.length > 0) {
+    if (advertisement.images?.length) {
       advertisement.images.forEach(imgUrl => {
         existingMedia.push({ uri: imgUrl, type: 'image', isExisting: true });
       });
@@ -654,7 +654,7 @@ const styles = StyleSheet.create({
     const code = error.response?.data?.code;
     const message = error.response?.data?.message;
 
-    const errorMessages: Record<string, { title: string; type: 'error' | 'warning' }> = {
+    const errorMessages: Record<string, { title: string; type: 'error' | 'warning' | 'info' }> = {
       IMAGE_LIMIT_EXCEEDED: { title: '❌ Demasiadas imágenes', type: 'error' },
       PREMIUM_REQUIRED: { title: '⭐ Premium requerido', type: 'info' },
       PREMIUM_DESCRIPTION_TOO_LONG: { title: '❌ Descripción muy larga', type: 'error' },

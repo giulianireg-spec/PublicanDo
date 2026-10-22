@@ -3,7 +3,7 @@
 
 import React from 'react';
 import { View, StyleSheet, useWindowDimensions } from 'react-native';
-import RenderHTML from 'react-native-render-html';
+import RenderHTML, { MixedStyleRecord } from 'react-native-render-html';
 import { useTheme } from '../context/ThemeContext';
 
 interface RichTextViewerProps {
@@ -14,7 +14,7 @@ const RichTextViewer: React.FC<RichTextViewerProps> = ({ html }) => {
   const { colors: COLORS } = useTheme();
   const { width } = useWindowDimensions();
 
-  const tagsStyles = {
+  const tagsStyles: MixedStyleRecord = {
     body: {
       color: COLORS.text,
       fontSize: 16,

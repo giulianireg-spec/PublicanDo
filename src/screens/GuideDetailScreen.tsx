@@ -691,10 +691,9 @@ const styles = StyleSheet.create({
   };
 
   const renderMap = () => {
-    // TODO: Fix MapView crash
-    return null;
-    // TEMP: Deshabilitado para debug
-    if (!guide) return null;
+    // TODO: Fix MapView crash (mapa deshabilitado temporalmente)
+    const MAP_ENABLED = false;
+    if (!MAP_ENABLED || !guide) return null;
 
     const pointsWithCoords = guide.points.filter(p => p.location.coordinates);
     if (pointsWithCoords.length === 0) return null;

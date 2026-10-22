@@ -43,7 +43,7 @@ const VideoItem = ({ url, isActive, height }: { url: string; isActive: boolean; 
       <VideoView
         style={{ width: '100%', height: '100%' }}
         player={player}
-        allowsFullscreen
+        fullscreenOptions={{ enable: true }}
         allowsPictureInPicture
       />
       <View style={{
