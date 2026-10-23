@@ -1,0 +1,4 @@
+<es-419>
+• Mejoras en los anuncios: ahora se integran como tarjetas en la lista de lugares y no aparecen espacios vacíos.
+• Correcciones y mejoras de estabilidad.
+</es-419>
