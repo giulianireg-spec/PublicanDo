@@ -17,7 +17,29 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundImage": "./assets/adaptive-background.png",
         "backgroundColor": "#84CC16"
-      }
+      },
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "autoVerify": true,
+          "data": [
+            {
+              "scheme": "https",
+              "host": "guiando-backend-509198716878.us-east1.run.app",
+              "pathPrefix": "/l/"
+            },
+            {
+              "scheme": "https",
+              "host": "guiando-backend-509198716878.us-east1.run.app",
+              "pathPrefix": "/g/"
+            }
+          ],
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ]
+        }
+      ]
     },
     "extra": {
       "googleWebClientId": "509198716878-nvuvkcpnfb74s171pegi81cee10c7h0m.apps.googleusercontent.com",

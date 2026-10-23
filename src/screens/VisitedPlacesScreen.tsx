@@ -106,6 +106,7 @@ const VisitedPlacesScreen = ({ navigation }: any) => {
     shareChip: { backgroundColor: '#1F2937', borderRadius: 14, paddingHorizontal: 10, paddingVertical: 6 },
     shareChipText: { color: '#FFFFFF', fontSize: 13, fontWeight: '600' },
     shareRecent: { color: '#D4D4D4', fontSize: 12, marginTop: 14 },
+    shareFooter: { color: '#A3E635', fontSize: 12, fontWeight: '700', marginTop: 12 },
     shareButton: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, backgroundColor: COLORS.primary, borderRadius: 24, paddingVertical: 12, marginBottom: 20 },
     shareButtonText: { color: COLORS.onPrimary, fontWeight: '700', fontSize: 15 },
     categoryBlock: { backgroundColor: COLORS.white, borderRadius: 16, padding: 14, marginBottom: 14, elevation: 2, shadowColor: COLORS.shadow, shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.08, shadowRadius: 3 },
@@ -174,6 +175,7 @@ const VisitedPlacesScreen = ({ navigation }: any) => {
                 <Text style={styles.shareRecent} numberOfLines={2}>
                   Últimos: {stamps.slice(0, 3).map((s) => s.title).join(' · ')}
                 </Text>
+                <Text style={styles.shareFooter}>Coleccioná los tuyos: descargá GuianDo en Google Play</Text>
               </View>
 
               <TouchableOpacity style={styles.shareButton} onPress={handleShare} disabled={sharing}>

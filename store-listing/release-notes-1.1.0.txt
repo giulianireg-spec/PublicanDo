@@ -1,0 +1,9 @@
+<es-419>
+Novedades de GuianDo 1.1:
+• Sellos de lugares visitados: recolectá el sello de cada lugar cuando estés ahí y compartí tu colección.
+• Modo sin conexión: los lugares cercanos quedan guardados para explorar sin señal.
+• Más de 100 lugares, festivales, ferias y guías de Córdoba.
+• Compartí lugares y guías con un link que se abre directo en la app.
+• Nuevas categorías de Compras: shoppings y galerías.
+• Mejoras de rendimiento y de diseño en Android 15.
+</es-419>

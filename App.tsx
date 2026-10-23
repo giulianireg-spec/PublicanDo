@@ -9,6 +9,7 @@ import { AuthProvider } from './src/context/AuthContext';
 import AppNavigator from './src/navigation/AppNavigator';
 import Toast from 'react-native-toast-message';
 import { navigateFromNotificationData } from './src/utils/notificationNavigation';
+import { listenForShareLinks } from './src/utils/shareLinks';
 
 // ✅ Importar notificaciones de forma segura
 let Notifications: any = null;
@@ -38,6 +39,9 @@ let handledColdStartId: string | undefined;
 export default function App() {
   const notificationListener = useRef<any>(null);
   const responseListener = useRef<any>(null);
+
+  // Links compartidos de lugares y guías (/l/<id>, /g/<id>)
+  useEffect(() => listenForShareLinks(), []);
 
   useEffect(() => {
     // ✅ Solo inicializar notificaciones si el módulo está disponible

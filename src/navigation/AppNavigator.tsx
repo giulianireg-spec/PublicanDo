@@ -26,6 +26,7 @@ import MyAdvertisementsScreen from '../screens/MyAdvertisementsScreen';
 import MyGuidesScreen from '../screens/MyGuidesScreen';
 import SavedGuidesScreen from '../screens/SavedGuidesScreen';
 import VisitedPlacesScreen from '../screens/VisitedPlacesScreen';
+import PlaceLinkScreen from '../screens/PlaceLinkScreen';
 import NotificationsScreen from '../screens/NotificationsScreen';
 import EditGuideScreen from '../screens/EditGuideScreen';
 import AdminDashboardScreen from '../screens/AdminDashboardScreen';
@@ -293,6 +294,7 @@ const AppNavigatorInner = () => {
         <Stack.Screen name="MyGuides"            component={MyGuidesScreen}            options={{ headerShown: false }} />
         <Stack.Screen name="SavedGuides"         component={SavedGuidesScreen}         options={{ headerShown: false }} />
         <Stack.Screen name="VisitedPlaces"       component={VisitedPlacesScreen}       options={{ headerShown: false }} />
+        <Stack.Screen name="PlaceLink"           component={PlaceLinkScreen}           options={{ headerShown: false }} />
         <Stack.Screen name="Notifications"        component={NotificationsScreen}        options={{ headerShown: false }} />
         <Stack.Screen name="EditGuide"           component={EditGuideScreen}           options={{ headerShown: false }} />
         <Stack.Screen name="AdminDashboard"      component={AdminDashboardScreen}      options={{ headerShown: false }} />

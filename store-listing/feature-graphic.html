@@ -1,0 +1,35 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+  html,body{margin:0;width:1024px;height:500px;overflow:hidden}
+  body{font-family:-apple-system,"SF Pro Display","Helvetica Neue",Arial,sans-serif;
+       background:linear-gradient(135deg,#BEF264 0%,#84CC16 55%,#4D7C0F 100%);position:relative}
+  .ring{position:absolute;border-radius:50%;border:2px solid rgba(10,10,10,.08)}
+  .r1{width:620px;height:620px;right:-150px;top:-60px}.r2{width:420px;height:420px;right:-50px;top:40px}
+  .left{position:absolute;left:64px;top:0;bottom:0;display:flex;flex-direction:column;justify-content:center;width:560px}
+  .brand{display:flex;align-items:center;gap:18px}
+  .brand img{width:96px;height:96px;border-radius:24px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+  .name{font-size:64px;font-weight:900;color:#0A0A0A;letter-spacing:-1px}
+  h1{font-size:40px;line-height:1.12;margin:26px 0 12px;color:#0A0A0A;font-weight:850}
+  p{font-size:22px;margin:0;color:#1A2E05;font-weight:600}
+  .stamps{position:absolute;right:70px;top:70px;width:300px;height:360px}
+  .st{position:absolute;width:140px;height:140px;border-radius:50%;background:#0A0A0A;color:#fff;display:flex;flex-direction:column;
+      align-items:center;justify-content:center;box-shadow:0 12px 28px rgba(0,0,0,.28);border:5px solid #A3E635;text-align:center}
+  .st b{font-size:44px;line-height:1}.st span{font-size:14px;font-weight:700;color:#A3E635;margin-top:6px;letter-spacing:.5px}
+  .a{left:0;top:0;transform:rotate(-10deg)}.b{left:150px;top:60px;transform:rotate(8deg)}.c{left:40px;top:190px;transform:rotate(6deg)}
+  .d{left:175px;top:215px;transform:rotate(-7deg);width:118px;height:118px}
+</style></head>
+<body>
+  <div class="ring r1"></div><div class="ring r2"></div>
+  <div class="left">
+    <div class="brand"><img src="icon.png" alt=""><div class="name">GuianDo</div></div>
+    <h1>Descubrí Córdoba y coleccioná sus lugares</h1>
+    <p>Sierras · Festivales · Historia · Guías de recorrido</p>
+  </div>
+  <div class="stamps">
+    <div class="st a"><b>⛰️</b><span>SIERRAS</span></div>
+    <div class="st b"><b>🎸</b><span>FESTIVALES</span></div>
+    <div class="st c"><b>⛪</b><span>HISTORIA</span></div>
+    <div class="st d"><b>🏅</b><span>SELLOS</span></div>
+  </div>
+</body></html>

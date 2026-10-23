@@ -19,6 +19,7 @@ import { Ionicons } from '@expo/vector-icons';
 import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from 'react-native-maps';
 import Toast from 'react-native-toast-message';
 import { useAuth } from '../context/AuthContext';
+import { guideLink } from '../utils/shareLinks';
 import { getGuideById, rateGuide, toggleSaveGuide, deleteGuide } from '../services/guidesApi';
 import { createGuideReport } from '../services/api';
 import { ReportModal } from '../components/ReportModal';
@@ -531,7 +532,7 @@ const styles = StyleSheet.create({
     
     try {
       await Share.share({
-        message: `🗺️ ${guide.title}\n\nDescubre esta guía en GuianDo: ${guide.mainLocation.city}, ${guide.mainLocation.province}\n\n${guide.description.substring(0, 100)}...`,
+        message: `🗺️ ${guide.title} · ${guide.mainLocation.city}, ${guide.mainLocation.province}\n\nSeguí esta guía en GuianDo: ${guideLink(guide._id)}`,
       });
     } catch (error) {
       console.error('Error sharing:', error);
