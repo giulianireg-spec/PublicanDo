@@ -15,6 +15,9 @@ import {
   TextInput,
   Modal,
 } from 'react-native';
+import { guideCategoryLabel, difficultyLabel } from '../i18n/labels';
+import { guideTitle } from '../i18n/content';
+import { useTranslation } from 'react-i18next';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../context/AuthContext';
 import Toast from 'react-native-toast-message';
@@ -36,6 +39,7 @@ const TagSearchInput = React.memo(({ selectedTag, onTagSelect, COLORS }: {
   COLORS: any;
 }) => {
   const [tagInput, setTagInput] = useState('');
+  const { t: tr } = useTranslation();
 
   const handleSubmit = () => {
     const t = tagInput.trim().toLowerCase();
@@ -52,7 +56,7 @@ const TagSearchInput = React.memo(({ selectedTag, onTagSelect, COLORS }: {
       <Ionicons name="pricetag-outline" size={16} color={COLORS.gray} />
       <TextInput
         style={{ flex: 1, backgroundColor: COLORS.inputBackground, borderRadius: 20, paddingHorizontal: 12, paddingVertical: 6, fontSize: 13, color: COLORS.text }}
-        placeholder="Buscar por tag..."
+        placeholder={tr('guides.searchTag')}
         placeholderTextColor={COLORS.gray}
         value={tagInput}
         onChangeText={setTagInput}
@@ -70,6 +74,7 @@ const TagSearchInput = React.memo(({ selectedTag, onTagSelect, COLORS }: {
 
 const GuidesListScreen = ({ navigation }: any) => {
   const { colors: COLORS } = useTheme();
+  const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const { user } = useAuth();
   const [guides, setGuides] = useState<GuideSummary[]>([]);
@@ -239,7 +244,7 @@ const GuidesListScreen = ({ navigation }: any) => {
               'Confirmar eliminación',
               `¿Eliminar "${item.title}" permanentemente?`,
               [
-                { text: 'Cancelar', style: 'cancel' },
+                { text: t('guides.cancel'), style: 'cancel' },
                 {
                   text: 'Eliminar',
                   style: 'destructive',
@@ -257,7 +262,7 @@ const GuidesListScreen = ({ navigation }: any) => {
             );
           },
         },
-        { text: 'Cancelar', style: 'cancel' },
+        { text: t('guides.cancel'), style: 'cancel' },
       ],
       { cancelable: true }
     );
@@ -292,7 +297,7 @@ const GuidesListScreen = ({ navigation }: any) => {
       >
         <Image source={{ uri: item.coverImageUrl }} style={styles.cardImage} />
         <View style={[styles.categoryBadge, { backgroundColor: categoryConfig.color }]}>
-          <Text style={styles.categoryBadgeText}>{categoryConfig.icon} {item.category}</Text>
+          <Text style={styles.categoryBadgeText}>{categoryConfig.icon} {guideCategoryLabel(item.category)}</Text>
         </View>
         {item.featured && (
           <View style={styles.featuredBadge}>
@@ -300,7 +305,7 @@ const GuidesListScreen = ({ navigation }: any) => {
           </View>
         )}
         <View style={styles.cardContent}>
-          <Text style={styles.cardTitle} numberOfLines={2}>{item.title}</Text>
+          <Text style={styles.cardTitle} numberOfLines={2}>{guideTitle(item)}</Text>
           <View style={styles.creatorRow}>
             <Image source={{ uri: item.createdBy.profileImage || 'https://via.placeholder.com/30' }} style={styles.creatorAvatar} />
             <Text style={styles.creatorName} numberOfLines={1}>{item.createdBy.name}</Text>
@@ -308,7 +313,7 @@ const GuidesListScreen = ({ navigation }: any) => {
           <View style={styles.statsRow}>
             <View style={styles.statItem}>
               {renderStars(item.averageRating)}
-              <Text style={styles.statText}>{item.averageRating > 0 ? item.averageRating.toFixed(1) : 'Sin rating'}</Text>
+              <Text style={styles.statText}>{item.averageRating > 0 ? item.averageRating.toFixed(1) : t('guides.noRating')}</Text>
             </View>
             <View style={styles.statItem}>
               <Ionicons name="time-outline" size={14} color={COLORS.gray} />
@@ -316,7 +321,7 @@ const GuidesListScreen = ({ navigation }: any) => {
             </View>
             <View style={styles.statItem}>
               <Ionicons name="location-outline" size={14} color={COLORS.gray} />
-              <Text style={styles.statText}>{item.pointsCount || '?'} puntos</Text>
+              <Text style={styles.statText}>{t('guides.points', { count: item.pointsCount || 0 })}</Text>
             </View>
           </View>
           <View style={styles.locationRow}>
@@ -324,7 +329,7 @@ const GuidesListScreen = ({ navigation }: any) => {
             <Text style={styles.locationText}>{item.mainLocation.city}, {item.mainLocation.province}</Text>
             <View style={[styles.difficultyBadge, { backgroundColor: difficultyConfig.color + '20' }]}>
               <Text style={[styles.difficultyText, { color: difficultyConfig.color }]}>
-                {difficultyConfig.icon} {difficultyConfig.label}
+                {difficultyConfig.icon} {difficultyLabel(item.difficulty)}
               </Text>
             </View>
           </View>
@@ -338,7 +343,7 @@ const GuidesListScreen = ({ navigation }: any) => {
     return (
       <View style={styles.featuredSection}>
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>⭐ Guías destacadas</Text>
+          <Text style={styles.sectionTitle}>{t('guides.featured')}</Text>
         </View>
         <FlatList
           horizontal
@@ -347,7 +352,7 @@ const GuidesListScreen = ({ navigation }: any) => {
             <TouchableOpacity style={styles.featuredCard} onPress={() => navigation.navigate('GuideDetail', { guideId: item._id })}>
               <Image source={{ uri: item.coverImageUrl }} style={styles.featuredImage} />
               <View style={styles.featuredOverlay}>
-                <Text style={styles.featuredTitle} numberOfLines={2}>{item.title}</Text>
+                <Text style={styles.featuredTitle} numberOfLines={2}>{guideTitle(item)}</Text>
                 <View style={styles.featuredStats}>
                   {renderStars(item.averageRating)}
                   <Text style={styles.featuredRating}>{item.ratingCount > 0 ? `(${item.ratingCount})` : ''}</Text>
@@ -377,7 +382,7 @@ const GuidesListScreen = ({ navigation }: any) => {
           >
             {config && <Text style={styles.categoryChipIcon}>{config.icon}</Text>}
             <Text style={[styles.categoryChipText, isSelected && styles.categoryChipTextActive]}>
-              {item === 'Todas' ? '🌟 Todas' : item}
+              {item === 'Todas' ? `🌟 ${t('guides.all')}` : guideCategoryLabel(item)}
             </Text>
           </TouchableOpacity>
         );
@@ -392,7 +397,7 @@ const GuidesListScreen = ({ navigation }: any) => {
     <View>
       <View style={styles.sortContainer}>
         {(['recent', 'popular', 'rating'] as const).map((option) => {
-          const labels = { recent: '🕐 Recientes', popular: '🔥 Populares', rating: '⭐ Mejor valoradas' };
+          const labels = { recent: t('guides.sortRecent'), popular: t('guides.sortPopular'), rating: t('guides.sortRating') };
           const isSelected = sortBy === option;
           return (
             <TouchableOpacity key={option} style={[styles.sortOption, isSelected && styles.sortOptionActive]} onPress={() => setSortBy(option)}>
@@ -416,7 +421,7 @@ const GuidesListScreen = ({ navigation }: any) => {
     <View>
       {renderFeaturedSection()}
       <View style={styles.filtersSection}>
-        <Text style={styles.sectionTitle}>Explorar guías</Text>
+        <Text style={styles.sectionTitle}>{t('guides.explore')}</Text>
         {renderCategoryFilter()}
         {renderSortOptions()}
       </View>
@@ -432,7 +437,7 @@ const GuidesListScreen = ({ navigation }: any) => {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color={COLORS.primaryText} />
-        <Text style={styles.loadingText}>Cargando guías...</Text>
+        <Text style={styles.loadingText}>{t('guides.loading')}</Text>
       </View>
     );
   }
@@ -440,7 +445,7 @@ const GuidesListScreen = ({ navigation }: any) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>🗺️ Guías</Text>
+        <Text style={styles.headerTitle}>{t('guides.title')}</Text>
         <TouchableOpacity style={styles.createButton} onPress={() => navigation.navigate('CreateGuide')}>
           <Ionicons name="add" size={24} color={COLORS.primary} />
         </TouchableOpacity>
@@ -455,10 +460,10 @@ const GuidesListScreen = ({ navigation }: any) => {
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
             <Ionicons name="map-outline" size={64} color={COLORS.grayLight} />
-            <Text style={styles.emptyText}>No hay guías disponibles</Text>
+            <Text style={styles.emptyText}>{t('guides.empty')}</Text>
             <TouchableOpacity style={styles.createFirstButton} onPress={() => navigation.navigate('CreateGuide')}>
               <Ionicons name="add-circle" size={20} color={COLORS.onPrimary} />
-              <Text style={styles.createFirstText}>Crear la primera guía</Text>
+              <Text style={styles.createFirstText}>{t('guides.createFirst')}</Text>
             </TouchableOpacity>
           </View>
         }
@@ -487,7 +492,7 @@ const GuidesListScreen = ({ navigation }: any) => {
             <Text style={{ fontSize: 12, color: COLORS.gray, textAlign: 'right', marginTop: 4, marginBottom: 16 }}>{rejectReason.length}/200</Text>
             <View style={{ flexDirection: 'row', gap: 12 }}>
               <TouchableOpacity style={{ flex: 1, padding: 14, borderRadius: 8, borderWidth: 2, borderColor: COLORS.primary, alignItems: 'center' }} onPress={() => setShowRejectModal(false)}>
-                <Text style={{ color: COLORS.primaryText, fontWeight: '700' }}>Cancelar</Text>
+                <Text style={{ color: COLORS.primaryText, fontWeight: '700' }}>{t('guides.cancel')}</Text>
               </TouchableOpacity>
               <TouchableOpacity style={{ flex: 1, padding: 14, borderRadius: 8, backgroundColor: COLORS.primary, alignItems: 'center' }} onPress={confirmReject}>
                 <Text style={{ color: COLORS.onPrimary, fontWeight: '700' }}>Enviar</Text>

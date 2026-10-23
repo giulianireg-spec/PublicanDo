@@ -1,5 +1,5 @@
 // src/screens/HomeScreen.tsx
-// GUIANDO: Con subcategorías, filtro "Abierto ahora"
+// GUIANDO: Con subcategorías, filtro t('home.openNow')
 
 import React, { useState, useEffect, useRef } from 'react';
 import {
@@ -20,6 +20,9 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
+import { dateLocale } from '../i18n';
+import { categoryLabel, subcategoryLabel } from '../i18n/labels';
+import { useTranslation } from 'react-i18next';
 import { Ionicons } from '@expo/vector-icons';
 import * as Location from 'expo-location';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -83,6 +86,7 @@ interface FeedItem {
 type FilterMode = 'location' | 'radius';
 
 const HomeScreen = ({ navigation }: any) => {
+  const { t } = useTranslation();
   const { colors: COLORS } = useTheme();
 const styles = StyleSheet.create({
   container: {
@@ -193,7 +197,7 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: '600',
   },
-  // Filtro "Abierto ahora"
+  // Filtro t('home.openNow')
   openNowContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -694,7 +698,7 @@ const styles = StyleSheet.create({
   const [selectedCategory, setSelectedCategory] = useState('Todas');
   const [selectedSubcategory, setSelectedSubcategory] = useState<string | null>(null);
   
-  // Filtro "Abierto ahora"
+  // Filtro t('home.openNow')
   const [openNowFilter, setOpenNowFilter] = useState(false);
   
   // Modo de filtro (mutuamente excluyentes)
@@ -929,8 +933,8 @@ const styles = StyleSheet.create({
       }
       Toast.show({
         type: 'info',
-        text1: '📍 Modo: Por localidad',
-        text2: 'Mostrando lugares de la localidad seleccionada',
+        text1: t('home.modeLocation'),
+        text2: t('home.modeLocationBody'),
         position: 'bottom',
         visibilityTime: 2000,
       });
@@ -941,8 +945,8 @@ const styles = StyleSheet.create({
     if (!userLocation) {
       Toast.show({
         type: 'error',
-        text1: '📍 GPS no disponible',
-        text2: 'Necesitamos tu ubicación para buscar cerca de ti',
+        text1: t('home.gpsUnavailable'),
+        text2: t('home.gpsUnavailableBody'),
         position: 'bottom',
       });
       return;
@@ -954,8 +958,8 @@ const styles = StyleSheet.create({
       setSelectedLocality(null);
       Toast.show({
         type: 'info',
-        text1: '📡 Modo: Cerca de mí',
-        text2: `Mostrando lugares en un radio de ${distanceFilter} km`,
+        text1: t('home.modeRadius'),
+        text2: t('home.radiusBody', { km: distanceFilter }),
         position: 'bottom',
         visibilityTime: 2000,
       });
@@ -1008,7 +1012,7 @@ const styles = StyleSheet.create({
       // Con conexión de nuevo: validar los sellos recolectados sin señal
       if (user) {
         syncPendingStamps().then(({ synced }) => {
-          if (synced) Toast.show({ type: 'success', text1: `🏅 ${synced} sello${synced > 1 ? 's' : ''} validado${synced > 1 ? 's' : ''}`, position: 'bottom' });
+          if (synced) Toast.show({ type: 'success', text1: t('visited.syncedToast', { count: synced }), position: 'bottom' });
         });
       }
     } catch (error) {
@@ -1041,8 +1045,8 @@ const styles = StyleSheet.create({
     if (offlineSavedAt === null) {
       Toast.show({
         type: 'info',
-        text1: '📴 Sin conexión',
-        text2: 'Mostrando los lugares cercanos guardados en tu teléfono',
+        text1: t('home.offline'),
+        text2: t('home.offlineBody'),
         position: 'bottom',
       });
     }
@@ -1098,7 +1102,7 @@ const styles = StyleSheet.create({
       });
     }
 
-    // Filtro "Abierto ahora"
+    // Filtro t('home.openNow')
     if (openNowFilter) {
       filtered = filtered.filter((ad) => {
         if (!ad.schedule) return false;
@@ -1222,8 +1226,8 @@ const styles = StyleSheet.create({
       setSelectedLocality(autoDetectedLocation.locality);
       Toast.show({
         type: 'info',
-        text1: '🔄 Filtros restaurados',
-        text2: `Mostrando: ${autoDetectedLocation.locality}, ${autoDetectedLocation.province}`,
+        text1: t('home.filtersRestored'),
+        text2: t('home.showingPlace', { place: `${autoDetectedLocation.locality}, ${autoDetectedLocation.province}` }),
         position: 'bottom',
       });
     } else {
@@ -1242,7 +1246,7 @@ const styles = StyleSheet.create({
       await updateSavedLocation(tempProvince, tempLocality);
       Toast.show({
         type: 'success',
-        text1: '📍 Filtros aplicados',
+        text1: t('home.filtersApplied'),
         text2: `${tempLocality}, ${tempProvince}`,
         position: 'bottom',
       });
@@ -1291,7 +1295,7 @@ const styles = StyleSheet.create({
         {openStatus && (
           <View style={[styles.openBadge, { backgroundColor: openStatus.color }]}>
             <Text style={styles.openBadgeText}>
-              {openStatus.isOpen ? 'Abierto' : 'Cerrado'}
+              {openStatus.isOpen ? t('home.open') : t('home.closed')}
             </Text>
           </View>
         )}
@@ -1303,7 +1307,7 @@ const styles = StyleSheet.create({
           <View style={styles.categoryRow}>
             <Text style={styles.categoryIcon}>{categoryConfig?.emoji || '📍'}</Text>
             <Text style={styles.cardCategory} numberOfLines={1}>
-              {item.subcategory || item.category?.replace(/^[^\s]+\s/, '')}
+              {item.subcategory ? subcategoryLabel(item.category, item.subcategory) : categoryLabel(item.category, false)}
             </Text>
           </View>
           
@@ -1317,7 +1321,7 @@ const styles = StyleSheet.create({
           {item.hasProfessionalLicense && (
             <View style={styles.licenseIndicator}>
               <Ionicons name="document-text" size={12} color="#4CAF50" />
-              <Text style={styles.licenseIndicatorText}>Matriculado</Text>
+              <Text style={styles.licenseIndicatorText}>{t('home.licensed')}</Text>
             </View>
           )}
           
@@ -1360,7 +1364,7 @@ const styles = StyleSheet.create({
     return (
       <View style={styles.footerLoader}>
         <ActivityIndicator size="small" color={COLORS.primaryText} />
-        <Text style={styles.footerText}>Cargando más...</Text>
+        <Text style={styles.footerText}>{t('home.loadingMore')}</Text>
       </View>
     );
   };
@@ -1383,7 +1387,7 @@ const styles = StyleSheet.create({
           styles.filterModeText,
           filterMode === 'location' && styles.filterModeTextActive,
         ]}>
-          Por localidad
+          {t('home.byLocation')}
         </Text>
       </TouchableOpacity>
 
@@ -1406,7 +1410,7 @@ const styles = StyleSheet.create({
           filterMode === 'radius' && styles.filterModeTextActive,
           !userLocation && styles.filterModeTextDisabled,
         ]}>
-          Cerca de mí
+          {t('home.nearMe')}
         </Text>
       </TouchableOpacity>
       {filterMode === 'location' && (
@@ -1471,7 +1475,7 @@ const styles = StyleSheet.create({
               styles.subcategoryFilterText,
               !selectedSubcategory && styles.subcategoryFilterTextActive,
             ]}>
-              Todas
+              {t('home.all')}
             </Text>
           </TouchableOpacity>
           {availableSubcategories.map((sub) => (
@@ -1487,7 +1491,7 @@ const styles = StyleSheet.create({
                 styles.subcategoryFilterText,
                 selectedSubcategory === sub && styles.subcategoryFilterTextActive,
               ]}>
-                {sub}
+                {subcategoryLabel(selectedCategory ?? undefined, sub)}
               </Text>
             </TouchableOpacity>
           ))}
@@ -1505,7 +1509,7 @@ const styles = StyleSheet.create({
           color={openNowFilter ? COLORS.success : COLORS.gray} 
         />
         <Text style={[styles.openNowText, openNowFilter && styles.openNowTextActive]}>
-          Abierto ahora
+          {t('home.openNow')}
         </Text>
       </View>
       <Switch
@@ -1524,7 +1528,7 @@ const styles = StyleSheet.create({
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color={COLORS.primaryText} />
         <Text style={styles.loadingText}>
-          {detectingLocation ? 'Detectando ubicación...' : 'Cargando lugares...'}
+          {detectingLocation ? t('home.detecting') : t('home.loadingPlaces')}
         </Text>
       </View>
     );
@@ -1539,7 +1543,7 @@ const styles = StyleSheet.create({
       {renderFilterModeSelector()}
       {renderActiveFilters()}
 
-      {/* Filtro "Abierto ahora" */}
+      {/* Filtro t('home.openNow') */}
       {renderOpenNowFilter()}
 
       {/* Categorías con iconos */}
@@ -1575,7 +1579,7 @@ const styles = StyleSheet.create({
                   ]}
                   numberOfLines={1}
                 >
-                  {item === 'Todas' ? '🌟 Todas' : item.replace(/^[^\s]+\s/, '')}
+                  {item === 'Todas' ? `🌟 ${t('home.all')}` : categoryLabel(item, false)}
                 </Text>
               </TouchableOpacity>
             );
@@ -1593,7 +1597,7 @@ const styles = StyleSheet.create({
             onPress={() => setShowDistanceDropdown(!showDistanceDropdown)}
           >
             <Ionicons name="radio-button-on" size={18} color={COLORS.primaryText} />
-            <Text style={styles.distanceFilterText}>Radio: {distanceFilter} km</Text>
+            <Text style={styles.distanceFilterText}>{t('home.radius', { km: distanceFilter })}</Text>
             <Ionicons name={showDistanceDropdown ? 'chevron-up' : 'chevron-down'} size={18} color={COLORS.primaryText} />
           </TouchableOpacity>
 
@@ -1609,7 +1613,7 @@ const styles = StyleSheet.create({
                   }}
                 >
                   <Text style={[styles.distanceOptionText, distanceFilter === km && styles.distanceOptionTextActive]}>
-                    {km} km o menos
+                    {t('home.kmOrLess', { km })}
                   </Text>
                   {distanceFilter === km && <Ionicons name="checkmark" size={18} color={COLORS.onPrimary} />}
                 </TouchableOpacity>
@@ -1622,19 +1626,19 @@ const styles = StyleSheet.create({
       <View style={[styles.resultsInfo, styles.resultsRow]}>
         <Text style={[styles.resultsText, { flex: 1 }]}>
           {offlineSavedAt !== null
-            ? `📴 Sin conexión · ${filteredAds.length} lugares guardados el ${new Date(offlineSavedAt).toLocaleDateString('es-AR')}`
+            ? t('home.offlineCount', { count: filteredAds.length, date: new Date(offlineSavedAt).toLocaleDateString(dateLocale()) })
             : filterMode === 'radius'
-            ? `${filteredAds.length} lugares en un radio de ${distanceFilter} km`
-            : `Mostrando ${filteredAds.length} de ${totalItems} lugares`
+            ? t('home.radiusCount', { count: filteredAds.length, km: distanceFilter })
+            : t('home.showingCount', { count: filteredAds.length, total: totalItems })
           }
-          {openNowFilter ? ' (abiertos ahora)' : ''}
+          {openNowFilter ? t('home.openNowSuffix') : ''}
         </Text>
         <TouchableOpacity
           style={styles.viewToggle}
           onPress={() => setViewMode(viewMode === 'list' ? 'map' : 'list')}
         >
           <Ionicons name={viewMode === 'list' ? 'map-outline' : 'list-outline'} size={16} color={COLORS.primaryText} />
-          <Text style={styles.viewToggleText}>{viewMode === 'list' ? 'Mapa' : 'Lista'}</Text>
+          <Text style={styles.viewToggleText}>{viewMode === 'list' ? t('home.map') : t('home.list')}</Text>
         </TouchableOpacity>
       </View>
 
@@ -1657,11 +1661,11 @@ const styles = StyleSheet.create({
           <View style={styles.emptyContainer}>
             <Ionicons name="compass" size={64} color={COLORS.grayLight} />
             <Text style={styles.emptyText}>
-              {loading ? 'Cargando...' : 
-                openNowFilter ? 'No hay lugares abiertos en este momento' :
+              {loading ? t('home.loading') : 
+                openNowFilter ? t('home.noneOpen') :
                 filterMode === 'radius' 
-                  ? `No hay lugares en un radio de ${distanceFilter} km`
-                  : 'No se encontraron lugares'
+                  ? t('home.noneInRadius', { km: distanceFilter })
+                  : t('home.noneFound')
               }
             </Text>
             {openNowFilter && (
@@ -1669,7 +1673,7 @@ const styles = StyleSheet.create({
                 style={styles.clearFiltersButton} 
                 onPress={() => setOpenNowFilter(false)}
               >
-                <Text style={styles.clearFiltersText}>Mostrar todos</Text>
+                <Text style={styles.clearFiltersText}>{t('home.showAll')}</Text>
               </TouchableOpacity>
             )}
             {filterMode === 'radius' && !openNowFilter && (
@@ -1677,12 +1681,12 @@ const styles = StyleSheet.create({
                 style={styles.clearFiltersButton} 
                 onPress={() => setDistanceFilter(50)}
               >
-                <Text style={styles.clearFiltersText}>Ampliar a 50 km</Text>
+                <Text style={styles.clearFiltersText}>{t('home.widen')}</Text>
               </TouchableOpacity>
             )}
             {filterMode === 'location' && (selectedProvince || selectedLocality) && !openNowFilter && (
               <TouchableOpacity style={styles.clearFiltersButton} onPress={handleClearFilters}>
-                <Text style={styles.clearFiltersText}>{autoDetectedLocation ? 'Restaurar filtros' : 'Limpiar filtros'}</Text>
+                <Text style={styles.clearFiltersText}>{autoDetectedLocation ? t('home.restoreFilters') : t('home.clearFilters')}</Text>
               </TouchableOpacity>
             )}
           </View>
@@ -1709,7 +1713,7 @@ const styles = StyleSheet.create({
           >
           <View style={[styles.modalContent, { paddingBottom: insets.bottom }]}>
             <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>📍 Filtrar por localidad</Text>
+              <Text style={styles.modalTitle}>{t('home.filterTitle')}</Text>
               <TouchableOpacity onPress={() => setShowFiltersModal(false)}>
                 <Ionicons name="close" size={28} color={COLORS.text} />
               </TouchableOpacity>
@@ -1719,17 +1723,17 @@ const styles = StyleSheet.create({
               <View style={styles.modeInfoBox}>
                 <Ionicons name="information-circle" size={20} color="#2196F3" />
                 <Text style={styles.modeInfoText}>
-                  En este modo verás todos los lugares de la localidad seleccionada, sin límite de distancia.
+                  {t('home.filterHint')}
                 </Text>
               </View>
 
-              <Text style={styles.modalLabel}>Provincia</Text>
+              <Text style={styles.modalLabel}>{t('home.province')}</Text>
               <View style={styles.provincesGrid}>
                 <TouchableOpacity
                   style={[styles.provinceChip, !tempProvince && styles.provinceChipActive]}
                   onPress={() => { setTempProvince(null); setTempLocality(null); setLocalityQuery(''); }}
                 >
-                  <Text style={[styles.provinceChipText, !tempProvince && styles.provinceChipTextActive]}>Todas</Text>
+                  <Text style={[styles.provinceChipText, !tempProvince && styles.provinceChipTextActive]}>{t('home.allProvinces')}</Text>
                 </TouchableOpacity>
                 {ARGENTINA_PROVINCES.map((prov) => (
                   <TouchableOpacity
@@ -1746,11 +1750,11 @@ const styles = StyleSheet.create({
 
               {tempProvince && (
                 <>
-                  <Text style={styles.modalLabel}>Localidad (opcional)</Text>
+                  <Text style={styles.modalLabel}>{t('home.locality')}</Text>
                   <View style={styles.localityInputContainer}>
                     <TextInput
                       style={styles.modalInput}
-                      placeholder="Buscar localidad..."
+                      placeholder={t('home.searchLocality')}
                       placeholderTextColor={COLORS.gray}
                       value={localityQuery}
                       onChangeText={setLocalityQuery}
@@ -1801,7 +1805,7 @@ const styles = StyleSheet.create({
                 <Text style={styles.clearButtonText}>{autoDetectedLocation ? 'Restaurar' : 'Limpiar'}</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.applyButton} onPress={handleApplyFilters}>
-                <Text style={styles.applyButtonText}>Aplicar filtros</Text>
+                <Text style={styles.applyButtonText}>{t('home.apply')}</Text>
               </TouchableOpacity>
             </View>
           </View>

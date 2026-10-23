@@ -41,6 +41,8 @@ export interface Advertisement {
   title: string;
   description: string;
   richDescription?: string;
+  // Textos traducidos (en, pt) de las fichas cargadas por GuianDo
+  translations?: Record<string, { description?: string; richDescription?: string }>;
   category: string;
   subcategory?: string;
   imageUrl: string;

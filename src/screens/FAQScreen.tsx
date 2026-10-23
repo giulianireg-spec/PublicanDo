@@ -11,6 +11,9 @@ import {
   SafeAreaView,
   Linking,
 } from 'react-native';
+import { currentLanguage } from '../i18n';
+import { FAQ_TRANSLATIONS } from '../i18n/faq';
+import { useTranslation } from 'react-i18next';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
 
@@ -38,8 +41,8 @@ const FAQ_DATA: FAQItem[] = [
   {
     id: '3',
     category: 'general',
-    question: '¿En qué ciudades está disponible?',
-    answer: 'Estamos comenzando por la provincia de Córdoba: Córdoba Capital, Villa Carlos Paz, Alta Gracia, Villa María, Cosquín, La Falda, Jesús María y muchas localidades más.\n\nPero GuianDo está diseñado para crecer. Cualquier persona puede publicar lugares en cualquier punto del país. Si tu ciudad todavía tiene pocos lugares, ¡vos podés ser quien la ponga en el mapa!',
+    question: '¿Dónde está disponible?',
+    answer: 'GuianDo funciona en toda la Argentina. Ya hay lugares cargados en las 23 provincias y en la Ciudad de Buenos Aires: parques nacionales, pueblos, museos, festivales y mucho más. Córdoba, donde empezamos, es la provincia con más lugares por ahora.\n\nCualquier persona puede publicar lugares en cualquier punto del país. Si tu ciudad todavía tiene pocos lugares, ¡vos podés ser quien la ponga en el mapa!',
   },
   {
     id: '4',
@@ -92,12 +95,19 @@ const FAQ_DATA: FAQItem[] = [
     answer: 'Sí, y es muy útil hacerlo. Podés cargar los horarios día por día, indicando apertura y cierre. GuianDo mostrará automáticamente si el lugar está "Abierto ahora" o "Cerrado", lo que ayuda mucho a quienes están planeando su visita.',
   },
 
+  {
+    id: '29',
+    category: 'publicar',
+    question: '¿Puedo poner un QR de GuianDo en mi negocio?',
+    answer: 'Sí, es gratis. En "Mis Lugares Publicados", debajo de cada lugar aprobado, tocá "Kit QR para imprimir": se abre una hoja A4 con el nombre de tu lugar y un código QR que lleva directo a tu ficha.\n\nImprimila o guardala como PDF y pegala en la entrada, la caja o las mesas. Quien la escanee puede ver tu ficha, cómo llegar y recolectar el sello de tu lugar.',
+  },
+
   // ==================== GUÍAS ====================
   {
     id: '12',
     category: 'guias',
     question: '¿Qué son las guías?',
-    answer: 'Las guías son itinerarios armados por personas reales, para personas reales.\n\nPodés crear una guía con hasta 10 paradas: "Los mejores cafés de Nueva Córdoba", "Un fin de semana perfecto en Carlos Paz", "Ruta gastronómica por el centro", "Qué hacer en La Falda si llegás un viernes".\n\nCada punto tiene su descripción, tiempo estimado, ubicación y tips personales. Son la diferencia entre un viaje genérico y una experiencia memorable.',
+    answer: 'Las guías son itinerarios armados por personas reales, para personas reales.\n\nPodés crear una guía con hasta 10 paradas: "Buenos Aires en 2 días", "Quebrada de Humahuaca en 2 días", "Los mejores cafés de Nueva Córdoba", "Un fin de semana en Bariloche".\n\nCada punto tiene su descripción, tiempo estimado, ubicación y tips personales. Son la diferencia entre un viaje genérico y una experiencia memorable.',
   },
   {
     id: '13',
@@ -162,7 +172,7 @@ const FAQ_DATA: FAQItem[] = [
     id: '19',
     category: 'cuenta',
     question: '¿Olvidé mi contraseña, qué hago?',
-    answer: 'En la pantalla de inicio de sesión tocá "¿Olvidaste tu contraseña?". Te enviaremos un email con instrucciones para crear una nueva. Revisá la carpeta de spam si no lo encontrás en unos minutos.',
+    answer: 'En la pantalla de inicio de sesión tocá "¿Olvidaste tu contraseña?" e ingresá tu email. Si está registrado, te enviaremos un código de 6 dígitos para crear una contraseña nueva. Revisá la carpeta de spam si no lo encontrás en unos minutos.',
   },
   {
     id: '20',
@@ -174,7 +184,7 @@ const FAQ_DATA: FAQItem[] = [
     id: '21',
     category: 'cuenta',
     question: '¿Cómo elimino mi cuenta?',
-    answer: 'Si querés eliminar tu cuenta, escribinos a soporte@guiando.com.ar. Tené en cuenta que:\n\n• Se eliminarán todas tus publicaciones y guías\n• Esta acción no se puede deshacer\n\nProcesamos las solicitudes en 48-72 horas hábiles.',
+    answer: 'Desde tu perfil, al final de la pantalla, tocá "Eliminar mi cuenta" y confirmá. También podés pedirlo desde guiando.com.ar/eliminar-cuenta o escribiendo a soporte@guiando.com.ar.\n\nTené en cuenta que:\n\n• Se eliminan tu cuenta, tus publicaciones, tus guías, tus sellos y tus valoraciones\n• Esta acción no se puede deshacer',
   },
 
   // ==================== SEGURIDAD ====================
@@ -194,7 +204,7 @@ const FAQ_DATA: FAQItem[] = [
     id: '24',
     category: 'seguridad',
     question: '¿Mis datos están seguros?',
-    answer: 'Sí. Tomamos la privacidad muy en serio:\n\n• Todas las conexiones son encriptadas (HTTPS)\n• Las contraseñas se almacenan con hash seguro\n• No vendemos ni compartimos tus datos con terceros\n• Cumplimos con las leyes argentinas de protección de datos personales\n\nPodés leer nuestra Política de Privacidad completa desde tu perfil.',
+    answer: 'Sí. Tomamos la privacidad muy en serio:\n\n• Todas las conexiones son encriptadas (HTTPS)\n• Las contraseñas se almacenan con hash seguro\n• No vendemos tus datos personales\n• Para mostrar anuncios y medir el uso de la app, Google (AdMob y Firebase) recibe el identificador del dispositivo y datos de uso y de errores\n• Tu ubicación precisa se usa solo para mostrarte lugares cercanos y validar sellos\n• Cumplimos con las leyes argentinas de protección de datos personales\n\nPodés leer nuestra Política de Privacidad completa desde tu perfil.',
   },
   {
     id: '25',
@@ -215,6 +225,7 @@ const CATEGORIES_INFO = {
 
 const FAQScreen = ({ navigation }: any) => {
   const { colors: COLORS } = useTheme();
+  const { t } = useTranslation();
   const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: COLORS.background },
     header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: COLORS.primary, paddingHorizontal: 16, paddingVertical: 12 },
@@ -254,12 +265,18 @@ const FAQScreen = ({ navigation }: any) => {
     setExpandedId(expandedId === id ? null : id);
   };
 
+  // Texto en el idioma de la app; si falta la traducción queda el español
+  const lang = currentLanguage();
+  const localizedFAQs = FAQ_DATA.map((faq) => {
+    const tr = lang === 'es' ? undefined : FAQ_TRANSLATIONS[lang]?.[faq.id];
+    return tr ? { ...faq, question: tr[0], answer: tr[1] } : faq;
+  });
   const filteredFAQs = selectedCategory === 'all'
-    ? FAQ_DATA
-    : FAQ_DATA.filter(faq => faq.category === selectedCategory);
+    ? localizedFAQs
+    : localizedFAQs.filter(faq => faq.category === selectedCategory);
 
   const handleContactSupport = () => {
-    Linking.openURL('mailto:soporte@guiando.com.ar?subject=Consulta desde GuianDo');
+    Linking.openURL(`mailto:soporte@guiando.com.ar?subject=${encodeURIComponent(t('faq.mailSubject'))}`);
   };
 
   const renderCategoryFilter = () => (
@@ -274,7 +291,7 @@ const FAQScreen = ({ navigation }: any) => {
         onPress={() => setSelectedCategory('all')}
       >
         <Ionicons name="apps" size={16} color={selectedCategory === 'all' ? COLORS.white : COLORS.gray} />
-        <Text style={[styles.categoryChipText, selectedCategory === 'all' && styles.categoryChipTextActive]}>Todas</Text>
+        <Text style={[styles.categoryChipText, selectedCategory === 'all' && styles.categoryChipTextActive]}>{t('faq.all')}</Text>
       </TouchableOpacity>
 
       {Object.entries(CATEGORIES_INFO).map(([key, info]) => (
@@ -284,7 +301,7 @@ const FAQScreen = ({ navigation }: any) => {
           onPress={() => setSelectedCategory(key)}
         >
           <Ionicons name={info.icon as any} size={16} color={selectedCategory === key ? COLORS.white : info.color} />
-          <Text style={[styles.categoryChipText, selectedCategory === key && styles.categoryChipTextActive]}>{info.label}</Text>
+          <Text style={[styles.categoryChipText, selectedCategory === key && styles.categoryChipTextActive]}>{t(`faq.categories.${key}`)}</Text>
         </TouchableOpacity>
       ))}
     </ScrollView>
@@ -316,15 +333,15 @@ const FAQScreen = ({ navigation }: any) => {
         <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
           <Ionicons name="arrow-back" size={24} color={COLORS.onPrimary} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Preguntas Frecuentes</Text>
+        <Text style={styles.headerTitle}>{t('faq.title')}</Text>
         <View style={styles.placeholder} />
       </View>
 
       <View style={styles.introContainer}>
         <Ionicons name="compass" size={40} color={COLORS.primaryText} />
-        <Text style={styles.introTitle}>Descubrí. Compartí. Guiá.</Text>
+        <Text style={styles.introTitle}>{t('faq.tagline')}</Text>
         <Text style={styles.introSubtitle}>
-          Para quienes viajan a lo desconocido{'\n'}y para quienes redescubren lo propio
+          {t('faq.subtitle')}
         </Text>
       </View>
 
@@ -332,8 +349,8 @@ const FAQScreen = ({ navigation }: any) => {
 
       <View style={styles.resultsInfo}>
         <Text style={styles.resultsText}>
-          {filteredFAQs.length} pregunta{filteredFAQs.length !== 1 ? 's' : ''}
-          {selectedCategory !== 'all' && ` en ${CATEGORIES_INFO[selectedCategory as keyof typeof CATEGORIES_INFO]?.label}`}
+          {t('faq.count', { count: filteredFAQs.length })}
+          {selectedCategory !== 'all' && ` ${t('faq.inCategory', { category: t(`faq.categories.${selectedCategory}`) })}`}
         </Text>
       </View>
 
@@ -341,11 +358,11 @@ const FAQScreen = ({ navigation }: any) => {
         {filteredFAQs.map(renderFAQItem)}
 
         <View style={styles.supportContainer}>
-          <Text style={styles.supportTitle}>¿No encontraste lo que buscabas?</Text>
-          <Text style={styles.supportText}>Nuestro equipo está listo para ayudarte</Text>
+          <Text style={styles.supportTitle}>{t('faq.notFound')}</Text>
+          <Text style={styles.supportText}>{t('faq.teamReady')}</Text>
           <TouchableOpacity style={styles.supportButton} onPress={handleContactSupport}>
             <Ionicons name="mail" size={20} color={COLORS.onPrimary} />
-            <Text style={styles.supportButtonText}>Contactar Soporte</Text>
+            <Text style={styles.supportButtonText}>{t('faq.contact')}</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

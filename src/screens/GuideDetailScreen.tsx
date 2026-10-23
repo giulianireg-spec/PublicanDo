@@ -15,6 +15,10 @@ import {
   Share,
   Dimensions,
 } from 'react-native';
+import { dateLocale } from '../i18n';
+import { guideCategoryLabel, difficultyLabel } from '../i18n/labels';
+import { guideTitle, guideDescription, guideNote } from '../i18n/content';
+import { useTranslation } from 'react-i18next';
 import { Ionicons } from '@expo/vector-icons';
 import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from 'react-native-maps';
 import Toast from 'react-native-toast-message';
@@ -37,6 +41,7 @@ const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 const GuideDetailScreen = ({ navigation, route }: any) => {
   const { colors: COLORS } = useTheme();
+  const { t } = useTranslation();
   const insets = useSafeAreaInsets();
 const styles = StyleSheet.create({
   container: {
@@ -436,7 +441,7 @@ const styles = StyleSheet.create({
       Toast.show({
         type: 'error',
         text1: 'Error',
-        text2: 'No se pudo cargar la guía',
+        text2: t('guide.loadError'),
         position: 'bottom',
       });
       navigation.goBack();
@@ -449,8 +454,8 @@ const styles = StyleSheet.create({
     if (!user) {
       Toast.show({
         type: 'info',
-        text1: 'Inicia sesión',
-        text2: 'Debes iniciar sesión para guardar guías',
+        text1: t('guide.signIn'),
+        text2: t('guide.signInSave'),
         position: 'bottom',
       });
       return;
@@ -461,7 +466,7 @@ const styles = StyleSheet.create({
       setIsSaved(result.saved);
       Toast.show({
         type: 'success',
-        text1: result.saved ? '💾 Guardada' : 'Removida de guardados',
+        text1: result.saved ? t('guide.saved') : t('guide.unsaved'),
         position: 'bottom',
         visibilityTime: 2000,
       });
@@ -474,8 +479,8 @@ const styles = StyleSheet.create({
     if (!user) {
       Toast.show({
         type: 'info',
-        text1: 'Inicia sesión',
-        text2: 'Debes iniciar sesión para valorar',
+        text1: t('guide.signIn'),
+        text2: t('guide.signInRate'),
         position: 'bottom',
       });
       return;
@@ -492,7 +497,7 @@ const styles = StyleSheet.create({
       
       Toast.show({
         type: 'success',
-        text1: '⭐ Valoración guardada',
+        text1: t('guide.rated'),
         position: 'bottom',
         visibilityTime: 2000,
       });
@@ -500,7 +505,7 @@ const styles = StyleSheet.create({
       Toast.show({
         type: 'error',
         text1: 'Error',
-        text2: error.message || 'No se pudo guardar la valoración',
+        text2: error.message || t('guide.rateError'),
         position: 'bottom',
       });
     }
@@ -508,7 +513,7 @@ const styles = StyleSheet.create({
 
   const handleReport = () => {
     if (!user) {
-      Alert.alert('Iniciá sesión', 'Para reportar necesitás tener una cuenta', [{ text: 'Entendido' }]);
+      Alert.alert(t('guide.signInTitle'), t('guide.signInReport'), [{ text: t('guide.ok') }]);
       return;
     }
     setReportModalVisible(true);
@@ -518,11 +523,11 @@ const styles = StyleSheet.create({
     try {
       await createGuideReport(guideId, reason, description);
       setReportModalVisible(false);
-      Toast.show({ type: 'success', text1: '✅ Reporte enviado', text2: 'Será revisado por un moderador', position: 'bottom' });
+      Toast.show({ type: 'success', text1: t('guide.reportSent'), text2: t('guide.reportSentBody'), position: 'bottom' });
     } catch (error: any) {
       setReportModalVisible(false);
       if (error.message.includes('anteriormente')) {
-        Toast.show({ type: 'info', text1: '⚠️ Ya reportaste esta guía', position: 'bottom' });
+        Toast.show({ type: 'info', text1: t('guide.alreadyReported'), position: 'bottom' });
       } else {
         Toast.show({ type: 'error', text1: 'Error', text2: error.message, position: 'bottom' });
       }
@@ -535,7 +540,7 @@ const styles = StyleSheet.create({
     
     try {
       await Share.share({
-        message: `🗺️ ${guide.title} · ${guide.mainLocation.city}, ${guide.mainLocation.province}\n\nSeguí esta guía en GuianDo: ${guideLink(guide._id)}`,
+        message: `🗺️ ${guideTitle(guide)} · ${guide.mainLocation.city}, ${guide.mainLocation.province}\n\n${t('guide.shareCta')} ${guideLink(guide._id)}`,
       });
     } catch (error) {
       console.error('Error sharing:', error);
@@ -544,19 +549,19 @@ const styles = StyleSheet.create({
 
   const handleDelete = () => {
     Alert.alert(
-      '⚠️ Eliminar guía',
-      '¿Estás seguro? Esta acción no se puede deshacer.',
+      t('guide.deleteTitle'),
+      t('guide.deleteBody'),
       [
         { text: 'Cancelar', style: 'cancel' },
         {
-          text: 'Eliminar',
+          text: t('guide.delete'),
           style: 'destructive',
           onPress: async () => {
             try {
               await deleteGuide(guideId);
               Toast.show({
                 type: 'success',
-                text1: '🗑️ Guía eliminada',
+                text1: t('guide.deleted'),
                 position: 'bottom',
               });
               navigation.goBack();
@@ -564,7 +569,7 @@ const styles = StyleSheet.create({
               Toast.show({
                 type: 'error',
                 text1: 'Error',
-                text2: 'No se pudo eliminar la guía',
+                text2: t('guide.deleteError'),
                 position: 'bottom',
               });
             }
@@ -580,7 +585,7 @@ const styles = StyleSheet.create({
       Toast.show({
         type: 'info',
         text1: 'Sin coordenadas',
-        text2: 'Este punto no tiene ubicación exacta',
+        text2: t('guide.noLocation'),
         position: 'bottom',
       });
       return;
@@ -665,7 +670,7 @@ const styles = StyleSheet.create({
             {point.notes && (
               <View style={styles.notesContainer}>
                 <Ionicons name="chatbubble-outline" size={14} color={COLORS.primaryText} />
-                <Text style={styles.notesText}>{point.notes}</Text>
+                <Text style={styles.notesText}>{guide ? guideNote(guide, point.order, point.notes) : point.notes}</Text>
               </View>
             )}
 
@@ -675,7 +680,7 @@ const styles = StyleSheet.create({
                 onPress={() => handleOpenMaps(point)}
               >
                 <Ionicons name="navigate" size={16} color={COLORS.onPrimary} />
-                <Text style={styles.pointActionText}>Cómo llegar</Text>
+                <Text style={styles.pointActionText}>{t('guide.directions')}</Text>
               </TouchableOpacity>
 
               {point.type === 'place' && (point.placeId as any) && (
@@ -684,7 +689,7 @@ const styles = StyleSheet.create({
                   onPress={() => navigation.navigate('Detail', { advertisement: (point.placeId as any) })}
                 >
                   <Ionicons name="information-circle" size={16} color={COLORS.primaryText} />
-                  <Text style={[styles.pointActionText, { color: COLORS.primaryText }]}>Ver lugar</Text>
+                  <Text style={[styles.pointActionText, { color: COLORS.primaryText }]}>{t('guide.seePlace')}</Text>
                 </TouchableOpacity>
               )}
             </View>
@@ -777,7 +782,7 @@ const styles = StyleSheet.create({
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color={COLORS.primaryText} />
-        <Text style={styles.loadingText}>Cargando guía...</Text>
+        <Text style={styles.loadingText}>{t('guide.loading')}</Text>
       </View>
     );
   }
@@ -786,7 +791,7 @@ const styles = StyleSheet.create({
     return (
       <View style={styles.errorContainer}>
         <Ionicons name="alert-circle" size={64} color={COLORS.error} />
-        <Text style={styles.errorText}>Guía no encontrada</Text>
+        <Text style={styles.errorText}>{t('guide.notFound')}</Text>
       </View>
     );
   }
@@ -825,7 +830,7 @@ const styles = StyleSheet.create({
           <View style={styles.coverOverlay}>
             <View style={[styles.categoryBadge, { backgroundColor: categoryConfig.color }]}>
               <Text style={styles.categoryBadgeText}>
-                {categoryConfig.icon} {guide.category}
+                {categoryConfig.icon} {guideCategoryLabel(guide.category)}
               </Text>
             </View>
           </View>
@@ -833,7 +838,7 @@ const styles = StyleSheet.create({
 
         {/* Contenido */}
         <View style={styles.content}>
-          <Text style={styles.title}>{guide.title}</Text>
+          <Text style={styles.title}>{guideTitle(guide)}</Text>
 
           {/* Creador */}
           <TouchableOpacity style={styles.creatorRow}>
@@ -844,7 +849,7 @@ const styles = StyleSheet.create({
             <View>
               <Text style={styles.creatorName}>{guide.createdBy.name}</Text>
               <Text style={styles.createdAt}>
-                {new Date(guide.createdAt).toLocaleDateString('es-AR')}
+                {new Date(guide.createdAt).toLocaleDateString(dateLocale())}
               </Text>
             </View>
           </TouchableOpacity>
@@ -870,7 +875,7 @@ const styles = StyleSheet.create({
 
             <View style={styles.statItem}>
               <Ionicons name="location-outline" size={18} color={COLORS.primaryText} />
-              <Text style={styles.statValue}>{guide.points.length} puntos</Text>
+              <Text style={styles.statValue}>{t('guides.points', { count: guide.points.length })}</Text>
             </View>
           </View>
 
@@ -878,7 +883,7 @@ const styles = StyleSheet.create({
           <View style={styles.metaRow}>
             <View style={[styles.difficultyBadge, { backgroundColor: difficultyConfig.color + '20' }]}>
               <Text style={[styles.difficultyText, { color: difficultyConfig.color }]}>
-                {difficultyConfig.icon} {difficultyConfig.label}
+                {difficultyConfig.icon} {difficultyLabel(guide.difficulty)}
               </Text>
             </View>
             <View style={styles.locationBadge}>
@@ -890,13 +895,13 @@ const styles = StyleSheet.create({
           </View>
 
           {/* Descripción */}
-          <Text style={styles.sectionTitle}>Sobre esta guía</Text>
-          <Text style={styles.description}>{guide.description}</Text>
+          <Text style={styles.sectionTitle}>{t('guide.about')}</Text>
+          <Text style={styles.description}>{guideDescription(guide)}</Text>
 
           {/* Valorar (si no es el dueño) */}
           {!isOwner && user && (
             <View style={styles.rateSection}>
-              <Text style={styles.rateTitle}>¿Qué te pareció?</Text>
+              <Text style={styles.rateTitle}>{t('guide.rateQuestion')}</Text>
               {renderStars(userRating, true, 32)}
             </View>
           )}
@@ -906,7 +911,7 @@ const styles = StyleSheet.create({
 
           {/* Puntos de interés */}
           <Text style={styles.sectionTitle}>
-            🗺️ Itinerario ({guide.points.length} paradas)
+            {t('guide.itinerary', { count: guide.points.length })}
           </Text>
           
           {guide.points.map((point, index) => renderPointCard(point, index))}
@@ -920,7 +925,7 @@ const styles = StyleSheet.create({
                   onPress={() => navigation.navigate('EditGuide', { guideId })}
                 >
                   <Ionicons name="pencil" size={18} color={COLORS.onPrimary} />
-                  <Text style={styles.editButtonText}>Editar guía</Text>
+                  <Text style={styles.editButtonText}>{t('guide.edit')}</Text>
                 </TouchableOpacity>
               )}
               <TouchableOpacity
@@ -928,7 +933,7 @@ const styles = StyleSheet.create({
                 onPress={handleDelete}
               >
                 <Ionicons name="trash" size={18} color={COLORS.error} />
-                <Text style={styles.deleteButtonText}>Eliminar</Text>
+                <Text style={styles.deleteButtonText}>{t('guide.delete')}</Text>
               </TouchableOpacity>
             </View>
           )}

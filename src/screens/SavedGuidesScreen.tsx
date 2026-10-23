@@ -4,6 +4,9 @@ import {
   View, Text, FlatList, Image, TouchableOpacity,
   StyleSheet, RefreshControl, ActivityIndicator,
 } from 'react-native';
+import { guideCategoryLabel, difficultyLabel } from '../i18n/labels';
+import { guideTitle } from '../i18n/content';
+import { useTranslation } from 'react-i18next';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import { useTheme } from '../context/ThemeContext';
@@ -15,6 +18,7 @@ import Toast from 'react-native-toast-message';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 const SavedGuidesScreen = ({ navigation }: any) => {
   const { colors: COLORS } = useTheme();
+  const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const [guides, setGuides] = useState<GuideSummary[]>([]);
   const [loading, setLoading] = useState(true);
@@ -77,7 +81,7 @@ const SavedGuidesScreen = ({ navigation }: any) => {
     try {
       await toggleSaveGuide(guide._id);
       setGuides(prev => prev.filter(g => g._id !== guide._id));
-      Toast.show({ type: 'info', text1: 'Guía removida de guardados', position: 'bottom' });
+      Toast.show({ type: 'info', text1: t('saved.removed'), position: 'bottom' });
     } catch (error: any) {
       Toast.show({ type: 'error', text1: 'Error', text2: error.message, position: 'bottom' });
     }
@@ -95,13 +99,13 @@ const SavedGuidesScreen = ({ navigation }: any) => {
       >
         <Image source={{ uri: item.coverImageUrl }} style={styles.cardImage} />
         <View style={[styles.categoryBadge, { backgroundColor: categoryConfig.color }]}>
-          <Text style={styles.categoryBadgeText}>{categoryConfig.icon} {item.category}</Text>
+          <Text style={styles.categoryBadgeText}>{categoryConfig.icon} {guideCategoryLabel(item.category)}</Text>
         </View>
         <TouchableOpacity style={styles.unsaveButton} onPress={() => handleUnsave(item)}>
           <Ionicons name="bookmark" size={16} color="#FFD700" />
         </TouchableOpacity>
         <View style={styles.cardContent}>
-          <Text style={styles.cardTitle} numberOfLines={2}>{item.title}</Text>
+          <Text style={styles.cardTitle} numberOfLines={2}>{guideTitle(item)}</Text>
           <View style={styles.statsRow}>
             <View style={styles.statItem}>
               <Ionicons name="time-outline" size={14} color={COLORS.gray} />
@@ -109,7 +113,7 @@ const SavedGuidesScreen = ({ navigation }: any) => {
             </View>
             <View style={styles.statItem}>
               <Ionicons name="location-outline" size={14} color={COLORS.gray} />
-              <Text style={styles.statText}>{item.pointsCount || '?'} puntos</Text>
+              <Text style={styles.statText}>{t('guides.points', { count: item.pointsCount || 0 })}</Text>
             </View>
             <View style={styles.statItem}>
               <Ionicons name="star" size={14} color="#FFD700" />
@@ -121,7 +125,7 @@ const SavedGuidesScreen = ({ navigation }: any) => {
             <Text style={styles.locationText}>{item.mainLocation.city}, {item.mainLocation.province}</Text>
             <View style={[styles.difficultyBadge, { backgroundColor: difficultyConfig.color + '20' }]}>
               <Text style={[styles.difficultyText, { color: difficultyConfig.color }]}>
-                {difficultyConfig.icon} {difficultyConfig.label}
+                {difficultyConfig.icon} {difficultyLabel(item.difficulty)}
               </Text>
             </View>
           </View>
@@ -137,7 +141,7 @@ const SavedGuidesScreen = ({ navigation }: any) => {
           <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
             <Ionicons name="arrow-back" size={24} color={COLORS.onPrimary} />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>🔖 Guías guardadas</Text>
+          <Text style={styles.headerTitle}>{t('saved.title')}</Text>
           <View style={styles.placeholder} />
         </View>
         <View style={styles.loadingContainer}>
@@ -153,7 +157,7 @@ const SavedGuidesScreen = ({ navigation }: any) => {
         <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
           <Ionicons name="arrow-back" size={24} color={COLORS.onPrimary} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>🔖 Guías guardadas</Text>
+        <Text style={styles.headerTitle}>{t('saved.title')}</Text>
         <View style={styles.placeholder} />
       </View>
 
@@ -166,11 +170,11 @@ const SavedGuidesScreen = ({ navigation }: any) => {
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
             <Ionicons name="bookmark-outline" size={64} color={COLORS.grayLight} />
-            <Text style={styles.emptyText}>No tenés guías guardadas</Text>
-            <Text style={styles.emptySubtext}>Guardá guías que te interesen para acceder a ellas rápidamente</Text>
+            <Text style={styles.emptyText}>{t('saved.empty')}</Text>
+            <Text style={styles.emptySubtext}>{t('saved.emptyBody')}</Text>
             <TouchableOpacity style={styles.exploreButton} onPress={() => navigation.goBack()}>
               <Ionicons name="compass" size={20} color={COLORS.onPrimary} />
-              <Text style={styles.exploreButtonText}>Explorar guías</Text>
+              <Text style={styles.exploreButtonText}>{t('saved.explore')}</Text>
             </TouchableOpacity>
           </View>
         }

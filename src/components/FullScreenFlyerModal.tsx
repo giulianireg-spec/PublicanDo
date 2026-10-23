@@ -12,6 +12,7 @@ import {
   Linking,
   Alert,
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { Ionicons } from '@expo/vector-icons';
 import StampButton from './StampButton';
 import Toast from 'react-native-toast-message';
@@ -39,6 +40,7 @@ export const FullScreenFlyerModal: React.FC<Props> = ({
   onClose,
 }) => {
   const { colors: COLORS } = useTheme();
+  const { t } = useTranslation();
   const insets = useSafeAreaInsets();
 const styles = StyleSheet.create({
   container: {
@@ -165,7 +167,7 @@ const styles = StyleSheet.create({
         Alert.alert('Error', 'No se pudo abrir el enlace');
       }
     } catch (error) {
-      Alert.alert('Error', 'No se pudo realizar la acción');
+      Alert.alert('Error', t('detail.actionError'));
     }
   };
 
@@ -175,7 +177,7 @@ const styles = StyleSheet.create({
       setTimeout(() => {
         Toast.show({
           type: 'error',
-          text1: 'Debes iniciar sesión',
+          text1: t('detail.mustLogin'),
           text2: 'Para reportar debes tener una cuenta',
           position: 'bottom',
           visibilityTime: 4000,
@@ -195,8 +197,8 @@ const styles = StyleSheet.create({
       setTimeout(() => {
         Toast.show({
           type: 'success',
-          text1: '✅ Reporte enviado',
-          text2: 'Será revisado por un moderador',
+          text1: t('detail.reportSent'),
+          text2: t('detail.reportSentBody'),
           position: 'bottom',
           visibilityTime: 4000,
         });
@@ -208,9 +210,9 @@ const styles = StyleSheet.create({
         const banInfo = error.response.data.banInfo;
         setTimeout(() => {
           Alert.alert(
-            '❌ Acción no permitida',
-            `No puedes reportar publicidades mientras tu cuenta esté suspendida.\n\nRazón: ${banInfo.reason}`,
-            [{ text: 'Entendido' }]
+            t('detail.notAllowed'),
+            t('detail.suspendedReason', { reason: banInfo.reason }),
+            [{ text: t('detail.ok') }]
           );
         }, 300);
       } else if (error.message.includes('reportado esta publicidad anteriormente')) {
@@ -219,7 +221,7 @@ const styles = StyleSheet.create({
         setTimeout(() => {
           Toast.show({
             type: 'info',
-            text1: '⚠️ Ya reportaste esta publicidad',
+            text1: t('detail.alreadyReported'),
             text2: 'No puedes reportar la misma publicidad dos veces',
             position: 'bottom',
             visibilityTime: 4000,

@@ -11,6 +11,7 @@ import {
   Linking,
   Alert,
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
 
@@ -45,6 +46,7 @@ export const ContactInfoOverlay: React.FC<ContactInfoOverlayProps> = ({
   coordinates,
 }) => {
   const { colors: COLORS } = useTheme();
+  const { t } = useTranslation();
   const styles = StyleSheet.create({
     overlay: {
       position: 'absolute',
@@ -153,7 +155,7 @@ export const ContactInfoOverlay: React.FC<ContactInfoOverlayProps> = ({
     try {
       await Linking.openURL(`tel:${phone}`);
     } catch (error) {
-      Alert.alert('Error', 'No se pudo abrir la aplicación de teléfono');
+      Alert.alert('Error', t('contact.phoneError'));
     }
   };
 
@@ -220,7 +222,7 @@ export const ContactInfoOverlay: React.FC<ContactInfoOverlayProps> = ({
       await Linking.openURL(url);
     } catch (error) {
       console.error('Error abriendo mapas:', error);
-      Alert.alert('Error', 'No se pudo abrir la aplicación de mapas');
+      Alert.alert('Error', t('contact.mapsError'));
     }
   };
 
@@ -232,7 +234,7 @@ export const ContactInfoOverlay: React.FC<ContactInfoOverlayProps> = ({
     const parts: string[] = [];
     if (locality) parts.push(locality);
     if (province) parts.push(province);
-    return parts.join(', ') || 'Ver ubicación';
+    return parts.join(', ') || t('contact.seeLocation');
   };
 
   return (
@@ -245,7 +247,7 @@ export const ContactInfoOverlay: React.FC<ContactInfoOverlayProps> = ({
             <View style={styles.licenseItem}>
               <Ionicons name="shield-checkmark" size={18} color="#4CAF50" />
               <View style={styles.licenseContent}>
-                <Text style={styles.licenseLabel}>Profesional Matriculado</Text>
+                <Text style={styles.licenseLabel}>{t('contact.licensed')}</Text>
                 <Text style={styles.licenseNumber}>N° {professionalLicenseNumber}</Text>
               </View>
             </View>

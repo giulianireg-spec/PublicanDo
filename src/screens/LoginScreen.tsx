@@ -13,6 +13,7 @@ import {
   Platform,
   ScrollView
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { Ionicons } from '@expo/vector-icons';
 import Toast from 'react-native-toast-message';
 import { useAuth } from '../context/AuthContext';
@@ -26,6 +27,7 @@ interface LoginScreenProps {
 
 export default function LoginScreen({ onLoginSuccess, onRegisterPress, onForgotPasswordPress }: LoginScreenProps) {
   const { colors: COLORS } = useTheme();
+  const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -49,8 +51,8 @@ export default function LoginScreen({ onLoginSuccess, onRegisterPress, onForgotP
     if (!emailRegex.test(email)) {
       Toast.show({
         type: 'error',
-        text1: 'Email inválido',
-        text2: 'Por favor ingresa un email válido',
+        text1: t('auth.invalidEmail'),
+        text2: t('auth.invalidEmailBody'),
         position: 'top',
         topOffset: 20,
         visibilityTime: 3000,
@@ -63,8 +65,8 @@ export default function LoginScreen({ onLoginSuccess, onRegisterPress, onForgotP
       await login(email.toLowerCase().trim(), password);
       Toast.show({
         type: 'success',
-        text1: '¡Bienvenido! 👋',
-        text2: 'Has iniciado sesión correctamente',
+        text1: t('auth.welcome'),
+        text2: t('auth.loggedIn'),
         position: 'top',
         topOffset: 20,
         visibilityTime: 3000,
@@ -73,7 +75,7 @@ export default function LoginScreen({ onLoginSuccess, onRegisterPress, onForgotP
     } catch (error: any) {
       Toast.show({
         type: 'error',
-        text1: 'Error al iniciar sesión',
+        text1: t('auth.loginError'),
         text2: error.message || 'Credenciales incorrectas',
         position: 'top',
         topOffset: 20,
@@ -90,8 +92,8 @@ export default function LoginScreen({ onLoginSuccess, onRegisterPress, onForgotP
       await googleSignIn();
       Toast.show({
         type: 'success',
-        text1: '¡Bienvenido! 👋',
-        text2: 'Has iniciado sesión con Google',
+        text1: t('auth.welcome'),
+        text2: t('auth.loggedInGoogle'),
         position: 'top',
         topOffset: 20,
         visibilityTime: 3000,
@@ -101,7 +103,7 @@ export default function LoginScreen({ onLoginSuccess, onRegisterPress, onForgotP
       Toast.show({
         type: 'error',
         text1: 'Error con Google',
-        text2: error.message || 'Error al iniciar sesión con Google',
+        text2: error.message || t('auth.googleError'),
         position: 'top',
         topOffset: 20,
         visibilityTime: 4000,
@@ -155,8 +157,8 @@ export default function LoginScreen({ onLoginSuccess, onRegisterPress, onForgotP
         <View style={styles.content}>
           <View style={styles.header}>
             <Ionicons name="compass" size={64} color={COLORS.primaryText} />
-            <Text style={styles.title}>Iniciar Sesión</Text>
-            <Text style={styles.subtitle}>Descubrí lugares increíbles en tu ciudad</Text>
+            <Text style={styles.title}>{t('auth.login')}</Text>
+            <Text style={styles.subtitle}>{t('auth.loginSubtitle')}</Text>
           </View>
 
           <View style={styles.form}>
@@ -178,7 +180,7 @@ export default function LoginScreen({ onLoginSuccess, onRegisterPress, onForgotP
               <Ionicons name="lock-closed" size={20} color={COLORS.gray} style={styles.inputIcon} />
               <TextInput
                 style={styles.input}
-                placeholder="Contraseña"
+                placeholder={t('auth.password')}
                 placeholderTextColor={COLORS.gray}
                 value={password}
                 onChangeText={setPassword}
@@ -200,20 +202,20 @@ export default function LoginScreen({ onLoginSuccess, onRegisterPress, onForgotP
               ) : (
                 <>
                   <Ionicons name="log-in" size={20} color={COLORS.onPrimary} />
-                  <Text style={styles.loginButtonText}>Iniciar Sesión</Text>
+                  <Text style={styles.loginButtonText}>{t('auth.login')}</Text>
                 </>
               )}
             </TouchableOpacity>
 
             {onForgotPasswordPress && (
               <TouchableOpacity style={styles.forgotPasswordLink} onPress={onForgotPasswordPress}>
-                <Text style={styles.forgotPasswordText}>¿Olvidaste tu contraseña?</Text>
+                <Text style={styles.forgotPasswordText}>{t('auth.forgot')}</Text>
               </TouchableOpacity>
             )}
 
             <View style={styles.divider}>
               <View style={styles.dividerLine} />
-              <Text style={styles.dividerText}>O continúa con</Text>
+              <Text style={styles.dividerText}>{t('auth.orContinue')}</Text>
               <View style={styles.dividerLine} />
             </View>
 
@@ -223,9 +225,9 @@ export default function LoginScreen({ onLoginSuccess, onRegisterPress, onForgotP
             </TouchableOpacity>
 
             <View style={styles.registerContainer}>
-              <Text style={styles.registerText}>¿No tienes cuenta? </Text>
+              <Text style={styles.registerText}>{t('auth.noAccount')}</Text>
               <TouchableOpacity onPress={onRegisterPress}>
-                <Text style={styles.registerLink}>Regístrate</Text>
+                <Text style={styles.registerLink}>{t('auth.register')}</Text>
               </TouchableOpacity>
             </View>
           </View>

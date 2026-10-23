@@ -10,13 +10,16 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { captureRef } from 'react-native-view-shot';
 import QRCode from 'react-native-qrcode-svg';
 import { DOWNLOAD_URL } from '../utils/shareLinks';
+import { useTranslation } from 'react-i18next';
+import { dateLocale } from '../i18n';
+import { categoryLabel, subcategoryLabel, collectorTitleText } from '../i18n/labels';
 import * as Sharing from 'expo-sharing';
 import Toast from 'react-native-toast-message';
 import { useTheme } from '../context/ThemeContext';
 import { CATEGORIES_CONFIG } from '../constants/categories';
-import { getMyStamps, getMyTitles, syncPendingStamps, Stamp, CollectorTitle, TITLE_LEVEL_LABELS } from '../services/stamps';
+import { getMyStamps, getMyTitles, syncPendingStamps, Stamp, CollectorTitle } from '../services/stamps';
 
-const formatDate = (d: string) => new Date(d).toLocaleDateString('es-AR', { day: 'numeric', month: 'short', year: 'numeric' });
+const formatDate = (d: string) => new Date(d).toLocaleDateString(dateLocale(), { day: 'numeric', month: 'short', year: 'numeric' });
 
 interface CategoryGroup {
   category: string;
@@ -28,6 +31,7 @@ interface CategoryGroup {
 
 const VisitedPlacesScreen = ({ navigation }: any) => {
   const { colors: COLORS } = useTheme();
+  const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const shareCardRef = useRef<View>(null);
   const [stamps, setStamps] = useState<Stamp[]>([]);
@@ -39,8 +43,8 @@ const VisitedPlacesScreen = ({ navigation }: any) => {
 
   const load = async () => {
     const { synced, rejected } = await syncPendingStamps();
-    if (synced) Toast.show({ type: 'success', text1: `🏅 ${synced} sello${synced > 1 ? 's' : ''} validado${synced > 1 ? 's' : ''}`, position: 'bottom' });
-    if (rejected.length) Toast.show({ type: 'error', text1: 'Algunos sellos no se pudieron validar', text2: rejected[0], position: 'bottom' });
+    if (synced) Toast.show({ type: 'success', text1: t('visited.syncedToast', { count: synced }), position: 'bottom' });
+    if (rejected.length) Toast.show({ type: 'error', text1: t('visited.rejectedToast'), text2: rejected[0], position: 'bottom' });
     const [mine, myTitles] = await Promise.all([getMyStamps(), getMyTitles()]);
     setStamps(mine);
     setTitles(myTitles);
@@ -80,14 +84,14 @@ const VisitedPlacesScreen = ({ navigation }: any) => {
     try {
       setSharing(true);
       if (!(await Sharing.isAvailableAsync())) {
-        Toast.show({ type: 'error', text1: 'Compartir no está disponible en este dispositivo', position: 'bottom' });
+        Toast.show({ type: 'error', text1: t('visited.shareUnavailable'), position: 'bottom' });
         return;
       }
       const uri = await captureRef(shareCardRef, { format: 'png', quality: 1 });
-      await Sharing.shareAsync(uri, { mimeType: 'image/png', dialogTitle: 'Compartir mis lugares visitados' });
+      await Sharing.shareAsync(uri, { mimeType: 'image/png', dialogTitle: t('visited.shareDialog') });
     } catch (error) {
       console.error('Error compartiendo sellos:', error);
-      Toast.show({ type: 'error', text1: 'No se pudo compartir', position: 'bottom' });
+      Toast.show({ type: 'error', text1: t('visited.shareError'), position: 'bottom' });
     } finally {
       setSharing(false);
     }
@@ -149,7 +153,7 @@ const VisitedPlacesScreen = ({ navigation }: any) => {
         <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
           <Ionicons name="arrow-back" size={24} color={COLORS.onPrimary} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Lugares visitados</Text>
+        <Text style={styles.headerTitle}>{t('visited.title')}</Text>
         <View style={styles.placeholder} />
       </View>
 
@@ -165,81 +169,81 @@ const VisitedPlacesScreen = ({ navigation }: any) => {
           {stamps.length === 0 ? (
             <View style={styles.emptyContainer}>
               <Ionicons name="ribbon-outline" size={72} color={COLORS.grayLight} />
-              <Text style={styles.emptyText}>Todavía no tenés sellos</Text>
+              <Text style={styles.emptyText}>{t('visited.emptyTitle')}</Text>
               <Text style={styles.emptySubtext}>
-                Cuando visites un lugar de GuianDo, abrí su ficha y tocá "Recolectar" para sumar su sello a tu colección.
+                {t('visited.emptyBody')}
               </Text>
             </View>
           ) : (
             <>
               <View ref={shareCardRef} collapsable={false} style={styles.shareCard}>
                 <Text style={styles.shareBrand}>GUIANDO</Text>
-                <Text style={styles.shareTitle}>Mis lugares visitados</Text>
+                <Text style={styles.shareTitle}>{t('visited.shareTitle')}</Text>
                 <View style={styles.shareStats}>
                   <View>
                     <Text style={styles.shareStatNumber}>{stamps.length}</Text>
-                    <Text style={styles.shareStatLabel}>{stamps.length === 1 ? 'sello' : 'sellos'}</Text>
+                    <Text style={styles.shareStatLabel}>{t('visited.stampsLabel', { count: stamps.length })}</Text>
                   </View>
                   <View>
                     <Text style={styles.shareStatNumber}>{cities}</Text>
-                    <Text style={styles.shareStatLabel}>{cities === 1 ? 'localidad' : 'localidades'}</Text>
+                    <Text style={styles.shareStatLabel}>{t('visited.citiesLabel', { count: cities })}</Text>
                   </View>
                 </View>
                 <View style={styles.shareChips}>
                   {groups.map((g) => (
                     <View key={g.category} style={styles.shareChip}>
-                      <Text style={styles.shareChipText}>{g.emoji} {g.name} · {g.total}</Text>
+                      <Text style={styles.shareChipText}>{categoryLabel(g.category)} · {g.total}</Text>
                     </View>
                   ))}
                 </View>
-                {titles.slice(0, 2).map((t) => (
-                  <Text key={t.title} style={styles.shareTitleBadge} numberOfLines={1}>🏅 {t.title} · {t.percent}%</Text>
+                {titles.slice(0, 2).map((ct) => (
+                  <Text key={`${ct.scope}-${ct.category ?? ''}-${ct.place}`} style={styles.shareTitleBadge} numberOfLines={1}>🏅 {collectorTitleText(ct)} · {ct.percent}%</Text>
                 ))}
                 <Text style={styles.shareRecent} numberOfLines={2}>
-                  Últimos: {stamps.slice(0, 3).map((s) => s.title).join(' · ')}
+                  {t('visited.latest', { list: stamps.slice(0, 3).map((s) => s.title).join(' · ') })}
                 </Text>
                 <View style={styles.shareFooterRow}>
                   <View style={styles.shareQr}>
                     <QRCode value={DOWNLOAD_URL} size={64} color="#0A0A0A" backgroundColor="#FFFFFF" />
                   </View>
                   <View style={{ flex: 1 }}>
-                    <Text style={styles.shareFooter}>Coleccioná los tuyos</Text>
-                    <Text style={styles.shareFooterUrl}>Escaneá el código o entrá a guiando.com.ar/descargar</Text>
+                    <Text style={styles.shareFooter}>{t('visited.collectYours')}</Text>
+                    <Text style={styles.shareFooterUrl}>{t('visited.scanCode')}</Text>
                   </View>
                 </View>
               </View>
 
               <TouchableOpacity style={styles.shareButton} onPress={handleShare} disabled={sharing}>
                 {sharing ? <ActivityIndicator color={COLORS.onPrimary} /> : <Ionicons name="share-social" size={20} color={COLORS.onPrimary} />}
-                <Text style={styles.shareButtonText}>Compartir mis sellos</Text>
+                <Text style={styles.shareButtonText}>{t('visited.shareButton')}</Text>
               </TouchableOpacity>
 
               {titles.length > 0 && (
                 <View style={styles.categoryBlock}>
-                  <Text style={styles.categoryTitle}>🏅 Tus títulos</Text>
+                  <Text style={styles.categoryTitle}>{t('visited.titlesHeader')}</Text>
                   <Text style={styles.titlesHint}>
-                    Según el porcentaje de lugares visitados de cada localidad, provincia y categoría. Si se suman lugares nuevos, el porcentaje baja.
+                    {t('visited.titlesHint')}
                   </Text>
-                  {(showAllTitles ? titles : titles.slice(0, 5)).map((t) => (
-                    <View key={`${t.scope}-${t.category ?? ''}-${t.place}`} style={styles.titleRow}>
+                  {(showAllTitles ? titles : titles.slice(0, 5)).map((ct) => (
+                    <View key={`${ct.scope}-${ct.category ?? ''}-${ct.place}`} style={styles.titleRow}>
                       <View style={styles.titleHeader}>
-                        <Text style={styles.titleName} numberOfLines={2}>{t.title}</Text>
-                        <Text style={[styles.titleLevel, t.level === 'maestro' && styles.titleLevelMaster]}>
-                          {TITLE_LEVEL_LABELS[t.level]}
+                        <Text style={styles.titleName} numberOfLines={2}>{collectorTitleText(ct)}</Text>
+                        <Text style={[styles.titleLevel, ct.level === 'maestro' && styles.titleLevelMaster]}>
+                          {t(`titles.levels.${ct.level}`)}
                         </Text>
                       </View>
                       <View style={styles.progressTrack}>
-                        <View style={[styles.progressFill, { width: `${t.percent}%` }]} />
+                        <View style={[styles.progressFill, { width: `${ct.percent}%` }]} />
                       </View>
                       <Text style={styles.titleMeta}>
-                        {t.visited} de {t.total} lugares · {t.percent}%
-                        {t.nextLevel ? ` · te ${t.missingForNext === 1 ? 'falta 1' : `faltan ${t.missingForNext}`} para ${TITLE_LEVEL_LABELS[t.nextLevel]}` : ''}
+                        {t('visited.progress', { visited: ct.visited, total: ct.total, percent: ct.percent })}
+                        {ct.nextLevel ? ` · ${t('visited.missingForNext', { count: ct.missingForNext, level: t(`titles.levels.${ct.nextLevel}`) })}` : ''}
                       </Text>
                     </View>
                   ))}
                   {titles.length > 5 && (
                     <TouchableOpacity onPress={() => setShowAllTitles(!showAllTitles)}>
-                      <Text style={styles.showMore}>{showAllTitles ? 'Ver menos' : `Ver los ${titles.length} títulos`}</Text>
+                      <Text style={styles.showMore}>{showAllTitles ? t('visited.showLess') : t('visited.showAll', { count: titles.length })}</Text>
                     </TouchableOpacity>
                   )}
                 </View>
@@ -247,10 +251,10 @@ const VisitedPlacesScreen = ({ navigation }: any) => {
 
               {groups.map((g) => (
                 <View key={g.category} style={styles.categoryBlock}>
-                  <Text style={styles.categoryTitle}>{g.emoji} {g.name} · {g.total}</Text>
+                  <Text style={styles.categoryTitle}>{categoryLabel(g.category)} · {g.total}</Text>
                   {g.subgroups.map((sub) => (
                     <View key={sub.name ?? 'general'}>
-                      {sub.name !== null && <Text style={styles.subTitle}>{sub.name} · {sub.stamps.length}</Text>}
+                      {sub.name !== null && <Text style={styles.subTitle}>{subcategoryLabel(g.category, sub.name)} · {sub.stamps.length}</Text>}
                       {sub.stamps.map((s) => (
                         <View key={s._id} style={styles.row}>
                           {s.imageUrl ? <Image source={{ uri: s.imageUrl }} style={styles.thumb} /> : <View style={styles.thumb} />}
@@ -261,7 +265,7 @@ const VisitedPlacesScreen = ({ navigation }: any) => {
                             <Text style={styles.rowSub}>
                               {s.city ? `${s.city} · ` : ''}{formatDate(s.visitedAt)}
                             </Text>
-                            {s.pending && <Text style={styles.pendingBadge}>Pendiente de validar (sin conexión)</Text>}
+                            {s.pending && <Text style={styles.pendingBadge}>{t('visited.pendingBadge')}</Text>}
                           </View>
                           <Ionicons name="ribbon" size={22} color={s.pending ? COLORS.gray : COLORS.success} />
                         </View>

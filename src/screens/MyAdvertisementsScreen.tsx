@@ -14,6 +14,7 @@ import {
   Alert,
   RefreshControl,
   ActivityIndicator,
+  Linking,
 } from 'react-native';
 // ✅ CORREGIDO: Usar SafeAreaView de react-native-safe-area-context
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -30,6 +31,7 @@ import {
 import { Advertisement } from '../types';
 import { useTheme } from '../context/ThemeContext';
 import TemporalBadge from '../components/TemporalBadge';
+import { SHARE_BASE_URL } from '../utils/shareLinks';
 
 const MyAdvertisementsScreen = ({ navigation }: any) => {
   const { colors: COLORS } = useTheme();
@@ -534,6 +536,18 @@ const styles = StyleSheet.create({
             >
               <Text style={styles.viewStatsText}>Ver estadísticas detalladas</Text>
               <Ionicons name="chevron-forward" size={16} color={COLORS.primaryText} />
+            </TouchableOpacity>
+          )}
+
+          {/* Hoja A4 con el QR de la ficha, para imprimir o guardar como PDF */}
+          {item.isActive && item.status === 'approved' && (
+            <TouchableOpacity
+              style={styles.viewStatsLink}
+              onPress={() => Linking.openURL(`${SHARE_BASE_URL}/kit/${item._id}`)}
+            >
+              <Ionicons name="qr-code" size={16} color={COLORS.primaryText} />
+              <Text style={styles.viewStatsText}> Kit QR para imprimir</Text>
+              <Ionicons name="open-outline" size={16} color={COLORS.primaryText} />
             </TouchableOpacity>
           )}
         </View>

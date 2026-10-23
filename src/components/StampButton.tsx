@@ -12,6 +12,8 @@ import Toast from 'react-native-toast-message';
 import { useFocusEffect } from '@react-navigation/native';
 import { useTheme } from '../context/ThemeContext';
 import { useAuth } from '../context/AuthContext';
+import { useTranslation } from 'react-i18next';
+import { dateLocale } from '../i18n';
 import { Advertisement } from '../types';
 import {
   collectStamp,
@@ -28,11 +30,12 @@ import { onStampCollected } from '../services/reviewPrompt';
 import { logAppEvent } from '../services/telemetry';
 
 const formatDate = (d: string | Date) =>
-  new Date(d).toLocaleDateString('es-AR', { day: 'numeric', month: 'short', year: 'numeric' });
+  new Date(d).toLocaleDateString(dateLocale(), { day: 'numeric', month: 'short', year: 'numeric' });
 
 export const StampButton = ({ advertisement }: { advertisement: Advertisement }) => {
   const { colors: COLORS } = useTheme();
   const { user } = useAuth();
+  const { t } = useTranslation();
   const [stamp, setStamp] = useState<Stamp | null>(null);
   const [working, setWorking] = useState(false);
   const [ready, setReady] = useState(false);
@@ -94,20 +97,20 @@ export const StampButton = ({ advertisement }: { advertisement: Advertisement })
 
   const handleCollect = async () => {
     if (!user) {
-      Toast.show({ type: 'info', text1: 'Iniciá sesión', text2: 'Debes iniciar sesión para recolectar sellos', position: 'bottom' });
+      Toast.show({ type: 'info', text1: t('stamp.loginTitle'), text2: t('stamp.loginBody'), position: 'bottom' });
       return;
     }
     if (edition === null) return;
     if (!hasPermission) {
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
-        Toast.show({ type: 'error', text1: '📍 Necesitamos tu ubicación', text2: 'Activá el permiso de ubicación para recolectar sellos', position: 'bottom' });
+        Toast.show({ type: 'error', text1: t('stamp.permissionTitle'), text2: t('stamp.permissionBody'), position: 'bottom' });
       }
       setHasPermission(status === 'granted'); // reinicia el seguimiento de la ubicación
       return;
     }
     if (!ready) {
-      Toast.show({ type: 'info', text1: 'Todavía no podés recolectar este sello', text2: 'En Preguntas frecuentes te contamos por qué', position: 'bottom' });
+      Toast.show({ type: 'info', text1: t('stamp.notYetTitle'), text2: t('stamp.notYetBody'), position: 'bottom' });
       return;
     }
     setWorking(true);
@@ -117,11 +120,11 @@ export const StampButton = ({ advertisement }: { advertisement: Advertisement })
       const { latitude, longitude, accuracy } = position.coords;
 
       if ((position as any).mocked) {
-        Toast.show({ type: 'error', text1: 'Ubicación simulada', text2: 'Desactivá la ubicación simulada para recolectar sellos', position: 'bottom' });
+        Toast.show({ type: 'error', text1: t('stamp.mockedTitle'), text2: t('stamp.mockedBody'), position: 'bottom' });
         return;
       }
       if (!accuracy || accuracy > MAX_GPS_ACCURACY_METERS) {
-        Toast.show({ type: 'error', text1: '📡 Señal GPS imprecisa', text2: 'Probá al aire libre y volvé a intentar en unos segundos', position: 'bottom' });
+        Toast.show({ type: 'error', text1: t('stamp.gpsTitle'), text2: t('stamp.gpsBody'), position: 'bottom' });
         return;
       }
       const distance = distanceMeters(latitude, longitude, coords[1], coords[0]);
@@ -137,19 +140,19 @@ export const StampButton = ({ advertisement }: { advertisement: Advertisement })
         edition
       );
       if (result.status === 'collected' || result.status === 'already') {
-        Toast.show({ type: 'success', text1: '🏅 ¡Sello recolectado!', text2: `${advertisement.title} ya está en tus lugares visitados`, position: 'bottom' });
+        Toast.show({ type: 'success', text1: t('stamp.collectedTitle'), text2: t('stamp.collectedBody', { title: advertisement.title }), position: 'bottom' });
         if (result.status === 'collected') {
           onStampCollected();
           logAppEvent('stamp_collected', { category: advertisement.category, province: advertisement.location?.province });
         }
       } else if (result.status === 'queued') {
-        Toast.show({ type: 'info', text1: '📴 Sello guardado', text2: 'Se validará cuando vuelvas a tener conexión', position: 'bottom' });
+        Toast.show({ type: 'info', text1: t('stamp.queuedTitle'), text2: t('stamp.queuedBody'), position: 'bottom' });
       } else {
-        Toast.show({ type: 'error', text1: 'No se pudo recolectar', text2: 'message' in result ? result.message : '', position: 'bottom' });
+        Toast.show({ type: 'error', text1: t('stamp.failedTitle'), text2: 'message' in result ? result.message : '', position: 'bottom' });
       }
       await loadStatus();
     } catch (error) {
-      Toast.show({ type: 'error', text1: 'No pudimos obtener tu ubicación', text2: 'Revisá que el GPS esté activado', position: 'bottom' });
+      Toast.show({ type: 'error', text1: t('stamp.locationErrorTitle'), text2: t('stamp.locationErrorBody'), position: 'bottom' });
     } finally {
       setWorking(false);
     }
@@ -172,10 +175,10 @@ export const StampButton = ({ advertisement }: { advertisement: Advertisement })
       <View style={[styles.box, { backgroundColor: COLORS.success + '15', borderColor: COLORS.success + '55' }]}>
         <Ionicons name="ribbon" size={32} color={COLORS.success} />
         <View style={styles.textBox}>
-          <Text style={styles.title}>{stamp.pending ? 'Sello pendiente de validar' : '¡Sello recolectado!'}</Text>
+          <Text style={styles.title}>{stamp.pending ? t('stamp.pending') : t('stamp.collected')}</Text>
           <Text style={styles.subtitle}>
-            {stamp.pending ? 'Se validará cuando tengas conexión' : `Visitado el ${formatDate(stamp.visitedAt)}`}
-            {stamp.edition ? ` · Edición ${stamp.edition}` : ''}
+            {stamp.pending ? t('stamp.pendingBody') : t('stamp.visitedOn', { date: formatDate(stamp.visitedAt) })}
+            {stamp.edition ? ` · ${t('stamp.edition', { edition: stamp.edition })}` : ''}
           </Text>
         </View>
       </View>
@@ -188,11 +191,11 @@ export const StampButton = ({ advertisement }: { advertisement: Advertisement })
       <View style={[styles.box, styles.faded, { backgroundColor: COLORS.white, borderColor: COLORS.grayLight }]}>
         <Ionicons name="ribbon-outline" size={32} color={COLORS.gray} />
         <View style={styles.textBox}>
-          <Text style={styles.title}>Sello disponible durante el evento</Text>
+          <Text style={styles.title}>{t('stamp.eventOnly')}</Text>
           <Text style={styles.subtitle}>
             {next
-              ? `Próxima edición: del ${formatDate(next.start)} al ${formatDate(next.end)}`
-              : 'Las fechas de la próxima edición todavía no están publicadas'}
+              ? t('stamp.nextEdition', { start: formatDate(next.start), end: formatDate(next.end) })
+              : t('stamp.noDates')}
           </Text>
         </View>
       </View>
@@ -204,20 +207,20 @@ export const StampButton = ({ advertisement }: { advertisement: Advertisement })
     <View style={[styles.box, !enabled && styles.faded, { backgroundColor: COLORS.white, borderColor: enabled ? COLORS.primary : COLORS.grayLight }]}>
       <Ionicons name={enabled ? 'ribbon' : 'ribbon-outline'} size={32} color={enabled ? COLORS.primaryText : COLORS.gray} />
       <View style={styles.textBox}>
-        <Text style={styles.title}>Sello de este lugar</Text>
+        <Text style={styles.title}>{t('stamp.title')}</Text>
         <Text style={styles.subtitle}>
           {!user
-            ? 'Iniciá sesión para coleccionar los lugares que visitás'
+            ? t('stamp.loginHint')
             : enabled
-              ? '¡Estás en el lugar! Ya podés recolectarlo'
-              : 'Visitá este lugar para sumarlo a tu colección'}
+              ? t('stamp.ready')
+              : t('stamp.visitHint')}
         </Text>
       </View>
       <TouchableOpacity style={[styles.button, !enabled && styles.buttonDisabled]} onPress={handleCollect} disabled={working}>
         {working ? (
           <ActivityIndicator color={COLORS.onPrimary} />
         ) : (
-          <Text style={[styles.buttonText, !enabled && styles.buttonTextDisabled]}>{user ? 'Recolectar' : 'Ingresar'}</Text>
+          <Text style={[styles.buttonText, !enabled && styles.buttonTextDisabled]}>{user ? t('stamp.collect') : t('stamp.login')}</Text>
         )}
       </TouchableOpacity>
     </View>

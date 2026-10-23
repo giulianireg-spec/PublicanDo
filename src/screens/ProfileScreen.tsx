@@ -16,12 +16,15 @@ import {
   Switch,
   Modal,
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import Toast from 'react-native-toast-message';
 import { useAuth } from '../context/AuthContext';
 import { useTheme, ThemeMode } from '../context/ThemeContext';
 import { CATEGORIES } from '../constants/categories';
+import { categoryLabel } from '../i18n/labels';
+import { LANGUAGES, setAppLanguage, currentLanguage } from '../i18n';
 import { getProfile, updateProfile, changePassword, UserProfile, deleteAccount, DELETE_ACCOUNT_CONFIRMATION } from '../services/profileApi';
 import { uploadImage } from '../services/api';
 import { User } from '../types';
@@ -103,6 +106,7 @@ const styles = StyleSheet.create({
   const [deleteConfirmText, setDeleteConfirmText] = useState('');
   const [deletingAccount, setDeletingAccount] = useState(false);
   const { colors: COLORS, themeMode, isDark, setThemeMode } = useTheme();
+  const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   
   // Estados de carga
@@ -175,7 +179,7 @@ const styles = StyleSheet.create({
           createdAt: '',
         });
       } else {
-        Toast.show({ type: 'error', text1: 'Error', text2: 'No se pudo cargar el perfil', position: 'bottom' });
+        Toast.show({ type: 'error', text1: 'Error', text2: t('profile.loadError'), position: 'bottom' });
       }
     } finally {
       setLoading(false);
@@ -186,7 +190,7 @@ const styles = StyleSheet.create({
     try {
       const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
       if (!permissionResult.granted) {
-        Toast.show({ type: 'error', text1: 'Permiso denegado', text2: 'Necesitamos acceso a tus fotos', position: 'bottom' });
+        Toast.show({ type: 'error', text1: t('profile.permDenied'), text2: t('profile.photosAccess'), position: 'bottom' });
         return;
       }
       const result = await ImagePicker.launchImageLibraryAsync({
@@ -203,9 +207,9 @@ const styles = StyleSheet.create({
           await updateProfile({ avatar: imageUrl } as any);
           setAvatar(imageUrl);
           if (updateUser) await updateUser({ avatar: imageUrl } as any);
-          Toast.show({ type: 'success', text1: '✅ Foto actualizada', text2: 'Tu foto de perfil ha sido cambiada', position: 'bottom' });
+          Toast.show({ type: 'success', text1: t('profile.photoUpdated'), text2: t('profile.photoUpdatedBody'), position: 'bottom' });
         } catch (uploadError) {
-          Toast.show({ type: 'error', text1: 'Error', text2: 'No se pudo subir la imagen', position: 'bottom' });
+          Toast.show({ type: 'error', text1: 'Error', text2: t('profile.uploadError'), position: 'bottom' });
         } finally {
           setUploadingAvatar(false);
         }
@@ -219,7 +223,7 @@ const styles = StyleSheet.create({
     setInterests(prev => {
       if (prev.includes(category)) return prev.filter(c => c !== category);
       if (prev.length >= 10) {
-        Toast.show({ type: 'info', text1: 'Límite alcanzado', text2: 'Máximo 10 categorías de interés', position: 'bottom' });
+        Toast.show({ type: 'info', text1: t('profile.limitTitle'), text2: t('profile.limitBody'), position: 'bottom' });
         return prev;
       }
       return [...prev, category];
@@ -228,11 +232,11 @@ const styles = StyleSheet.create({
   
   const handleSaveProfile = async () => {
     if (!name.trim()) {
-      Toast.show({ type: 'error', text1: 'Error', text2: 'El nombre es obligatorio', position: 'bottom' });
+      Toast.show({ type: 'error', text1: 'Error', text2: t('profile.nameRequired'), position: 'bottom' });
       return;
     }
     if (name.trim().length < 2) {
-      Toast.show({ type: 'error', text1: 'Error', text2: 'El nombre debe tener al menos 2 caracteres', position: 'bottom' });
+      Toast.show({ type: 'error', text1: 'Error', text2: t('profile.nameShort'), position: 'bottom' });
       return;
     }
     try {
@@ -242,9 +246,9 @@ const styles = StyleSheet.create({
         address: address.trim(), instagram: instagram.trim(), facebook: facebook.trim(), interests,
       });
       if (updateUser && result.user) updateUser(result.user as Partial<User>);
-      Toast.show({ type: 'success', text1: '✅ Perfil actualizado', text2: 'Los cambios se guardaron correctamente', position: 'bottom' });
+      Toast.show({ type: 'success', text1: t('profile.saved'), text2: t('profile.savedBody'), position: 'bottom' });
     } catch (error: any) {
-      Toast.show({ type: 'error', text1: 'Error', text2: error.response?.data?.message || 'No se pudo guardar el perfil', position: 'bottom' });
+      Toast.show({ type: 'error', text1: 'Error', text2: error.response?.data?.message || t('profile.saveError'), position: 'bottom' });
     } finally {
       setSaving(false);
     }
@@ -252,15 +256,15 @@ const styles = StyleSheet.create({
   
   const handleChangePassword = async () => {
     if (!currentPassword || !newPassword || !confirmPassword) {
-      Toast.show({ type: 'error', text1: 'Error', text2: 'Completa todos los campos de contraseña', position: 'bottom' });
+      Toast.show({ type: 'error', text1: 'Error', text2: t('profile.pwdFields'), position: 'bottom' });
       return;
     }
     if (newPassword.length < 6) {
-      Toast.show({ type: 'error', text1: 'Error', text2: 'La nueva contraseña debe tener al menos 6 caracteres', position: 'bottom' });
+      Toast.show({ type: 'error', text1: 'Error', text2: t('profile.pwdShort'), position: 'bottom' });
       return;
     }
     if (newPassword !== confirmPassword) {
-      Toast.show({ type: 'error', text1: 'Error', text2: 'Las contraseñas no coinciden', position: 'bottom' });
+      Toast.show({ type: 'error', text1: 'Error', text2: t('profile.pwdMismatch'), position: 'bottom' });
       return;
     }
     try {
@@ -268,9 +272,9 @@ const styles = StyleSheet.create({
       await changePassword({ currentPassword, newPassword, confirmPassword });
       setCurrentPassword(''); setNewPassword(''); setConfirmPassword('');
       setShowPasswordSection(false);
-      Toast.show({ type: 'success', text1: '✅ Contraseña actualizada', text2: 'Tu contraseña ha sido cambiada', position: 'bottom' });
+      Toast.show({ type: 'success', text1: t('profile.pwdChanged'), text2: t('profile.pwdChangedBody'), position: 'bottom' });
     } catch (error: any) {
-      Toast.show({ type: 'error', text1: 'Error', text2: error.response?.data?.message || 'No se pudo cambiar la contraseña', position: 'bottom' });
+      Toast.show({ type: 'error', text1: 'Error', text2: error.response?.data?.message || t('profile.pwdError'), position: 'bottom' });
     } finally {
       setChangingPassword(false);
     }
@@ -279,7 +283,7 @@ const styles = StyleSheet.create({
   const copyPhoneToWhatsapp = () => {
     if (phone.trim()) {
       setWhatsapp(phone.trim());
-      Toast.show({ type: 'info', text1: 'Copiado', text2: 'Teléfono copiado a WhatsApp', position: 'bottom', visibilityTime: 1500 });
+      Toast.show({ type: 'info', text1: t('profile.copied'), text2: t('profile.phoneCopied'), position: 'bottom', visibilityTime: 1500 });
     }
   };
 
@@ -291,13 +295,13 @@ const styles = StyleSheet.create({
     try {
       await deleteAccount();
       setDeleteModalVisible(false);
-      Toast.show({ type: 'success', text1: 'Cuenta eliminada', text2: 'Tu cuenta y tus datos fueron eliminados', position: 'bottom' });
+      Toast.show({ type: 'success', text1: t('profile.deleted'), text2: t('profile.deletedBody'), position: 'bottom' });
       await logout();
     } catch (error: any) {
       Toast.show({
         type: 'error',
-        text1: 'No se pudo eliminar la cuenta',
-        text2: error?.response?.data?.message || 'Intentá de nuevo más tarde',
+        text1: t('profile.deleteError'),
+        text2: error?.response?.data?.message || t('profile.tryLater'),
         position: 'bottom',
       });
     } finally {
@@ -307,16 +311,16 @@ const styles = StyleSheet.create({
 
   // ── Opciones de tema ────────────────────────────────────────────────────────
   const themeOptions: { mode: ThemeMode; label: string; icon: string; desc: string }[] = [
-    { mode: 'light', label: 'Claro',      icon: 'sunny',          desc: 'Siempre modo claro' },
-    { mode: 'dark',  label: 'Oscuro',     icon: 'moon',           desc: 'Siempre modo oscuro' },
-    { mode: 'auto',  label: 'Automático', icon: 'time-outline',   desc: 'Oscuro de 20:00 a 06:00' },
+    { mode: 'light', label: t('profile.themeLight'),      icon: 'sunny',          desc: t('profile.themeLightDesc') },
+    { mode: 'dark',  label: t('profile.themeDark'),     icon: 'moon',           desc: t('profile.themeDarkDesc') },
+    { mode: 'auto',  label: t('profile.themeAuto'), icon: 'time-outline',   desc: t('profile.themeAutoDesc') },
   ];
   
   if (loading) {
     return (
       <View style={[styles.loadingContainer, { backgroundColor: COLORS.background }]}>
         <ActivityIndicator size="large" color={COLORS.primaryText} />
-        <Text style={[styles.loadingText, { color: COLORS.gray }]}>Cargando perfil...</Text>
+        <Text style={[styles.loadingText, { color: COLORS.gray }]}>{t('profile.loading')}</Text>
       </View>
     );
   }
@@ -331,7 +335,7 @@ const styles = StyleSheet.create({
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
             <Ionicons name="arrow-back" size={24} color={COLORS.onPrimary} />
           </TouchableOpacity>
-          <Text style={[styles.headerTitle, { color: COLORS.onPrimary }]}>Mi Perfil</Text>
+          <Text style={[styles.headerTitle, { color: COLORS.onPrimary }]}>{t('profile.title')}</Text>
           <TouchableOpacity onPress={handleNavigateToLegal} style={styles.infoButton}>
             <Ionicons name="information-circle-outline" size={26} color={COLORS.onPrimary} />
           </TouchableOpacity>
@@ -355,18 +359,18 @@ const styles = StyleSheet.create({
               <Ionicons name="camera" size={16} color={COLORS.onPrimary} />
             </View>
           </TouchableOpacity>
-          <Text style={[styles.avatarHint, { color: COLORS.gray }]}>Toca para cambiar foto</Text>
+          <Text style={[styles.avatarHint, { color: COLORS.gray }]}>{t('profile.avatarHint')}</Text>
           <Text style={[styles.emailText, { color: COLORS.gray }]}>{profile?.email}</Text>
           {user?.role === 'seeder' && (
             <View style={[styles.roleBadge, { backgroundColor: COLORS.success + '20' }]}>
               <Ionicons name="leaf" size={14} color={COLORS.success} />
-              <Text style={[styles.roleBadgeText, { color: COLORS.success }]}>Seeder</Text>
+              <Text style={[styles.roleBadgeText, { color: COLORS.success }]}>{t('profile.teamBadge')}</Text>
             </View>
           )}
           {user?.trusted && user?.role !== 'seeder' && (
             <View style={[styles.roleBadge, { backgroundColor: COLORS.success + '20' }]}>
               <Ionicons name="checkmark-circle" size={14} color={COLORS.success} />
-              <Text style={[styles.roleBadgeText, { color: COLORS.success }]}>Usuario verificado</Text>
+              <Text style={[styles.roleBadgeText, { color: COLORS.success }]}>{t('profile.verified')}</Text>
             </View>
           )}
         </View>
@@ -378,28 +382,28 @@ const styles = StyleSheet.create({
         >
           <Ionicons name="ribbon" size={28} color={COLORS.primaryText} />
           <View style={{ flex: 1 }}>
-            <Text style={[styles.sectionTitle, { color: COLORS.text, marginBottom: 2 }]}>Lugares visitados</Text>
-            <Text style={{ color: COLORS.gray, fontSize: 13 }}>Tus sellos por categoría, listos para compartir</Text>
+            <Text style={[styles.sectionTitle, { color: COLORS.text, marginBottom: 2 }]}>{t('profile.visited')}</Text>
+            <Text style={{ color: COLORS.gray, fontSize: 13 }}>{t('profile.visitedHint')}</Text>
           </View>
           <Ionicons name="chevron-forward" size={22} color={COLORS.gray} />
         </TouchableOpacity>
 
         {/* Información personal */}
         <View style={[styles.section, { backgroundColor: COLORS.white, shadowColor: COLORS.shadow }]}>
-          <Text style={[styles.sectionTitle, { color: COLORS.text }]}>👤 Información Personal</Text>
+          <Text style={[styles.sectionTitle, { color: COLORS.text }]}>{t('profile.personal')}</Text>
           <View style={styles.inputGroup}>
-            <Text style={[styles.label, { color: COLORS.text }]}>Nombre *</Text>
+            <Text style={[styles.label, { color: COLORS.text }]}>{t('profile.name')}</Text>
             <TextInput
               style={[styles.input, { backgroundColor: COLORS.inputBackground, color: COLORS.text }]}
-              placeholder="Tu nombre completo" placeholderTextColor={COLORS.gray}
+              placeholder={t('profile.namePh')} placeholderTextColor={COLORS.gray}
               value={name} onChangeText={setName} maxLength={50}
             />
           </View>
           <View style={styles.inputGroup}>
-            <Text style={[styles.label, { color: COLORS.text }]}>Dirección</Text>
+            <Text style={[styles.label, { color: COLORS.text }]}>{t('profile.address')}</Text>
             <TextInput
               style={[styles.input, { backgroundColor: COLORS.inputBackground, color: COLORS.text }]}
-              placeholder="Tu dirección" placeholderTextColor={COLORS.gray}
+              placeholder={t('profile.addressPh')} placeholderTextColor={COLORS.gray}
               value={address} onChangeText={setAddress} maxLength={200}
             />
           </View>
@@ -407,10 +411,10 @@ const styles = StyleSheet.create({
         
         {/* Información de contacto */}
         <View style={[styles.section, { backgroundColor: COLORS.white, shadowColor: COLORS.shadow }]}>
-          <Text style={[styles.sectionTitle, { color: COLORS.text }]}>📱 Información de Contacto</Text>
-          <Text style={[styles.sectionSubtitle, { color: COLORS.gray }]}>Estos datos se precargarán en tus publicaciones</Text>
+          <Text style={[styles.sectionTitle, { color: COLORS.text }]}>{t('profile.contact')}</Text>
+          <Text style={[styles.sectionSubtitle, { color: COLORS.gray }]}>{t('profile.contactHint')}</Text>
           <View style={styles.inputGroup}>
-            <Text style={[styles.label, { color: COLORS.text }]}>Teléfono</Text>
+            <Text style={[styles.label, { color: COLORS.text }]}>{t('profile.phone')}</Text>
             <TextInput
               style={[styles.input, { backgroundColor: COLORS.inputBackground, color: COLORS.text }]}
               placeholder="Ej: 351-1234567" placeholderTextColor={COLORS.gray}
@@ -423,13 +427,13 @@ const styles = StyleSheet.create({
               {phone.trim() && (
                 <TouchableOpacity onPress={copyPhoneToWhatsapp} style={styles.copyButton}>
                   <Ionicons name="copy-outline" size={16} color={COLORS.primaryText} />
-                  <Text style={[styles.copyButtonText, { color: COLORS.primaryText }]}>Copiar teléfono</Text>
+                  <Text style={[styles.copyButtonText, { color: COLORS.primaryText }]}>{t('profile.copyPhone')}</Text>
                 </TouchableOpacity>
               )}
             </View>
             <TextInput
               style={[styles.input, { backgroundColor: COLORS.inputBackground, color: COLORS.text }]}
-              placeholder="Número de WhatsApp" placeholderTextColor={COLORS.gray}
+              placeholder={t('profile.whatsappPh')} placeholderTextColor={COLORS.gray}
               value={whatsapp} onChangeText={setWhatsapp} keyboardType="phone-pad" maxLength={20}
             />
           </View>
@@ -439,7 +443,7 @@ const styles = StyleSheet.create({
               <Text style={[styles.socialPrefix, { color: COLORS.gray }]}>@</Text>
               <TextInput
                 style={[styles.socialInput, { color: COLORS.text }]}
-                placeholder="tu_usuario" placeholderTextColor={COLORS.gray}
+                placeholder={t('profile.userPh')} placeholderTextColor={COLORS.gray}
                 value={instagram} onChangeText={setInstagram} autoCapitalize="none" maxLength={50}
               />
             </View>
@@ -448,7 +452,7 @@ const styles = StyleSheet.create({
             <Text style={[styles.label, { color: COLORS.text }]}>Facebook</Text>
             <TextInput
               style={[styles.input, { backgroundColor: COLORS.inputBackground, color: COLORS.text }]}
-              placeholder="URL o nombre de usuario" placeholderTextColor={COLORS.gray}
+              placeholder={t('profile.facebookPh')} placeholderTextColor={COLORS.gray}
               value={facebook} onChangeText={setFacebook} autoCapitalize="none" maxLength={100}
             />
           </View>
@@ -456,9 +460,9 @@ const styles = StyleSheet.create({
         
         {/* Intereses */}
         <View style={[styles.section, { backgroundColor: COLORS.white, shadowColor: COLORS.shadow }]}>
-          <Text style={[styles.sectionTitle, { color: COLORS.text }]}>⭐ Mis Intereses</Text>
+          <Text style={[styles.sectionTitle, { color: COLORS.text }]}>{t('profile.interests')}</Text>
           <Text style={[styles.sectionSubtitle, { color: COLORS.gray }]}>
-            Selecciona las categorías que te interesan. Aparecerán primero en el filtro.
+            {t('profile.interestsHint')}
           </Text>
           <View style={styles.interestsContainer}>
             {CATEGORIES.map((category) => {
@@ -475,21 +479,21 @@ const styles = StyleSheet.create({
                   activeOpacity={0.7}
                 >
                   <Text style={[styles.interestChipText, { color: COLORS.text }, isSelected && { color: COLORS.onPrimary, fontWeight: '600' }]}>
-                    {category}
+                    {categoryLabel(category)}
                   </Text>
                   {isSelected && <Ionicons name="checkmark-circle" size={18} color={COLORS.onPrimary} />}
                 </TouchableOpacity>
               );
             })}
           </View>
-          <Text style={[styles.interestsCount, { color: COLORS.gray }]}>{interests.length}/10 seleccionados</Text>
+          <Text style={[styles.interestsCount, { color: COLORS.gray }]}>{t('profile.interestsCount', { count: interests.length })}</Text>
         </View>
 
         {/* ── PREFERENCIAS DE TEMA ─────────────────────────────────────────── */}
         <View style={[styles.section, { backgroundColor: COLORS.white, shadowColor: COLORS.shadow }]}>
-          <Text style={[styles.sectionTitle, { color: COLORS.text }]}>🎨 Apariencia</Text>
+          <Text style={[styles.sectionTitle, { color: COLORS.text }]}>{t('profile.appearance')}</Text>
           <Text style={[styles.sectionSubtitle, { color: COLORS.gray }]}>
-            Elegí cómo querés ver la app
+            {t('profile.appearanceHint')}
           </Text>
 
           <View style={styles.themeOptionsContainer}>
@@ -531,12 +535,36 @@ const styles = StyleSheet.create({
           <View style={[styles.themeStatusBadge, { backgroundColor: isDark ? '#1A1A2E' : '#FFF9E6', borderColor: isDark ? COLORS.primaryLight : COLORS.accent }]}>
             <Ionicons name={isDark ? 'moon' : 'sunny'} size={16} color={COLORS.primaryText} />
             <Text style={[styles.themeStatusText, { color: COLORS.primaryText }]}>
-              {isDark ? 'Modo oscuro activo' : 'Modo claro activo'}
-              {themeMode === 'auto' ? ' · automático' : ''}
+              {isDark ? t('profile.darkActive') : t('profile.lightActive')}
+              {themeMode === 'auto' ? t('profile.autoSuffix') : ''}
             </Text>
           </View>
         </View>
         
+        {/* Idioma de la app: se aplica al instante, sin guardar */}
+        <View style={[styles.section, { backgroundColor: COLORS.white, shadowColor: COLORS.shadow }]}>
+          <Text style={[styles.sectionTitle, { color: COLORS.text }]}>{t('profile.language')}</Text>
+          <Text style={[styles.sectionSubtitle, { color: COLORS.gray }]}>{t('profile.languageHint')}</Text>
+          {LANGUAGES.map(({ code, label }) => {
+            const isActive = currentLanguage() === code;
+            return (
+              <TouchableOpacity
+                key={code}
+                style={[
+                  styles.themeOption,
+                  { borderColor: COLORS.grayLight, backgroundColor: COLORS.inputBackground },
+                  isActive && { borderColor: COLORS.primary, backgroundColor: COLORS.primary + '15' },
+                ]}
+                onPress={() => setAppLanguage(code)}
+                activeOpacity={0.7}
+              >
+                <Text style={[styles.themeLabel, { flex: 1, color: COLORS.text }, isActive && { color: COLORS.primaryText, fontWeight: '700' }]}>{label}</Text>
+                {isActive && <Ionicons name="checkmark-circle" size={22} color={COLORS.primaryText} />}
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+
         {/* Botón guardar */}
         <TouchableOpacity
           style={[styles.saveButton, { backgroundColor: COLORS.secondary, shadowColor: COLORS.shadow }, saving && styles.saveButtonDisabled]}
@@ -548,7 +576,7 @@ const styles = StyleSheet.create({
           ) : (
             <>
               <Ionicons name="checkmark-circle" size={24} color={COLORS.onPrimary} />
-              <Text style={[styles.saveButtonText, { color: COLORS.onPrimary }]}>Guardar Cambios</Text>
+              <Text style={[styles.saveButtonText, { color: COLORS.onPrimary }]}>{t('profile.save')}</Text>
             </>
           )}
         </TouchableOpacity>
@@ -558,7 +586,7 @@ const styles = StyleSheet.create({
           <TouchableOpacity style={styles.passwordToggle} onPress={() => setShowPasswordSection(!showPasswordSection)}>
             <View style={styles.passwordToggleLeft}>
               <Ionicons name="lock-closed" size={24} color={COLORS.primaryText} />
-              <Text style={[styles.passwordToggleText, { color: COLORS.text }]}>Cambiar Contraseña</Text>
+              <Text style={[styles.passwordToggleText, { color: COLORS.text }]}>{t('profile.changePwd')}</Text>
             </View>
             <Ionicons name={showPasswordSection ? 'chevron-up' : 'chevron-down'} size={24} color={COLORS.gray} />
           </TouchableOpacity>
@@ -566,7 +594,7 @@ const styles = StyleSheet.create({
           {showPasswordSection && (
             <View style={[styles.passwordSection, { borderTopColor: COLORS.grayLight }]}>
               <View style={styles.inputGroup}>
-                <Text style={[styles.label, { color: COLORS.text }]}>Contraseña actual</Text>
+                <Text style={[styles.label, { color: COLORS.text }]}>{t('profile.currentPwd')}</Text>
                 <View style={[styles.passwordInputContainer, { backgroundColor: COLORS.inputBackground }]}>
                   <TextInput
                     style={[styles.passwordInput, { color: COLORS.text }]}
@@ -580,11 +608,11 @@ const styles = StyleSheet.create({
                 </View>
               </View>
               <View style={styles.inputGroup}>
-                <Text style={[styles.label, { color: COLORS.text }]}>Nueva contraseña</Text>
+                <Text style={[styles.label, { color: COLORS.text }]}>{t('profile.newPwd')}</Text>
                 <View style={[styles.passwordInputContainer, { backgroundColor: COLORS.inputBackground }]}>
                   <TextInput
                     style={[styles.passwordInput, { color: COLORS.text }]}
-                    placeholder="Mínimo 6 caracteres" placeholderTextColor={COLORS.gray}
+                    placeholder={t('profile.newPwdPh')} placeholderTextColor={COLORS.gray}
                     value={newPassword} onChangeText={setNewPassword}
                     secureTextEntry={!showNewPassword} autoCapitalize="none"
                   />
@@ -594,10 +622,10 @@ const styles = StyleSheet.create({
                 </View>
               </View>
               <View style={styles.inputGroup}>
-                <Text style={[styles.label, { color: COLORS.text }]}>Confirmar nueva contraseña</Text>
+                <Text style={[styles.label, { color: COLORS.text }]}>{t('profile.confirmPwd')}</Text>
                 <TextInput
                   style={[styles.input, { backgroundColor: COLORS.inputBackground, color: COLORS.text }]}
-                  placeholder="Repite la nueva contraseña" placeholderTextColor={COLORS.gray}
+                  placeholder={t('profile.confirmPwdPh')} placeholderTextColor={COLORS.gray}
                   value={confirmPassword} onChangeText={setConfirmPassword}
                   secureTextEntry={!showNewPassword} autoCapitalize="none"
                 />
@@ -611,7 +639,7 @@ const styles = StyleSheet.create({
                 ) : (
                   <>
                     <Ionicons name="key" size={20} color={COLORS.onPrimary} />
-                    <Text style={[styles.changePasswordButtonText, { color: COLORS.onPrimary }]}>Cambiar Contraseña</Text>
+                    <Text style={[styles.changePasswordButtonText, { color: COLORS.onPrimary }]}>{t('profile.changePwd')}</Text>
                   </>
                 )}
               </TouchableOpacity>
@@ -622,9 +650,9 @@ const styles = StyleSheet.create({
         {/* Eliminar cuenta (requerido por Google Play) */}
         {user?.role !== 'admin' && (
           <View style={[styles.section, { backgroundColor: COLORS.white, shadowColor: COLORS.shadow }]}>
-            <Text style={[styles.sectionTitle, { color: COLORS.text }]}>🗑️ Eliminar cuenta</Text>
+            <Text style={[styles.sectionTitle, { color: COLORS.text }]}>{t('profile.deleteSection')}</Text>
             <Text style={[styles.sectionSubtitle, { color: COLORS.gray }]}>
-              Se borran tu cuenta, tus publicaciones, tus guías y tus valoraciones. No se puede deshacer.
+              {t('profile.deleteHint')}
             </Text>
             <TouchableOpacity
               style={[styles.deleteAccountButton, { borderColor: COLORS.error }]}
@@ -634,7 +662,7 @@ const styles = StyleSheet.create({
               }}
             >
               <Ionicons name="trash-outline" size={20} color={COLORS.error} />
-              <Text style={[styles.deleteAccountButtonText, { color: COLORS.error }]}>Eliminar mi cuenta</Text>
+              <Text style={[styles.deleteAccountButtonText, { color: COLORS.error }]}>{t('profile.deleteButton')}</Text>
             </TouchableOpacity>
           </View>
         )}
@@ -645,12 +673,12 @@ const styles = StyleSheet.create({
       <Modal visible={deleteModalVisible} transparent animationType="fade" onRequestClose={() => !deletingAccount && setDeleteModalVisible(false)}>
         <View style={styles.deleteModalBackdrop}>
           <View style={[styles.deleteModalCard, { backgroundColor: COLORS.cardBackground }]}>
-            <Text style={[styles.sectionTitle, { color: COLORS.text }]}>¿Eliminar tu cuenta?</Text>
+            <Text style={[styles.sectionTitle, { color: COLORS.text }]}>{t('profile.deleteConfirmTitle')}</Text>
             <Text style={[styles.deleteModalText, { color: COLORS.textSecondary }]}>
-              Vamos a borrar tu cuenta y todo tu contenido: publicaciones, guías, fotos y valoraciones. Esta acción no se puede deshacer.
+              {t('profile.deleteConfirmBody')}
             </Text>
             <Text style={[styles.label, { color: COLORS.text }]}>
-              Escribí {DELETE_ACCOUNT_CONFIRMATION} para confirmar
+              {t('profile.typeToConfirm', { word: DELETE_ACCOUNT_CONFIRMATION })}
             </Text>
             <TextInput
               value={deleteConfirmText}
@@ -668,7 +696,7 @@ const styles = StyleSheet.create({
                 onPress={() => setDeleteModalVisible(false)}
                 disabled={deletingAccount}
               >
-                <Text style={[styles.deleteModalButtonText, { color: COLORS.text }]}>Cancelar</Text>
+                <Text style={[styles.deleteModalButtonText, { color: COLORS.text }]}>{t('profile.cancel')}</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={[
@@ -682,7 +710,7 @@ const styles = StyleSheet.create({
                 {deletingAccount ? (
                   <ActivityIndicator color="#FFFFFF" />
                 ) : (
-                  <Text style={[styles.deleteModalButtonText, { color: '#FFFFFF' }]}>Eliminar</Text>
+                  <Text style={[styles.deleteModalButtonText, { color: '#FFFFFF' }]}>{t('profile.delete')}</Text>
                 )}
               </TouchableOpacity>
             </View>

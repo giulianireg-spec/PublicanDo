@@ -4,6 +4,7 @@
 
 import React, { useEffect } from 'react';
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import Toast from 'react-native-toast-message';
 import { useTheme } from '../context/ThemeContext';
 import { getAdvertisementById } from '../services/api';
@@ -11,6 +12,7 @@ import { getOfflineSnapshot } from '../services/offlineCache';
 
 const PlaceLinkScreen = ({ navigation, route }: any) => {
   const { colors: COLORS } = useTheme();
+  const { t } = useTranslation();
   const { advertisementId } = route.params;
 
   useEffect(() => {
@@ -28,7 +30,7 @@ const PlaceLinkScreen = ({ navigation, route }: any) => {
         navigation.replace('Detail', { advertisement });
       } catch {
         if (cancelled) return;
-        Toast.show({ type: 'error', text1: 'Lugar no disponible', text2: 'Puede que se haya eliminado o que no tengas conexión', position: 'bottom' });
+        Toast.show({ type: 'error', text1: t('placeLink.unavailable'), text2: t('placeLink.unavailableBody'), position: 'bottom' });
         if (navigation.canGoBack()) navigation.goBack();
         else navigation.replace('Home');
       }

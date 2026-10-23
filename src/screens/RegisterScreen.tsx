@@ -14,6 +14,7 @@ import {
   ScrollView,
   Modal,
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { Ionicons } from '@expo/vector-icons';
 import Toast from 'react-native-toast-message';
 import { useAuth } from '../context/AuthContext';
@@ -27,6 +28,7 @@ interface RegisterScreenProps {
 
 export default function RegisterScreen({ onRegisterSuccess, onLoginPress }: RegisterScreenProps) {
   const { colors: COLORS } = useTheme();
+  const { t } = useTranslation();
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -47,28 +49,28 @@ export default function RegisterScreen({ onRegisterSuccess, onLoginPress }: Regi
 
   const handleRegister = async () => {
     if (!name || !email || !password || !confirmPassword) {
-      Toast.show({ type: 'error', text1: 'Campos incompletos', text2: 'Por favor completa los campos obligatorios', position: 'top', topOffset: 20, visibilityTime: 3000 });
+      Toast.show({ type: 'error', text1: t('auth.incomplete'), text2: t('auth.incompleteBody'), position: 'top', topOffset: 20, visibilityTime: 3000 });
       return;
     }
     if (name.length < 3) {
-      Toast.show({ type: 'error', text1: 'Nombre muy corto', text2: 'El nombre debe tener al menos 3 caracteres', position: 'top', topOffset: 20, visibilityTime: 3000 });
+      Toast.show({ type: 'error', text1: t('auth.nameShort'), text2: t('auth.nameShortBody'), position: 'top', topOffset: 20, visibilityTime: 3000 });
       return;
     }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      Toast.show({ type: 'error', text1: 'Email inválido', text2: 'Por favor ingresa un email válido', position: 'top', topOffset: 20, visibilityTime: 3000 });
+      Toast.show({ type: 'error', text1: t('auth.invalidEmail'), text2: t('auth.invalidEmailBody'), position: 'top', topOffset: 20, visibilityTime: 3000 });
       return;
     }
     if (password.length < 6) {
-      Toast.show({ type: 'error', text1: 'Contraseña débil', text2: 'La contraseña debe tener al menos 6 caracteres', position: 'top', topOffset: 20, visibilityTime: 3000 });
+      Toast.show({ type: 'error', text1: t('auth.weakPwd'), text2: t('auth.weakPwdBody'), position: 'top', topOffset: 20, visibilityTime: 3000 });
       return;
     }
     if (password !== confirmPassword) {
-      Toast.show({ type: 'error', text1: 'Contraseñas no coinciden', text2: 'Por favor verifica las contraseñas', position: 'top', topOffset: 20, visibilityTime: 3000 });
+      Toast.show({ type: 'error', text1: t('auth.pwdMismatch'), text2: t('auth.pwdMismatchBody'), position: 'top', topOffset: 20, visibilityTime: 3000 });
       return;
     }
     if (!acceptedTerms) {
-      Toast.show({ type: 'error', text1: 'Términos no aceptados', text2: 'Debés aceptar los términos y condiciones', position: 'top', topOffset: 20, visibilityTime: 3000 });
+      Toast.show({ type: 'error', text1: t('auth.termsNot'), text2: t('auth.termsNotBody'), position: 'top', topOffset: 20, visibilityTime: 3000 });
       return;
     }
     try {
@@ -80,10 +82,10 @@ export default function RegisterScreen({ onRegisterSuccess, onLoginPress }: Regi
       if (instagram.trim()) optionalData.instagram = instagram.trim().replace(/^@/, '');
       if (facebook.trim()) optionalData.facebook = facebook.trim();
       await register(name.trim(), email.toLowerCase().trim(), password, optionalData);
-      Toast.show({ type: 'success', text1: '✅ ¡Cuenta creada!', text2: 'Bienvenido a GuianDo', position: 'top', topOffset: 20, visibilityTime: 4000 });
+      Toast.show({ type: 'success', text1: t('auth.created'), text2: t('auth.welcomeApp'), position: 'top', topOffset: 20, visibilityTime: 4000 });
       setTimeout(() => onRegisterSuccess(), 500);
     } catch (error: any) {
-      Toast.show({ type: 'error', text1: 'Error al crear cuenta', text2: error.message || 'El email ya está registrado', position: 'top', topOffset: 20, visibilityTime: 4000 });
+      Toast.show({ type: 'error', text1: t('auth.createError'), text2: error.message || t('auth.emailTaken'), position: 'top', topOffset: 20, visibilityTime: 4000 });
     } finally {
       setLoading(false);
     }
@@ -91,16 +93,16 @@ export default function RegisterScreen({ onRegisterSuccess, onLoginPress }: Regi
 
   const handleGoogleRegister = async () => {
     if (!acceptedTerms) {
-      Toast.show({ type: 'error', text1: 'Términos no aceptados', text2: 'Debés aceptar los términos y condiciones', position: 'top', topOffset: 20, visibilityTime: 3000 });
+      Toast.show({ type: 'error', text1: t('auth.termsNot'), text2: t('auth.termsNotBody'), position: 'top', topOffset: 20, visibilityTime: 3000 });
       return;
     }
     try {
       setLoading(true);
       await googleSignIn();
-      Toast.show({ type: 'success', text1: '✅ ¡Cuenta creada!', text2: 'Bienvenido a GuianDo', position: 'top', topOffset: 20, visibilityTime: 3000 });
+      Toast.show({ type: 'success', text1: t('auth.created'), text2: t('auth.welcomeApp'), position: 'top', topOffset: 20, visibilityTime: 3000 });
       setTimeout(() => onRegisterSuccess(), 500);
     } catch (error: any) {
-      Toast.show({ type: 'error', text1: 'Error con Google', text2: error.message || 'Error al registrarse con Google', position: 'top', topOffset: 20, visibilityTime: 4000 });
+      Toast.show({ type: 'error', text1: t('auth.googleErrorTitle'), text2: error.message || t('auth.googleRegisterError'), position: 'top', topOffset: 20, visibilityTime: 4000 });
     } finally {
       setLoading(false);
     }
@@ -165,16 +167,16 @@ export default function RegisterScreen({ onRegisterSuccess, onLoginPress }: Regi
           <View style={styles.content}>
             <View style={styles.header}>
               <Ionicons name="compass" size={64} color={COLORS.primaryText} />
-              <Text style={styles.title}>Crear Cuenta</Text>
-              <Text style={styles.subtitle}>Descubrí y compartí lugares increíbles</Text>
+              <Text style={styles.title}>{t('auth.createAccount')}</Text>
+              <Text style={styles.subtitle}>{t('auth.registerSubtitle')}</Text>
             </View>
 
             <View style={styles.form}>
-              <Text style={styles.requiredNote}>* Campos obligatorios</Text>
+              <Text style={styles.requiredNote}>{t('auth.required')}</Text>
 
               <View style={styles.inputContainer}>
                 <Ionicons name="person" size={20} color={COLORS.gray} style={styles.inputIcon} />
-                <TextInput style={styles.input} placeholder="Nombre completo *" placeholderTextColor={COLORS.gray} value={name} onChangeText={setName} autoCapitalize="words" />
+                <TextInput style={styles.input} placeholder={t('auth.fullName')} placeholderTextColor={COLORS.gray} value={name} onChangeText={setName} autoCapitalize="words" />
               </View>
 
               <View style={styles.inputContainer}>
@@ -184,7 +186,7 @@ export default function RegisterScreen({ onRegisterSuccess, onLoginPress }: Regi
 
               <View style={styles.inputContainer}>
                 <Ionicons name="lock-closed" size={20} color={COLORS.gray} style={styles.inputIcon} />
-                <TextInput style={styles.input} placeholder="Contraseña *" placeholderTextColor={COLORS.gray} value={password} onChangeText={setPassword} secureTextEntry={!showPassword} autoCapitalize="none" />
+                <TextInput style={styles.input} placeholder={t('auth.passwordReq')} placeholderTextColor={COLORS.gray} value={password} onChangeText={setPassword} secureTextEntry={!showPassword} autoCapitalize="none" />
                 <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={styles.eyeButton}>
                   <Ionicons name={showPassword ? 'eye-off' : 'eye'} size={20} color={COLORS.gray} />
                 </TouchableOpacity>
@@ -192,7 +194,7 @@ export default function RegisterScreen({ onRegisterSuccess, onLoginPress }: Regi
 
               <View style={styles.inputContainer}>
                 <Ionicons name="lock-closed" size={20} color={COLORS.gray} style={styles.inputIcon} />
-                <TextInput style={styles.input} placeholder="Confirmar contraseña *" placeholderTextColor={COLORS.gray} value={confirmPassword} onChangeText={setConfirmPassword} secureTextEntry={!showConfirmPassword} autoCapitalize="none" />
+                <TextInput style={styles.input} placeholder={t('auth.confirmPwd')} placeholderTextColor={COLORS.gray} value={confirmPassword} onChangeText={setConfirmPassword} secureTextEntry={!showConfirmPassword} autoCapitalize="none" />
                 <TouchableOpacity onPress={() => setShowConfirmPassword(!showConfirmPassword)} style={styles.eyeButton}>
                   <Ionicons name={showConfirmPassword ? 'eye-off' : 'eye'} size={20} color={COLORS.gray} />
                 </TouchableOpacity>
@@ -200,7 +202,7 @@ export default function RegisterScreen({ onRegisterSuccess, onLoginPress }: Regi
 
               <View style={styles.inputContainer}>
                 <Ionicons name="call" size={20} color={COLORS.gray} style={styles.inputIcon} />
-                <TextInput style={styles.input} placeholder="Teléfono" placeholderTextColor={COLORS.gray} value={phone} onChangeText={setPhone} keyboardType="phone-pad" maxLength={20} />
+                <TextInput style={styles.input} placeholder={t('auth.phone')} placeholderTextColor={COLORS.gray} value={phone} onChangeText={setPhone} keyboardType="phone-pad" maxLength={20} />
               </View>
 
               <View style={styles.inputContainerWithAction}>
@@ -217,7 +219,7 @@ export default function RegisterScreen({ onRegisterSuccess, onLoginPress }: Regi
 
               <View style={styles.inputContainer}>
                 <Ionicons name="location" size={20} color={COLORS.gray} style={styles.inputIcon} />
-                <TextInput style={styles.input} placeholder="Dirección" placeholderTextColor={COLORS.gray} value={address} onChangeText={setAddress} maxLength={200} />
+                <TextInput style={styles.input} placeholder={t('auth.address')} placeholderTextColor={COLORS.gray} value={address} onChangeText={setAddress} maxLength={200} />
               </View>
 
               <View style={styles.inputContainer}>
@@ -237,10 +239,10 @@ export default function RegisterScreen({ onRegisterSuccess, onLoginPress }: Regi
                     {acceptedTerms && <Ionicons name="checkmark" size={16} color={COLORS.onPrimary} />}
                   </View>
                   <Text style={styles.termsText}>
-                    Acepto los{' '}
-                    <Text style={styles.termsLink} onPress={() => setShowLegalModal(true)}>Términos y Condiciones</Text>
-                    {' '}y la{' '}
-                    <Text style={styles.termsLink} onPress={() => setShowLegalModal(true)}>Política de Privacidad</Text>
+                    {t('auth.acceptPrefix')}{' '}
+                    <Text style={styles.termsLink} onPress={() => setShowLegalModal(true)}>{t('auth.terms')}</Text>
+                    {' '}{t('auth.acceptAnd')}{' '}
+                    <Text style={styles.termsLink} onPress={() => setShowLegalModal(true)}>{t('auth.privacy')}</Text>
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -253,14 +255,14 @@ export default function RegisterScreen({ onRegisterSuccess, onLoginPress }: Regi
                 {loading ? <ActivityIndicator color={COLORS.onPrimary} /> : (
                   <>
                     <Ionicons name="person-add" size={20} color={COLORS.onPrimary} />
-                    <Text style={styles.registerButtonText}>Crear Cuenta</Text>
+                    <Text style={styles.registerButtonText}>{t('auth.createAccount')}</Text>
                   </>
                 )}
               </TouchableOpacity>
 
               <View style={styles.divider}>
                 <View style={styles.dividerLine} />
-                <Text style={styles.dividerText}>O registrate con</Text>
+                <Text style={styles.dividerText}>{t('auth.orRegister')}</Text>
                 <View style={styles.dividerLine} />
               </View>
 
@@ -273,12 +275,12 @@ export default function RegisterScreen({ onRegisterSuccess, onLoginPress }: Regi
                 <Text style={[styles.googleButtonText, !acceptedTerms && styles.googleButtonTextDisabled]}>Google</Text>
               </TouchableOpacity>
 
-              {!acceptedTerms && <Text style={styles.termsHint}>Aceptá los términos para continuar</Text>}
+              {!acceptedTerms && <Text style={styles.termsHint}>{t('auth.acceptHint')}</Text>}
 
               <View style={styles.loginContainer}>
-                <Text style={styles.loginText}>¿Ya tenés cuenta? </Text>
+                <Text style={styles.loginText}>{t('auth.haveAccount')}</Text>
                 <TouchableOpacity onPress={onLoginPress}>
-                  <Text style={styles.loginLink}>Iniciá sesión</Text>
+                  <Text style={styles.loginLink}>{t('auth.loginLink')}</Text>
                 </TouchableOpacity>
               </View>
             </View>

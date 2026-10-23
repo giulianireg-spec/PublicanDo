@@ -14,6 +14,7 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
 
@@ -39,6 +40,7 @@ export const ReportModal: React.FC<ReportModalProps> = ({
   onCancel,
 }) => {
   const { colors: COLORS } = useTheme();
+  const { t } = useTranslation();
   const styles = StyleSheet.create({
     overlay: {
       flex: 1,
@@ -203,15 +205,15 @@ export const ReportModal: React.FC<ReportModalProps> = ({
       return;
     }
     if (!description.trim()) {
-      setError('Debes proporcionar una descripción');
+      setError(t('report.descRequired'));
       return;
     }
     if (description.trim().length < 10) {
-      setError('La descripción debe tener al menos 10 caracteres');
+      setError(t('report.descShort'));
       return;
     }
     if (description.trim().length > 200) {
-      setError('La descripción no puede exceder 200 caracteres');
+      setError(t('report.descLong'));
       return;
     }
 
@@ -245,14 +247,14 @@ export const ReportModal: React.FC<ReportModalProps> = ({
           <ScrollView showsVerticalScrollIndicator={false}>
             <View style={styles.header}>
               <Ionicons name="flag" size={32} color={COLORS.error} />
-              <Text style={styles.title}>Reportar publicidad</Text>
+              <Text style={styles.title}>{t('report.title')}</Text>
             </View>
 
             <Text style={styles.adTitle} numberOfLines={2}>
               "{advertisementTitle}"
             </Text>
 
-            <Text style={styles.sectionTitle}>Motivo del reporte:</Text>
+            <Text style={styles.sectionTitle}>{t('report.reason')}</Text>
 
             {REPORT_REASONS.map((reason) => (
               <TouchableOpacity
@@ -279,7 +281,7 @@ export const ReportModal: React.FC<ReportModalProps> = ({
                     selectedReason === reason.value && styles.reasonTextActive,
                   ]}
                 >
-                  {reason.label}
+                  {t(`report.reasons.${reason.value}`)}
                 </Text>
                 {selectedReason === reason.value && (
                   <Ionicons
@@ -298,7 +300,7 @@ export const ReportModal: React.FC<ReportModalProps> = ({
 
             <TextInput
               style={[styles.input, error && styles.inputError]}
-              placeholder="Describe el problema con detalle..."
+              placeholder={t('report.descPh')}
               placeholderTextColor={COLORS.gray}
               value={description}
               onChangeText={(text) => {
@@ -312,7 +314,7 @@ export const ReportModal: React.FC<ReportModalProps> = ({
             />
 
             <Text style={styles.charCount}>
-              {description.length}/200 caracteres
+              {t('report.charCount', { count: description.length })}
             </Text>
 
             {error && (
@@ -325,8 +327,7 @@ export const ReportModal: React.FC<ReportModalProps> = ({
             <View style={styles.infoBox}>
               <Ionicons name="information-circle" size={16} color={COLORS.primaryText} />
               <Text style={styles.infoText}>
-                Tu reporte será revisado por un moderador. El anunciante no verá tu
-                identidad.
+                {t('report.privacy')}
               </Text>
             </View>
 
@@ -335,7 +336,7 @@ export const ReportModal: React.FC<ReportModalProps> = ({
                 style={[styles.button, styles.cancelButton]}
                 onPress={handleCancel}
               >
-                <Text style={styles.cancelButtonText}>Cancelar</Text>
+                <Text style={styles.cancelButtonText}>{t('report.cancel')}</Text>
               </TouchableOpacity>
 
               <TouchableOpacity
@@ -349,7 +350,7 @@ export const ReportModal: React.FC<ReportModalProps> = ({
                 disabled={!selectedReason || !description.trim()}
               >
                 <Ionicons name="flag" size={20} color={COLORS.onPrimary} />
-                <Text style={styles.confirmButtonText}>Enviar reporte</Text>
+                <Text style={styles.confirmButtonText}>{t('report.send')}</Text>
               </TouchableOpacity>
             </View>
           </ScrollView>

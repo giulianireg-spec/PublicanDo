@@ -2,6 +2,7 @@
 // CORREGIDO: Manejo seguro de notificaciones para evitar crashes
 
 import './src/utils/logger';
+import './src/i18n';
 import React, { useEffect, useRef } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';

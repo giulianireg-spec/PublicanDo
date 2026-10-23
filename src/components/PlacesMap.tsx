@@ -4,6 +4,7 @@
 
 import React, { useEffect, useMemo, useRef } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import MapView, { Callout, Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { useTheme } from '../context/ThemeContext';
 import { Advertisement } from '../types';
@@ -21,6 +22,7 @@ const hasCoords = (ad: Advertisement) => {
 
 const PlacesMap: React.FC<PlacesMapProps> = ({ ads, userLocation, onSelect }) => {
   const { colors: COLORS } = useTheme();
+  const { t } = useTranslation();
   const mapRef = useRef<MapView>(null);
   const withCoords = useMemo(() => ads.filter(hasCoords), [ads]);
 
@@ -74,7 +76,7 @@ const PlacesMap: React.FC<PlacesMapProps> = ({ ads, userLocation, onSelect }) =>
               <View style={styles.callout}>
                 <Text style={styles.calloutTitle} numberOfLines={2}>{ad.title}</Text>
                 <Text style={styles.calloutSub} numberOfLines={1}>{ad.category} · {ad.location.city}</Text>
-                <Text style={styles.calloutLink}>Ver ficha ›</Text>
+                <Text style={styles.calloutLink}>{t('map.seePlace')}</Text>
               </View>
             </Callout>
           </Marker>
@@ -82,7 +84,7 @@ const PlacesMap: React.FC<PlacesMapProps> = ({ ads, userLocation, onSelect }) =>
       </MapView>
       {withCoords.length === 0 && (
         <View style={styles.empty}>
-          <Text style={styles.emptyText}>No hay lugares con ubicación para estos filtros</Text>
+          <Text style={styles.emptyText}>{t('map.empty')}</Text>
         </View>
       )}
     </View>

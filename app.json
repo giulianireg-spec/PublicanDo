@@ -88,7 +88,8 @@
       "expo-sharing",
       "@react-native-firebase/app",
       "@react-native-firebase/analytics",
-      "@react-native-firebase/crashlytics"
+      "@react-native-firebase/crashlytics",
+      "expo-localization"
     ],
     "owner": "rgiuliani3612",
     "icon": "./assets/icon.png",

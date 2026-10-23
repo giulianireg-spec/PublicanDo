@@ -15,6 +15,7 @@ import {
   ScrollView,
   ActivityIndicator,
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { Ionicons } from '@expo/vector-icons';
 import Toast from 'react-native-toast-message';
 import { useTheme } from '../context/ThemeContext';
@@ -32,6 +33,7 @@ const ForgotPasswordScreen: React.FC<ForgotPasswordScreenProps> = ({
   onBackToLogin,
 }) => {
   const { colors: COLORS } = useTheme();
+  const { t } = useTranslation();
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -228,7 +230,7 @@ const styles = StyleSheet.create({
       Toast.show({
         type: 'error',
         text1: 'Error',
-        text2: 'Ingresa tu email',
+        text2: t('forgot.enterEmail'),
         position: 'bottom',
       });
       return;
@@ -239,7 +241,7 @@ const styles = StyleSheet.create({
       Toast.show({
         type: 'error',
         text1: 'Error',
-        text2: 'Ingresa un email válido',
+        text2: t('forgot.validEmail'),
         position: 'bottom',
       });
       return;
@@ -252,8 +254,8 @@ const styles = StyleSheet.create({
       // ✅ CORREGIDO: Mensaje más claro sin revelar si el email existe
       Toast.show({
         type: 'success',
-        text1: '📧 Solicitud procesada',
-        text2: 'Si el email está registrado, recibirás un código',
+        text1: t('forgot.processed'),
+        text2: t('forgot.willReceive'),
         position: 'bottom',
         visibilityTime: 4000,
       });
@@ -276,8 +278,8 @@ const styles = StyleSheet.create({
       // para no revelar si el email existe o no
       Toast.show({
         type: 'success',
-        text1: '📧 Solicitud procesada',
-        text2: 'Si el email está registrado, recibirás un código',
+        text1: t('forgot.processed'),
+        text2: t('forgot.willReceive'),
         position: 'bottom',
         visibilityTime: 4000,
       });
@@ -293,7 +295,7 @@ const styles = StyleSheet.create({
       Toast.show({
         type: 'error',
         text1: 'Error',
-        text2: 'Ingresa el código de 6 dígitos',
+        text2: t('forgot.enterCode'),
         position: 'bottom',
       });
       return;
@@ -305,8 +307,8 @@ const styles = StyleSheet.create({
       
       Toast.show({
         type: 'success',
-        text1: '✅ Código válido',
-        text2: 'Ahora ingresa tu nueva contraseña',
+        text1: t('forgot.codeOk'),
+        text2: t('forgot.nowPassword'),
         position: 'bottom',
       });
 
@@ -314,8 +316,8 @@ const styles = StyleSheet.create({
     } catch (error: any) {
       Toast.show({
         type: 'error',
-        text1: 'Código inválido',
-        text2: 'El código es incorrecto, expiró, o el email no está registrado',
+        text1: t('forgot.codeBad'),
+        text2: t('forgot.codeBadBody'),
         position: 'bottom',
       });
     } finally {
@@ -329,7 +331,7 @@ const styles = StyleSheet.create({
       Toast.show({
         type: 'error',
         text1: 'Error',
-        text2: 'Completa ambos campos',
+        text2: t('forgot.bothFields'),
         position: 'bottom',
       });
       return;
@@ -339,7 +341,7 @@ const styles = StyleSheet.create({
       Toast.show({
         type: 'error',
         text1: 'Error',
-        text2: 'La contraseña debe tener al menos 6 caracteres',
+        text2: t('forgot.pwdShort'),
         position: 'bottom',
       });
       return;
@@ -349,7 +351,7 @@ const styles = StyleSheet.create({
       Toast.show({
         type: 'error',
         text1: 'Error',
-        text2: 'Las contraseñas no coinciden',
+        text2: t('forgot.pwdMismatch'),
         position: 'bottom',
       });
       return;
@@ -366,8 +368,8 @@ const styles = StyleSheet.create({
       
       Toast.show({
         type: 'success',
-        text1: '🎉 ¡Listo!',
-        text2: 'Tu contraseña fue actualizada',
+        text1: t('forgot.done'),
+        text2: t('forgot.updated'),
         position: 'bottom',
         visibilityTime: 3000,
       });
@@ -381,7 +383,7 @@ const styles = StyleSheet.create({
       Toast.show({
         type: 'error',
         text1: 'Error',
-        text2: error.message || 'No se pudo cambiar la contraseña',
+        text2: error.message || t('forgot.changeError'),
         position: 'bottom',
       });
     } finally {
@@ -397,8 +399,8 @@ const styles = StyleSheet.create({
       
       Toast.show({
         type: 'success',
-        text1: '📧 Código reenviado',
-        text2: 'Si el email está registrado, recibirás un nuevo código',
+        text1: t('forgot.resent'),
+        text2: t('forgot.willReceiveNew'),
         position: 'bottom',
       });
 
@@ -416,8 +418,8 @@ const styles = StyleSheet.create({
       // Silenciar error para no revelar info
       Toast.show({
         type: 'success',
-        text1: '📧 Código reenviado',
-        text2: 'Si el email está registrado, recibirás un nuevo código',
+        text1: t('forgot.resent'),
+        text2: t('forgot.willReceiveNew'),
         position: 'bottom',
       });
     } finally {
@@ -449,11 +451,11 @@ const styles = StyleSheet.create({
           <View style={styles.iconContainer}>
             <Ionicons name="key" size={48} color={COLORS.primaryText} />
           </View>
-          <Text style={styles.title}>Recuperar Contraseña</Text>
+          <Text style={styles.title}>{t('forgot.title')}</Text>
           <Text style={styles.subtitle}>
-            {step === 'email' && 'Ingresa tu email para recibir un código'}
-            {step === 'code' && 'Ingresa el código de 6 dígitos'}
-            {step === 'password' && 'Crea tu nueva contraseña'}
+            {step === 'email' && t('forgot.stepEmail')}
+            {step === 'code' && t('forgot.enterCode')}
+            {step === 'password' && t('forgot.stepPassword')}
           </Text>
           {renderStepIndicator()}
         </View>
@@ -480,7 +482,7 @@ const styles = StyleSheet.create({
             <View style={styles.infoBox}>
               <Ionicons name="information-circle" size={16} color="#1976D2" />
               <Text style={styles.infoBoxText}>
-                Si el email está registrado, recibirás un código de 6 dígitos.
+                {t('forgot.emailNote')}
               </Text>
             </View>
 
@@ -494,7 +496,7 @@ const styles = StyleSheet.create({
               ) : (
                 <>
                   <Ionicons name="send" size={20} color={COLORS.onPrimary} />
-                  <Text style={styles.primaryButtonText}>Enviar Código</Text>
+                  <Text style={styles.primaryButtonText}>{t('forgot.send')}</Text>
                 </>
               )}
             </TouchableOpacity>
@@ -512,7 +514,7 @@ const styles = StyleSheet.create({
             <View style={styles.infoBox}>
               <Ionicons name="information-circle" size={16} color="#1976D2" />
               <Text style={styles.infoBoxText}>
-                Revisa tu bandeja de entrada y spam. Si no recibiste el código, puede que el email no esté registrado.
+                {t('forgot.checkInbox')}
               </Text>
             </View>
 
@@ -540,7 +542,7 @@ const styles = StyleSheet.create({
               ) : (
                 <>
                   <Ionicons name="checkmark-circle" size={20} color={COLORS.onPrimary} />
-                  <Text style={styles.primaryButtonText}>Verificar Código</Text>
+                  <Text style={styles.primaryButtonText}>{t('forgot.verify')}</Text>
                 </>
               )}
             </TouchableOpacity>
@@ -550,7 +552,7 @@ const styles = StyleSheet.create({
               onPress={handleResendCode}
               disabled={loading}
             >
-              <Text style={styles.resendButtonText}>¿No recibiste el código? Reenviar</Text>
+              <Text style={styles.resendButtonText}>{t('forgot.resend')}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -559,7 +561,7 @@ const styles = StyleSheet.create({
               disabled={loading}
             >
               <Ionicons name="arrow-back" size={16} color={COLORS.gray} />
-              <Text style={styles.backButtonText}>Cambiar email</Text>
+              <Text style={styles.backButtonText}>{t('forgot.changeEmail')}</Text>
             </TouchableOpacity>
           </View>
         )}
@@ -571,7 +573,7 @@ const styles = StyleSheet.create({
               <Ionicons name="lock-closed" size={20} color={COLORS.gray} style={styles.inputIcon} />
               <TextInput
                 style={styles.input}
-                placeholder="Nueva contraseña"
+                placeholder={t('forgot.newPwd')}
                 placeholderTextColor={COLORS.gray}
                 value={newPassword}
                 onChangeText={setNewPassword}
@@ -594,7 +596,7 @@ const styles = StyleSheet.create({
               <Ionicons name="lock-closed" size={20} color={COLORS.gray} style={styles.inputIcon} />
               <TextInput
                 style={styles.input}
-                placeholder="Confirmar contraseña"
+                placeholder={t('forgot.confirmPwd')}
                 placeholderTextColor={COLORS.gray}
                 value={confirmPassword}
                 onChangeText={setConfirmPassword}
@@ -614,7 +616,7 @@ const styles = StyleSheet.create({
             </View>
 
             <Text style={styles.passwordHint}>
-              Mínimo 6 caracteres
+              {t('forgot.min6')}
             </Text>
 
             <TouchableOpacity
@@ -627,7 +629,7 @@ const styles = StyleSheet.create({
               ) : (
                 <>
                   <Ionicons name="checkmark-done" size={20} color={COLORS.onPrimary} />
-                  <Text style={styles.primaryButtonText}>Cambiar Contraseña</Text>
+                  <Text style={styles.primaryButtonText}>{t('forgot.change')}</Text>
                 </>
               )}
             </TouchableOpacity>
@@ -641,7 +643,7 @@ const styles = StyleSheet.create({
           disabled={loading}
         >
           <Ionicons name="arrow-back" size={16} color={COLORS.primaryText} />
-          <Text style={styles.loginLinkText}>Volver a iniciar sesión</Text>
+          <Text style={styles.loginLinkText}>{t('forgot.backLogin')}</Text>
         </TouchableOpacity>
       </ScrollView>
     </KeyboardAvoidingView>

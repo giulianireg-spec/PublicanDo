@@ -5,6 +5,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, StyleProp, ViewStyle } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import {
   NativeAd,
   NativeAdView,
@@ -23,6 +24,7 @@ interface NativeAdCardProps {
 
 const NativeAdCard: React.FC<NativeAdCardProps> = ({ style, onAdLoaded, onAdFailed }) => {
   const { colors: COLORS } = useTheme();
+  const { t } = useTranslation();
   const [nativeAd, setNativeAd] = useState<NativeAd | null>(null);
 
   useEffect(() => {
@@ -95,7 +97,7 @@ const NativeAdCard: React.FC<NativeAdCardProps> = ({ style, onAdLoaded, onAdFail
       <View>
         <NativeMediaView style={styles.media} resizeMode="cover" />
         <View style={styles.badge}>
-          <Text style={styles.badgeText}>Anuncio</Text>
+          <Text style={styles.badgeText}>{t('ads.badge')}</Text>
         </View>
       </View>
       <View style={styles.content}>

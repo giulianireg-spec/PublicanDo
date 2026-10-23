@@ -59,6 +59,7 @@ export interface Guide {
   _id: string;
   
   title: string;
+  translations?: Record<string, { title?: string; description?: string; notes?: Record<string, string> }>;
   description: string;
   coverImageUrl: string;
   category: GuideCategory;
@@ -105,6 +106,7 @@ export interface Guide {
 export interface GuideSummary {
   _id: string;
   title: string;
+  translations?: Record<string, { title?: string; description?: string; notes?: Record<string, string> }>;
   coverImageUrl: string;
   category: GuideCategory;
   tags: string[];

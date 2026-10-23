@@ -3,6 +3,7 @@
 
 import React, { useState, useLayoutEffect } from 'react';
 import { TouchableOpacity, TouchableOpacityProps, View, StyleSheet, Modal, ScrollView, Text, Alert, Image, Platform } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { navigationRef, flushPendingNavigation } from './navigationRef';
@@ -209,6 +210,7 @@ const TabNavigator = ({
 const AppNavigatorInner = () => {
   const { colors: COLORS } = useTheme();
   const { user, logout } = useAuth();
+  const { t } = useTranslation();
 
   const [loginModalVisible, setLoginModalVisible] = useState(false);
   const [registerModalVisible, setRegisterModalVisible] = useState(false);
@@ -223,17 +225,17 @@ const AppNavigatorInner = () => {
 
   const handleLogout = () => {
     Alert.alert(
-      'Cerrar sesión',
-      '¿Estás seguro que querés cerrar sesión?',
+      t('nav.logout'),
+      t('nav.logoutConfirm'),
       [
-        { text: 'Cancelar', style: 'cancel' },
+        { text: t('nav.cancel'), style: 'cancel' },
         {
-          text: 'Cerrar sesión',
+          text: t('nav.logout'),
           style: 'destructive',
           onPress: () => {
             setUserMenuVisible(false);
             logout();
-            Toast.show({ type: 'success', text1: '👋 Hasta pronto', text2: 'Sesión cerrada correctamente', position: 'top', visibilityTime: 2000 });
+            Toast.show({ type: 'success', text1: t('nav.bye'), text2: t('nav.byeBody'), position: 'top', visibilityTime: 2000 });
           },
         },
       ]
@@ -299,9 +301,9 @@ const AppNavigatorInner = () => {
           )}
         </Stack.Screen>
 
-        <Stack.Screen name="Detail"              component={DetailScreen as React.ComponentType<any>}             options={{ title: 'Detalle' }} />
-        <Stack.Screen name="CreateAdvertisement" component={CreateAdvertisementScreen} options={{ title: 'Nuevo Lugar' }} />
-        <Stack.Screen name="EditAdvertisement"   component={EditAdvertisementScreen as React.ComponentType<any>}   options={{ title: 'Editar Lugar' }} />
+        <Stack.Screen name="Detail"              component={DetailScreen as React.ComponentType<any>}             options={{ title: t('nav.detail') }} />
+        <Stack.Screen name="CreateAdvertisement" component={CreateAdvertisementScreen} options={{ title: t('nav.newPlace') }} />
+        <Stack.Screen name="EditAdvertisement"   component={EditAdvertisementScreen as React.ComponentType<any>}   options={{ title: t('nav.editPlace') }} />
         <Stack.Screen name="MyAdvertisements"    component={MyAdvertisementsScreen}    options={{ headerShown: false }} />
         <Stack.Screen name="MyGuides"            component={MyGuidesScreen}            options={{ headerShown: false }} />
         <Stack.Screen name="SavedGuides"         component={SavedGuidesScreen}         options={{ headerShown: false }} />
@@ -310,10 +312,10 @@ const AppNavigatorInner = () => {
         <Stack.Screen name="Notifications"        component={NotificationsScreen}        options={{ headerShown: false }} />
         <Stack.Screen name="EditGuide"           component={EditGuideScreen}           options={{ headerShown: false }} />
         <Stack.Screen name="AdminDashboard"      component={AdminDashboardScreen}      options={{ headerShown: false }} />
-        <Stack.Screen name="UsersManagement"     component={UsersManagementScreen}     options={{ title: 'Gestión de Usuarios' }} />
+        <Stack.Screen name="UsersManagement"     component={UsersManagementScreen}     options={{ title: t('nav.users') }} />
         <Stack.Screen name="ReportsManagement"   component={ReportsManagementScreen}   options={{ headerShown: false }} />
-        <Stack.Screen name="Profile"             component={ProfileScreen}             options={{ title: 'Mi Perfil', headerShown: false }} />
-        <Stack.Screen name="AdvertisementStats"  component={AdvertisementStatsScreen as React.ComponentType<any>}  options={{ title: 'Estadísticas' }} />
+        <Stack.Screen name="Profile"             component={ProfileScreen}             options={{ title: t('nav.profile'), headerShown: false }} />
+        <Stack.Screen name="AdvertisementStats"  component={AdvertisementStatsScreen as React.ComponentType<any>}  options={{ title: t('nav.stats') }} />
         <Stack.Screen name="FAQ"                 component={FAQScreen}                 options={{ headerShown: false }} />
         <Stack.Screen name="Legal"               component={LegalScreen}               options={{ headerShown: false }} />
         <Stack.Screen name="GuideDetail"         component={GuideDetailScreen}         options={{ headerShown: false }} />
@@ -383,13 +385,13 @@ const AppNavigatorInner = () => {
             {isSeeder && (
               <View style={dynStyles.seederBadge}>
                 <Ionicons name="leaf" size={16} color={COLORS.success} />
-                <Text style={dynStyles.seederText}>Seeder</Text>
+                <Text style={dynStyles.seederText}>{t('profile.teamBadge')}</Text>
               </View>
             )}
             {user?.trusted && !isSeeder && (
               <View style={dynStyles.trustedBadge}>
                 <Ionicons name="checkmark-circle" size={16} color={COLORS.success} />
-                <Text style={dynStyles.trustedText}>Usuario verificado</Text>
+                <Text style={dynStyles.trustedText}>{t('nav.verified')}</Text>
               </View>
             )}
           </View>
@@ -398,36 +400,36 @@ const AppNavigatorInner = () => {
             <View style={dynStyles.menuOptions}>
               <TouchableOpacity style={[dynStyles.menuOption, dynStyles.profileOption]} onPress={() => { setUserMenuVisible(false); navigationRef.current?.navigate('Profile'); }}>
                 <Ionicons name="person" size={24} color={COLORS.primaryText} />
-                <Text style={dynStyles.menuOptionText}>Mi Perfil</Text>
+                <Text style={dynStyles.menuOptionText}>{t('nav.profile')}</Text>
                 <Ionicons name="chevron-forward" size={20} color={COLORS.gray} />
               </TouchableOpacity>
 
               <TouchableOpacity style={dynStyles.menuOption} onPress={() => { setUserMenuVisible(false); navigationRef.current?.navigate('MyAdvertisements'); }}>
                 <Ionicons name="list" size={24} color={COLORS.primaryText} />
-                <Text style={dynStyles.menuOptionText}>Mis Lugares Publicados</Text>
+                <Text style={dynStyles.menuOptionText}>{t('nav.myPlaces')}</Text>
                 <Ionicons name="chevron-forward" size={20} color={COLORS.gray} />
               </TouchableOpacity>
 
               <TouchableOpacity style={dynStyles.menuOption} onPress={() => { setUserMenuVisible(false); navigationRef.current?.navigate('MyGuides'); }}>
                 <Ionicons name="map" size={24} color={COLORS.primaryText} />
-                <Text style={dynStyles.menuOptionText}>Mis Guías</Text>
+                <Text style={dynStyles.menuOptionText}>{t('nav.myGuides')}</Text>
                 <Ionicons name="chevron-forward" size={20} color={COLORS.gray} />
               </TouchableOpacity>
               <TouchableOpacity style={dynStyles.menuOption} onPress={() => { setUserMenuVisible(false); navigationRef.current?.navigate('SavedGuides'); }}>
                 <Ionicons name="bookmark" size={24} color={COLORS.primaryText} />
-                <Text style={dynStyles.menuOptionText}>Guías guardadas</Text>
+                <Text style={dynStyles.menuOptionText}>{t('nav.savedGuides')}</Text>
                 <Ionicons name="chevron-forward" size={20} color={COLORS.gray} />
               </TouchableOpacity>
               <TouchableOpacity style={dynStyles.menuOption} onPress={() => { setUserMenuVisible(false); navigationRef.current?.navigate('VisitedPlaces'); }}>
                 <Ionicons name="ribbon" size={24} color={COLORS.primaryText} />
-                <Text style={dynStyles.menuOptionText}>Lugares visitados</Text>
+                <Text style={dynStyles.menuOptionText}>{t('nav.visited')}</Text>
                 <Ionicons name="chevron-forward" size={20} color={COLORS.gray} />
               </TouchableOpacity>
 
               {(user?.role === 'admin' || user?.role === 'moderator') && (
                 <TouchableOpacity style={[dynStyles.menuOption, dynStyles.adminOption]} onPress={() => { setUserMenuVisible(false); navigationRef.current?.navigate('AdminDashboard'); }}>
                   <Ionicons name="shield-checkmark" size={24} color={COLORS.error} />
-                  <Text style={dynStyles.menuOptionText}>{user?.role === 'admin' ? 'Panel Admin' : 'Panel Moderador'}</Text>
+                  <Text style={dynStyles.menuOptionText}>{user?.role === 'admin' ? t('nav.adminPanel') : t('nav.modPanel')}</Text>
                   <Ionicons name="chevron-forward" size={20} color={COLORS.gray} />
                 </TouchableOpacity>
               )}
@@ -435,7 +437,7 @@ const AppNavigatorInner = () => {
               {user?.role === 'admin' && (
                 <TouchableOpacity style={[dynStyles.menuOption, dynStyles.adminOption]} onPress={() => { setUserMenuVisible(false); navigationRef.current?.navigate('UsersManagement'); }}>
                   <Ionicons name="people" size={24} color={COLORS.error} />
-                  <Text style={dynStyles.menuOptionText}>Gestión de Usuarios</Text>
+                  <Text style={dynStyles.menuOptionText}>{t('nav.users')}</Text>
                   <Ionicons name="chevron-forward" size={20} color={COLORS.gray} />
                 </TouchableOpacity>
               )}
@@ -444,13 +446,13 @@ const AppNavigatorInner = () => {
 
               <TouchableOpacity style={dynStyles.menuOption} onPress={() => { setUserMenuVisible(false); navigationRef.current?.navigate('FAQ'); }}>
                 <Ionicons name="help-circle" size={24} color={COLORS.primaryText} />
-                <Text style={dynStyles.menuOptionText}>Preguntas Frecuentes</Text>
+                <Text style={dynStyles.menuOptionText}>{t('nav.faq')}</Text>
                 <Ionicons name="chevron-forward" size={20} color={COLORS.gray} />
               </TouchableOpacity>
 
               <TouchableOpacity style={[dynStyles.menuOption, dynStyles.logoutOption]} onPress={handleLogout}>
                 <Ionicons name="log-out" size={24} color={COLORS.error} />
-                <Text style={[dynStyles.menuOptionText, dynStyles.logoutText]}>Cerrar sesión</Text>
+                <Text style={[dynStyles.menuOptionText, dynStyles.logoutText]}>{t('nav.logout')}</Text>
               </TouchableOpacity>
             </View>
           </ScrollView>

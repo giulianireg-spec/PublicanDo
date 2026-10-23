@@ -20,6 +20,9 @@ import {
   NativeScrollEvent,
   NativeSyntheticEvent,
 } from 'react-native';
+import { categoryLabel, subcategoryLabel } from '../i18n/labels';
+import { localizedAd } from '../i18n/content';
+import { useTranslation } from 'react-i18next';
 import { Ionicons } from '@expo/vector-icons';
 import { useVideoPlayer, VideoView } from 'expo-video';
 import { useTheme } from '../context/ThemeContext';
@@ -55,6 +58,7 @@ interface DetailScreenProps {
 
 const DetailScreen: React.FC<DetailScreenProps> = ({ route, navigation }) => {
   const { colors: COLORS } = useTheme();
+  const { t } = useTranslation();
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -346,7 +350,9 @@ const styles = StyleSheet.create({
 });
 
   // preview: abierta desde el panel de moderación; no cuenta visitas ni estadísticas
-  const { advertisement, preview = false } = route.params;
+  const { advertisement: rawAdvertisement, preview = false } = route.params;
+  // Descripción en el idioma de la app (si la ficha tiene traducción)
+  const advertisement = localizedAd(rawAdvertisement);
   const insets = useSafeAreaInsets();
   const { user } = useAuth();
   const hasIncrementedView = useRef(false);
@@ -419,7 +425,7 @@ const styles = StyleSheet.create({
     const cleanNumber = phoneNumber.replace(/[^0-9]/g, '');
     Linking.canOpenURL(`whatsapp://send?phone=54${cleanNumber}`).then(supported => {
       if (supported) Linking.openURL(`whatsapp://send?phone=54${cleanNumber}`);
-      else Alert.alert('Error', 'WhatsApp no está instalado');
+      else Alert.alert('Error', t('detail.noWhatsapp'));
     });
   };
 
@@ -453,7 +459,7 @@ const styles = StyleSheet.create({
     logAppEvent('share', { content_type: 'place', item_id: advertisement._id });
     try {
       await Share.share({
-        message: `${advertisement.title} · ${advertisement.location.city}, ${advertisement.location.province}\n\nMiralo en GuianDo: ${placeLink(advertisement._id)}`,
+        message: `${advertisement.title} · ${advertisement.location.city}, ${advertisement.location.province}\n\n${t('detail.shareCta')} ${placeLink(advertisement._id)}`,
         title: advertisement.title,
       });
     } catch (error) {
@@ -463,7 +469,7 @@ const styles = StyleSheet.create({
 
   const handleReport = () => {
     if (!user) {
-      Alert.alert('Debes iniciar sesión', 'Para reportar necesitas tener una cuenta', [{ text: 'Entendido' }]);
+      Alert.alert(t('detail.mustLogin'), t('detail.mustLoginReport'), [{ text: t('detail.ok') }]);
       return;
     }
     setReportModalVisible(true);
@@ -473,13 +479,13 @@ const styles = StyleSheet.create({
     try {
       await createReport(advertisement._id, reason, description);
       setReportModalVisible(false);
-      Toast.show({ type: 'success', text1: '✅ Reporte enviado', text2: 'Será revisado por un moderador', position: 'bottom' });
+      Toast.show({ type: 'success', text1: t('detail.reportSent'), text2: t('detail.reportSentBody'), position: 'bottom' });
     } catch (error: any) {
       setReportModalVisible(false);
       if (error.response?.data?.code === 'USER_BANNED') {
-        Alert.alert('❌ Acción no permitida', 'No puedes reportar mientras tu cuenta esté suspendida.', [{ text: 'Entendido' }]);
+        Alert.alert(t('detail.notAllowed'), t('detail.suspended'), [{ text: t('detail.ok') }]);
       } else if (error.message.includes('reportado esta publicidad anteriormente')) {
-        Toast.show({ type: 'info', text1: '⚠️ Ya reportaste esta publicidad', position: 'bottom' });
+        Toast.show({ type: 'info', text1: t('detail.alreadyReported'), position: 'bottom' });
       } else {
         Toast.show({ type: 'error', text1: 'Error', text2: error.message, position: 'bottom' });
       }
@@ -488,7 +494,7 @@ const styles = StyleSheet.create({
 
   const handleOpenMap = () => {
     if (!advertisement.location.coordinates) {
-      Alert.alert('Error', 'No hay coordenadas GPS disponibles');
+      Alert.alert('Error', t('detail.noCoords'));
       return;
     }
     trackContactClick('click_location');
@@ -615,7 +621,7 @@ const styles = StyleSheet.create({
         <View style={styles.content}>
           <View style={styles.titleContainer}>
             <Text style={styles.title}>{advertisement.title}</Text>
-            <Text style={styles.category}>{advertisement.category}</Text>
+            <Text style={styles.category}>{categoryLabel(advertisement.category)}{advertisement.subcategory ? ` · ${subcategoryLabel(advertisement.category, advertisement.subcategory)}` : ''}</Text>
           </View>
 
           {!preview && <StampButton advertisement={advertisement} />}
@@ -624,8 +630,8 @@ const styles = StyleSheet.create({
             <View style={styles.licenseBadgeTop}>
               <Ionicons name="shield-checkmark" size={20} color="#2E7D32" />
               <View style={{ flex: 1 }}>
-                <Text style={styles.licenseBadgeTitle}>Profesional Matriculado</Text>
-                <Text style={styles.licenseBadgeNumber}>Matrícula N° {advertisement.professionalLicenseNumber}</Text>
+                <Text style={styles.licenseBadgeTitle}>{t('detail.licensed')}</Text>
+                <Text style={styles.licenseBadgeNumber}>{t('detail.licenseNumber', { number: advertisement.professionalLicenseNumber })}</Text>
               </View>
             </View>
           )}
@@ -641,13 +647,13 @@ const styles = StyleSheet.create({
 
           {advertisement.contactInfo && Object.keys(advertisement.contactInfo).length > 0 && (
             <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Información de Contacto</Text>
+              <Text style={styles.sectionTitle}>{t('detail.contact')}</Text>
               
               {advertisement.contactInfo?.phone && (
                 <View style={styles.contactGroup}>
                   <View style={styles.contactHeader}>
                     <Ionicons name="call" size={20} color={COLORS.primaryText} />
-                    <Text style={styles.contactGroupTitle}>Teléfono</Text>
+                    <Text style={styles.contactGroupTitle}>{t('detail.phone')}</Text>
                   </View>
                   <View style={styles.contactItem}>
                     <Text style={styles.contactText}>{formatContactPhone(advertisement.contactInfo.phone)}</Text>
@@ -688,7 +694,7 @@ const styles = StyleSheet.create({
                 <View style={styles.contactGroup}>
                   <View style={styles.contactHeader}>
                     <Ionicons name="share-social" size={20} color={COLORS.primaryText} />
-                    <Text style={styles.contactGroupTitle}>Redes Sociales</Text>
+                    <Text style={styles.contactGroupTitle}>{t('detail.social')}</Text>
                   </View>
                   <View style={styles.socialMediaContainer}>
                     {advertisement.contactInfo.facebook && (
@@ -713,7 +719,7 @@ const styles = StyleSheet.create({
           )}
 
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Ubicación</Text>
+            <Text style={styles.sectionTitle}>{t('detail.location')}</Text>
             <View style={styles.locationInfo}>
               <Ionicons name="location" size={20} color={COLORS.primaryText} />
               <View style={{ flex: 1 }}>
@@ -729,7 +735,7 @@ const styles = StyleSheet.create({
             {advertisement.location.coordinates && (
               <TouchableOpacity style={styles.openMapButton} onPress={handleOpenMap}>
                 <Ionicons name="navigate" size={20} color={COLORS.onPrimary} />
-                <Text style={styles.openMapButtonText}>Abrir en Google Maps</Text>
+                <Text style={styles.openMapButtonText}>{t('detail.openMaps')}</Text>
               </TouchableOpacity>
             )}
           </View>

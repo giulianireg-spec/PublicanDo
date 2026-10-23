@@ -4,6 +4,8 @@ import {
   View, Text, FlatList, TouchableOpacity,
   StyleSheet, RefreshControl, ActivityIndicator,
 } from 'react-native';
+import i18n from '../i18n';
+import { useTranslation } from 'react-i18next';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import { useTheme } from '../context/ThemeContext';
@@ -21,6 +23,7 @@ const TYPE_CONFIG: Record<string, { icon: string; color: string }> = {
 
 const NotificationsScreen = ({ navigation }: any) => {
   const { colors: COLORS } = useTheme();
+  const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const [notifications, setNotifications] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -96,10 +99,10 @@ const NotificationsScreen = ({ navigation }: any) => {
     const mins = Math.floor(diff / 60000);
     const hours = Math.floor(diff / 3600000);
     const days = Math.floor(diff / 86400000);
-    if (mins < 1) return 'Ahora';
-    if (mins < 60) return `hace ${mins}min`;
-    if (hours < 24) return `hace ${hours}h`;
-    return `hace ${days}d`;
+    if (mins < 1) return i18n.t('notifications.now');
+    if (mins < 60) return i18n.t('notifications.minsAgo', { count: mins });
+    if (hours < 24) return i18n.t('notifications.hoursAgo', { count: hours });
+    return i18n.t('notifications.daysAgo', { count: days });
   };
 
   const renderItem = ({ item }: { item: any }) => {
@@ -130,7 +133,7 @@ const NotificationsScreen = ({ navigation }: any) => {
           <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
             <Ionicons name="arrow-back" size={24} color={COLORS.onPrimary} />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>🔔 Notificaciones</Text>
+          <Text style={styles.headerTitle}>{t('notifications.title')}</Text>
           <View style={{ width: 40 }} />
         </View>
         <View style={styles.loadingContainer}>
@@ -146,9 +149,9 @@ const NotificationsScreen = ({ navigation }: any) => {
         <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
           <Ionicons name="arrow-back" size={24} color={COLORS.onPrimary} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>🔔 Notificaciones</Text>
+        <Text style={styles.headerTitle}>{t('notifications.title')}</Text>
         <TouchableOpacity style={styles.readAllButton} onPress={handleMarkAllRead}>
-          <Text style={styles.readAllText}>Leer todo</Text>
+          <Text style={styles.readAllText}>{t('notifications.readAll')}</Text>
         </TouchableOpacity>
       </View>
 
@@ -161,8 +164,8 @@ const NotificationsScreen = ({ navigation }: any) => {
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
             <Ionicons name="notifications-off-outline" size={64} color={COLORS.grayLight} />
-            <Text style={styles.emptyText}>Sin notificaciones</Text>
-            <Text style={styles.emptySubtext}>Acá verás cuando tus publicaciones o guías sean aprobadas o necesiten cambios</Text>
+            <Text style={styles.emptyText}>{t('notifications.empty')}</Text>
+            <Text style={styles.emptySubtext}>{t('notifications.emptyBody')}</Text>
           </View>
         }
       />
