@@ -476,11 +476,6 @@ const styles = StyleSheet.create({
     margin: 8,
     maxWidth: CARD_WIDTH,
   },
-  adPlaceholder: {
-    flex: 1,
-    margin: 8,
-    maxWidth: CARD_WIDTH,
-  },
   footerLoader: {
     paddingVertical: 20,
     alignItems: 'center',
@@ -812,10 +807,6 @@ const styles = StyleSheet.create({
         items.push({
           type: 'ad',
           id: `ad-${index}`,
-        });
-        items.push({
-          type: 'ad',
-          id: `ad-placeholder-${index}`,
         });
       }
     });
@@ -1336,34 +1327,21 @@ const styles = StyleSheet.create({
     );
   };
 
-  const renderNativeAdCard = (itemId: string) => {
-    if (itemId.includes('placeholder')) {
-      return <View style={styles.adPlaceholder} />;
-    }
-
-    if (!NativeAdCard) {
-      return <View style={styles.card} />;
-    }
-
+  // Anuncio nativo con forma de tarjeta; si no carga, no ocupa lugar en la grilla
+  const renderNativeAdCard = () => {
+    if (!NativeAdCard) return null;
     try {
-      return (
-        <View style={styles.adCardContainer}>
-          <NativeAdCard 
-            onAdLoaded={() => console.log('✅ Native Ad loaded in feed')}
-            onAdFailed={() => console.log('❌ Native Ad failed in feed')}
-          />
-        </View>
-      );
+      return <NativeAdCard style={styles.adCardContainer} />;
     } catch (error) {
       console.warn('⚠️ Error rendering NativeAdCard:', error);
-      return <View style={styles.card} />;
+      return null;
     }
   };
 
   const renderFeedItem = ({ item, index }: { item: FeedItem; index: number }) => {
     try {
       if (item.type === 'ad') {
-        return renderNativeAdCard(item.id);
+        return renderNativeAdCard();
       }
       return renderAdvertisementCard(item.data);
     } catch (error) {

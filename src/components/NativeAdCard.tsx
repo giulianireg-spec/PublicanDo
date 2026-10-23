@@ -1,165 +1,124 @@
 // src/components/NativeAdCard.tsx
-// VERSIÓN ESTABLE: Usa BannerAd en lugar de NativeAd (más estable)
+// Anuncio nativo de AdMob con forma de tarjeta, del mismo tamaño que las tarjetas de lugares
+// del feed. En desarrollo usa la unidad de prueba de Google; en producción, la unidad nativa real
+// (ver src/config/adsConfig.ts). Si no hay anuncio para mostrar, no ocupa lugar.
 
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Platform } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { useTheme } from '../context/ThemeContext';
-
-// Importar BannerAd que es más estable que NativeAd
-import { 
-  BannerAd, 
-  BannerAdSize, 
-  TestIds,
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, StyleProp, ViewStyle } from 'react-native';
+import {
+  NativeAd,
+  NativeAdView,
+  NativeAsset,
+  NativeAssetType,
+  NativeMediaView,
 } from 'react-native-google-mobile-ads';
-
-// IDs de unidades de anuncios
-const AD_UNIT_IDS = {
-  // Producción - Banner (necesitás crear una unidad Banner en AdMob)
-  BANNER_ANDROID: 'ca-app-pub-8688791084507015/XXXX', // Reemplazar con tu ID de Banner
-  BANNER_IOS: 'ca-app-pub-8688791084507015/XXXX',
-  
-  // Test IDs de Google (siempre funcionan)
-  TEST_BANNER: TestIds.BANNER,
-};
-
-// ✅ Usar test ads en desarrollo
-const USE_TEST_ADS = true; // Cambiar a false cuando tengas Banner ID real
-
-const getBannerAdUnitId = (): string => {
-  if (USE_TEST_ADS) {
-    return TestIds.BANNER;
-  }
-  return Platform.OS === 'ios' ? AD_UNIT_IDS.BANNER_IOS : AD_UNIT_IDS.BANNER_ANDROID;
-};
+import { useTheme } from '../context/ThemeContext';
+import { ADS_CONFIG } from '../config/adsConfig';
 
 interface NativeAdCardProps {
+  style?: StyleProp<ViewStyle>;
   onAdLoaded?: () => void;
   onAdFailed?: (error?: Error) => void;
 }
 
-const NativeAdCard: React.FC<NativeAdCardProps> = ({ onAdLoaded, onAdFailed }) => {
+const NativeAdCard: React.FC<NativeAdCardProps> = ({ style, onAdLoaded, onAdFailed }) => {
   const { colors: COLORS } = useTheme();
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.white,
-    borderRadius: 16,
-    overflow: 'hidden',
-    shadowColor: COLORS.shadow,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-    borderWidth: 1,
-    borderColor: '#E8E0FF',
-    minHeight: 280,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  errorContainer: {
-    flex: 1,
-    backgroundColor: COLORS.white,
-    borderRadius: 16,
-    overflow: 'hidden',
-    borderWidth: 1,
-    borderColor: '#E8E0FF',
-    minHeight: 200,
-  },
-  adBadge: {
-    position: 'absolute',
-    top: 8,
-    left: 8,
-    zIndex: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.75)',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
-    gap: 4,
-  },
-  adBadgeText: {
-    color: COLORS.onPrimary,
-    fontSize: 10,
-    fontWeight: '700',
-  },
-  adWrapper: {
-    marginTop: 30, // Espacio para el badge
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  placeholderContent: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-    backgroundColor: '#FAFAFA',
-  },
-  placeholderText: {
-    marginTop: 8,
-    fontSize: 12,
-    color: COLORS.grayLight,
-  },
-});
+  const [nativeAd, setNativeAd] = useState<NativeAd | null>(null);
 
+  useEffect(() => {
+    let loaded: NativeAd | null = null;
+    let cancelled = false;
+    NativeAd.createForAdRequest(ADS_CONFIG.NATIVE_AD_UNIT_ID)
+      .then((ad) => {
+        if (cancelled) {
+          ad.destroy();
+          return;
+        }
+        loaded = ad;
+        setNativeAd(ad);
+        onAdLoaded?.();
+      })
+      .catch((error) => {
+        console.log('Anuncio nativo no disponible:', error?.message || error);
+        onAdFailed?.(error);
+      });
+    return () => {
+      cancelled = true;
+      loaded?.destroy();
+    };
+  }, []);
 
-  const [hasError, setHasError] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false);
+  if (!nativeAd) return null;
 
-  const adUnitId = getBannerAdUnitId();
-
-  const handleAdLoaded = () => {
-    console.log('✅ Banner Ad cargado exitosamente');
-    setIsLoaded(true);
-    setHasError(false);
-    onAdLoaded?.();
-  };
-
-  const handleAdFailedToLoad = (error: any) => {
-    console.log('❌ Banner Ad falló:', error?.message || error);
-    setHasError(true);
-    setIsLoaded(false);
-    onAdFailed?.(error);
-  };
-
-  // Si hay error, mostrar placeholder discreto
-  if (hasError) {
-    return (
-      <View style={styles.errorContainer}>
-        <View style={styles.adBadge}>
-          <Ionicons name="megaphone" size={10} color="#FFFFFF" />
-          <Text style={styles.adBadgeText}>Publicidad</Text>
-        </View>
-        <View style={styles.placeholderContent}>
-          <Ionicons name="megaphone-outline" size={24} color={COLORS.grayLight} />
-          <Text style={styles.placeholderText}>Espacio publicitario</Text>
-        </View>
-      </View>
-    );
-  }
+  const styles = StyleSheet.create({
+    card: {
+      flex: 1,
+      backgroundColor: COLORS.white,
+      borderRadius: 16,
+      overflow: 'hidden',
+      shadowColor: COLORS.shadow,
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 4,
+      elevation: 3,
+    },
+    media: { width: '100%', height: 120, backgroundColor: COLORS.grayLight },
+    badge: {
+      position: 'absolute',
+      top: 8,
+      left: 8,
+      backgroundColor: 'rgba(0, 0, 0, 0.75)',
+      paddingHorizontal: 8,
+      paddingVertical: 3,
+      borderRadius: 10,
+    },
+    badgeText: { color: '#FFFFFF', fontSize: 10, fontWeight: '700' },
+    content: { padding: 10, gap: 4 },
+    headline: { fontSize: 14, fontWeight: '700', color: COLORS.text },
+    body: { fontSize: 12, color: COLORS.gray },
+    advertiser: { fontSize: 11, color: COLORS.gray },
+    cta: {
+      marginTop: 6,
+      backgroundColor: COLORS.primary,
+      color: COLORS.onPrimary,
+      fontWeight: '700',
+      fontSize: 12,
+      textAlign: 'center',
+      paddingVertical: 8,
+      borderRadius: 16,
+      overflow: 'hidden',
+    },
+  });
 
   return (
-    <View style={styles.container}>
-      {/* Badge de publicidad */}
-      <View style={styles.adBadge}>
-        <Ionicons name="megaphone" size={10} color={COLORS.onPrimary} />
-        <Text style={styles.adBadgeText}>Publicidad</Text>
+    <NativeAdView nativeAd={nativeAd} style={[styles.card, style]}>
+      <View>
+        <NativeMediaView style={styles.media} resizeMode="cover" />
+        <View style={styles.badge}>
+          <Text style={styles.badgeText}>Anuncio</Text>
+        </View>
       </View>
-
-      {/* Banner Ad */}
-      <View style={styles.adWrapper}>
-        <BannerAd
-          unitId={adUnitId}
-          size={BannerAdSize.MEDIUM_RECTANGLE} // 300x250 - buen tamaño para feed
-          requestOptions={{
-            requestNonPersonalizedAdsOnly: false,
-          }}
-          onAdLoaded={handleAdLoaded}
-          onAdFailedToLoad={handleAdFailedToLoad}
-        />
+      <View style={styles.content}>
+        <NativeAsset assetType={NativeAssetType.HEADLINE}>
+          <Text style={styles.headline} numberOfLines={2}>{nativeAd.headline}</Text>
+        </NativeAsset>
+        {!!nativeAd.body && (
+          <NativeAsset assetType={NativeAssetType.BODY}>
+            <Text style={styles.body} numberOfLines={2}>{nativeAd.body}</Text>
+          </NativeAsset>
+        )}
+        {!!nativeAd.advertiser && (
+          <NativeAsset assetType={NativeAssetType.ADVERTISER}>
+            <Text style={styles.advertiser} numberOfLines={1}>{nativeAd.advertiser}</Text>
+          </NativeAsset>
+        )}
+        {!!nativeAd.callToAction && (
+          <NativeAsset assetType={NativeAssetType.CALL_TO_ACTION}>
+            <Text style={styles.cta}>{nativeAd.callToAction}</Text>
+          </NativeAsset>
+        )}
       </View>
-    </View>
+    </NativeAdView>
   );
 };
 

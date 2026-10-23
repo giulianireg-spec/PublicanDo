@@ -43,6 +43,20 @@ export default function App() {
   // Links compartidos de lugares y guías (/l/<id>, /g/<id>)
   useEffect(() => listenForShareLinks(), []);
 
+  // AdMob: contenido acorde a la clasificación de la app (Adolescentes) y SDK inicializado al arrancar
+  useEffect(() => {
+    try {
+      const ads = require('react-native-google-mobile-ads');
+      const mobileAds = ads.default;
+      mobileAds()
+        .setRequestConfiguration({ maxAdContentRating: ads.MaxAdContentRating.T })
+        .then(() => mobileAds().initialize())
+        .catch((error: unknown) => console.warn('⚠️ No se pudo inicializar AdMob:', error));
+    } catch (error) {
+      console.warn('⚠️ AdMob no disponible:', error);
+    }
+  }, []);
+
   useEffect(() => {
     // ✅ Solo inicializar notificaciones si el módulo está disponible
     if (!notificationService || !Notifications) {
