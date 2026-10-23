@@ -1,7 +1,7 @@
 // src/screens/GuideDetailScreen.tsx
 // Pantalla de detalle de una guía de GuianDo
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -20,6 +20,7 @@ import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from 'react-native-maps';
 import Toast from 'react-native-toast-message';
 import { useAuth } from '../context/AuthContext';
 import { guideLink } from '../utils/shareLinks';
+import { logAppEvent } from '../services/telemetry';
 import { getGuideById, rateGuide, toggleSaveGuide, deleteGuide } from '../services/guidesApi';
 import { createGuideReport } from '../services/api';
 import { ReportModal } from '../components/ReportModal';
@@ -399,6 +400,7 @@ const styles = StyleSheet.create({
   const { user } = useAuth();
   
   const [guide, setGuide] = useState<Guide | null>(null);
+  const guideMapRef = useRef<MapView>(null);
   const [loading, setLoading] = useState(true);
   const [isSaved, setIsSaved] = useState(false);
   const [userRating, setUserRating] = useState(0);
@@ -529,6 +531,7 @@ const styles = StyleSheet.create({
 
   const handleShare = async () => {
     if (!guide) return;
+    logAppEvent('share', { content_type: 'guide', item_id: guide._id });
     
     try {
       await Share.share({
@@ -691,10 +694,21 @@ const styles = StyleSheet.create({
     );
   };
 
+  // Abre el recorrido completo en Google Maps (origen, paradas intermedias y destino)
+  const openRouteInMaps = (coordinates: { latitude: number; longitude: number }[]) => {
+    const fmt = (c: { latitude: number; longitude: number }) => `${c.latitude},${c.longitude}`;
+    const origin = fmt(coordinates[0]);
+    const destination = fmt(coordinates[coordinates.length - 1]);
+    const waypoints = coordinates.slice(1, -1).map(fmt).join('|');
+    const url =
+      coordinates.length === 1
+        ? `https://www.google.com/maps/search/?api=1&query=${origin}`
+        : `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}${waypoints ? `&waypoints=${encodeURIComponent(waypoints)}` : ''}`;
+    Linking.openURL(url);
+  };
+
   const renderMap = () => {
-    // TODO: Fix MapView crash (mapa deshabilitado temporalmente)
-    const MAP_ENABLED = false;
-    if (!MAP_ENABLED || !guide) return null;
+    if (!guide) return null;
 
     const pointsWithCoords = guide.points.filter(p => p.location.coordinates);
     if (pointsWithCoords.length === 0) return null;
@@ -714,11 +728,18 @@ const styles = StyleSheet.create({
     return (
       <View style={styles.mapContainer}>
         <MapView
+          ref={guideMapRef}
           style={styles.map}
-          // provider={PROVIDER_GOOGLE} // Deshabilitado - requiere config adicional
+          provider={PROVIDER_GOOGLE}
           initialRegion={initialRegion}
           scrollEnabled={false}
           zoomEnabled={false}
+          onMapReady={() =>
+            guideMapRef.current?.fitToCoordinates(coordinates, {
+              edgePadding: { top: 40, right: 40, bottom: 40, left: 40 },
+              animated: false,
+            })
+          }
         >
           {pointsWithCoords.map((point, index) => (
             <Marker
@@ -745,7 +766,7 @@ const styles = StyleSheet.create({
           )}
         </MapView>
 
-        <TouchableOpacity style={styles.expandMapButton}>
+        <TouchableOpacity style={styles.expandMapButton} onPress={() => openRouteInMaps(coordinates)}>
           <Ionicons name="expand" size={20} color={COLORS.onPrimary} />
         </TouchableOpacity>
       </View>

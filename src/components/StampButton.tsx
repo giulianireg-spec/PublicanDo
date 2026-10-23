@@ -25,6 +25,7 @@ import {
   Stamp,
 } from '../services/stamps';
 import { onStampCollected } from '../services/reviewPrompt';
+import { logAppEvent } from '../services/telemetry';
 
 const formatDate = (d: string | Date) =>
   new Date(d).toLocaleDateString('es-AR', { day: 'numeric', month: 'short', year: 'numeric' });
@@ -137,7 +138,10 @@ export const StampButton = ({ advertisement }: { advertisement: Advertisement })
       );
       if (result.status === 'collected' || result.status === 'already') {
         Toast.show({ type: 'success', text1: '🏅 ¡Sello recolectado!', text2: `${advertisement.title} ya está en tus lugares visitados`, position: 'bottom' });
-        if (result.status === 'collected') onStampCollected();
+        if (result.status === 'collected') {
+          onStampCollected();
+          logAppEvent('stamp_collected', { category: advertisement.category, province: advertisement.location?.province });
+        }
       } else if (result.status === 'queued') {
         Toast.show({ type: 'info', text1: '📴 Sello guardado', text2: 'Se validará cuando vuelvas a tener conexión', position: 'bottom' });
       } else {

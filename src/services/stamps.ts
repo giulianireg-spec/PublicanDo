@@ -51,6 +51,7 @@ interface PendingStamp {
 }
 
 const MY_STAMPS_KEY = 'my_stamps_v1';
+const MY_TITLES_KEY = 'my_titles_v1';
 const PENDING_KEY = 'pending_stamps_v1';
 
 const readJson = async <T,>(key: string, fallback: T): Promise<T> => {
@@ -174,5 +175,42 @@ export const syncPendingStamps = async (): Promise<{ synced: number; rejected: s
     return result;
   } finally {
     syncing = false;
+  }
+};
+
+// ==================== TÍTULOS ====================
+
+export type TitleLevel = 'novato' | 'avezado' | 'experto' | 'supremo' | 'maestro';
+
+export interface CollectorTitle {
+  scope: 'locality' | 'province' | 'category';
+  category?: string;
+  place: string;
+  title: string; // "Paisajista experto de Córdoba"
+  level: TitleLevel;
+  percent: number;
+  visited: number;
+  total: number;
+  nextLevel: TitleLevel | null;
+  missingForNext: number;
+}
+
+export const TITLE_LEVEL_LABELS: Record<TitleLevel, string> = {
+  novato: 'Novato',
+  avezado: 'Avezado',
+  experto: 'Experto',
+  supremo: 'Supremo',
+  maestro: 'Maestro',
+};
+
+/** Títulos del usuario (del servidor si hay conexión; si no, la última copia guardada). */
+export const getMyTitles = async (): Promise<CollectorTitle[]> => {
+  try {
+    const response = await api.get('/stamps/titles', { timeout: 20000 });
+    const titles: CollectorTitle[] = response.data.data;
+    await AsyncStorage.setItem(MY_TITLES_KEY, JSON.stringify(titles));
+    return titles;
+  } catch {
+    return readJson<CollectorTitle[]>(MY_TITLES_KEY, []);
   }
 };

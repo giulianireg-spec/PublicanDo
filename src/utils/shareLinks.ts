@@ -7,10 +7,12 @@
 import { Linking } from 'react-native';
 import { navigateWhenReady } from '../navigation/navigationRef';
 
-const API_URL = process.env.EXPO_PUBLIC_API_URL || '';
-export const SHARE_BASE_URL = API_URL.replace(/\/api\/?$/, '');
+// Sitio de GuianDo (Cloudflare reenvía al backend). Los links viejos del dominio de Cloud Run siguen andando.
+export const SHARE_BASE_URL = 'https://guiando.com.ar';
 
 export const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=com.guiando.apparg';
+// Link corto de descarga (QR de la tarjeta de sellos): el sitio redirige a la tienda que corresponda
+export const DOWNLOAD_URL = 'https://guiando.com.ar/descargar';
 
 export const placeLink = (id: string) => `${SHARE_BASE_URL}/l/${id}`;
 export const guideLink = (id: string) => `${SHARE_BASE_URL}/g/${id}`;

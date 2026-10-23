@@ -26,6 +26,7 @@ import MyAdvertisementsScreen from '../screens/MyAdvertisementsScreen';
 import MyGuidesScreen from '../screens/MyGuidesScreen';
 import SavedGuidesScreen from '../screens/SavedGuidesScreen';
 import VisitedPlacesScreen from '../screens/VisitedPlacesScreen';
+import { logScreen } from '../services/telemetry';
 import PlaceLinkScreen from '../screens/PlaceLinkScreen';
 import NotificationsScreen from '../screens/NotificationsScreen';
 import EditGuideScreen from '../screens/EditGuideScreen';
@@ -266,7 +267,18 @@ const AppNavigatorInner = () => {
   });
 
   return (
-    <NavigationContainer ref={navigationRef} onReady={flushPendingNavigation}>
+    <NavigationContainer
+      ref={navigationRef}
+      onReady={() => {
+        flushPendingNavigation();
+        const route = navigationRef.getCurrentRoute();
+        if (route) logScreen(route.name);
+      }}
+      onStateChange={() => {
+        const route = navigationRef.getCurrentRoute();
+        if (route) logScreen(route.name);
+      }}
+    >
       <Stack.Navigator
         screenOptions={{
           headerStyle:      { backgroundColor: COLORS.primary },

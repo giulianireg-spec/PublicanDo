@@ -42,7 +42,6 @@ import ClientSelector from '../components/ClientSelector';
 import TagSelector from '../components/TagSelector';
 
 // ✅ Hook para Interstitial Ads
-import { useInterstitialAd } from '../hooks/useInterstitialAd';
 
 const CATEGORIES = [
   '🍽️ Bares y Restaurantes',
@@ -356,7 +355,6 @@ const styles = StyleSheet.create({
   const { user } = useAuth();
 
   // ✅ Interstitial Ad (solo para usuarios Free que no sean seeder)
-  const { isLoaded: adLoaded, show: showAd } = useInterstitialAd();
 
   const [loading, setLoading] = useState(false);
   const [uploadingMedia, setUploadingMedia] = useState(false);
@@ -544,12 +542,6 @@ const styles = StyleSheet.create({
 
   const handleSubmit = async () => {
     if (!validateForm()) return;
-
-    // ✅ CORREGIDO: Mostrar ad intersticial para usuarios Free (NO seeders, NO premium) ANTES de guardar
-    if (!isUserPremium && !isSeeder && adLoaded) {
-      console.log('📢 Mostrando ad intersticial antes de guardar...');
-      await showAd();
-    }
 
     setLoading(true);
     setUploadingMedia(true);

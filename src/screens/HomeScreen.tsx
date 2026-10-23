@@ -38,6 +38,7 @@ import { refreshOfflineCache, getOfflineSnapshot } from '../services/offlineCach
 import { syncPendingStamps } from '../services/stamps';
 import { Advertisement } from '../types';
 import { useTheme } from '../context/ThemeContext';
+import PlacesMap from '../components/PlacesMap';
 import { FullScreenFlyerModal } from '../components/FullScreenFlyerModal';
 import { ARGENTINA_PROVINCES } from '../constants/argentinaLocations';
 import { ADS_CONFIG } from '../config/adsConfig';
@@ -350,6 +351,9 @@ const styles = StyleSheet.create({
     color: COLORS.onPrimary,
     fontWeight: '700',
   },
+  resultsRow: { flexDirection: 'row', alignItems: 'center' },
+  viewToggle: { flexDirection: 'row', alignItems: 'center', gap: 4, paddingHorizontal: 10, paddingVertical: 4, borderRadius: 14, borderWidth: 1, borderColor: COLORS.primaryText, marginVertical: 2 },
+  viewToggleText: { color: COLORS.primaryText, fontSize: 12, fontWeight: '700' },
   resultsInfo: {
     paddingHorizontal: 16,
     paddingVertical: 2,
@@ -737,6 +741,7 @@ const styles = StyleSheet.create({
   const [modalVisible, setModalVisible] = useState(false);
   // Fecha de la copia guardada que se está mostrando por falta de conexión (null = online)
   const [offlineSavedAt, setOfflineSavedAt] = useState<number | null>(null);
+  const [viewMode, setViewMode] = useState<'list' | 'map'>('list');
 
   // Subcategorías disponibles para la categoría seleccionada
   const availableSubcategories = selectedCategory !== 'Todas' ? getSubcategories(selectedCategory) : [];
@@ -1614,8 +1619,8 @@ const styles = StyleSheet.create({
         </View>
       )}
 
-      <View style={styles.resultsInfo}>
-        <Text style={styles.resultsText}>
+      <View style={[styles.resultsInfo, styles.resultsRow]}>
+        <Text style={[styles.resultsText, { flex: 1 }]}>
           {offlineSavedAt !== null
             ? `📴 Sin conexión · ${filteredAds.length} lugares guardados el ${new Date(offlineSavedAt).toLocaleDateString('es-AR')}`
             : filterMode === 'radius'
@@ -1624,8 +1629,18 @@ const styles = StyleSheet.create({
           }
           {openNowFilter ? ' (abiertos ahora)' : ''}
         </Text>
+        <TouchableOpacity
+          style={styles.viewToggle}
+          onPress={() => setViewMode(viewMode === 'list' ? 'map' : 'list')}
+        >
+          <Ionicons name={viewMode === 'list' ? 'map-outline' : 'list-outline'} size={16} color={COLORS.primaryText} />
+          <Text style={styles.viewToggleText}>{viewMode === 'list' ? 'Mapa' : 'Lista'}</Text>
+        </TouchableOpacity>
       </View>
 
+      {viewMode === 'map' ? (
+        <PlacesMap ads={filteredAds} userLocation={userLocation} onSelect={handleAdPress} />
+      ) : (
       <FlatList
         data={feedItems}
         renderItem={renderFeedItem}
@@ -1673,6 +1688,7 @@ const styles = StyleSheet.create({
           </View>
         }
       />
+      )}
 
       <FullScreenFlyerModal
         visible={modalVisible}

@@ -28,6 +28,7 @@ export interface VisitorLocation {
 }
 
 export interface StatsSummary {
+  totalStamps?: number; // sellos recolectados en el lugar
   totalViews: number;
   totalInterested: number;
   conversionRate: number;

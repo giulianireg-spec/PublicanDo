@@ -431,6 +431,12 @@ const styles = StyleSheet.create({
           </View>
         </View>
 
+        <View style={[styles.summaryCard, styles.summaryCardPrimary, styles.summaryCardFull]}>
+          <Ionicons name="ribbon" size={28} color={COLORS.onPrimary} />
+          <Text style={styles.summaryNumber}>{summary.totalStamps ?? 0}</Text>
+          <Text style={styles.summaryLabel}>Sellos recolectados (visitas en persona)</Text>
+        </View>
+
         <View style={[styles.summaryCard, styles.summaryCardAccent, styles.summaryCardFull]}>
           <View style={styles.conversionContent}>
             <Ionicons name="trending-up" size={32} color={COLORS.onPrimary} />

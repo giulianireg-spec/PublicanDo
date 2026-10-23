@@ -48,7 +48,6 @@ import {
 } from '../constants/categories';
 
 // Hook para Interstitial Ads
-import { useInterstitialAd } from '../hooks/useInterstitialAd';
 
 interface MediaItem {
   uri: string;
@@ -401,7 +400,6 @@ const styles = StyleSheet.create({
   const { user } = useAuth();
   
   // Interstitial Ad (solo para usuarios normales, no seeders)
-  const { isLoaded: adLoaded, show: showAd } = useInterstitialAd();
   
   const [loading, setLoading] = useState(false);
   const [uploadingMedia, setUploadingMedia] = useState(false);
@@ -627,12 +625,6 @@ const styles = StyleSheet.create({
 
   const handleSubmit = async () => {
     if (!validateForm()) return;
-
-    // Mostrar ad intersticial para usuarios normales (NO seeders)
-    if (!isSeeder && adLoaded) {
-      console.log('📢 Mostrando ad intersticial antes de crear...');
-      await showAd();
-    }
 
     setLoading(true);
     setUploadingMedia(true);

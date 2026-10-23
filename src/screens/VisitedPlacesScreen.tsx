@@ -8,11 +8,13 @@ import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { captureRef } from 'react-native-view-shot';
+import QRCode from 'react-native-qrcode-svg';
+import { DOWNLOAD_URL } from '../utils/shareLinks';
 import * as Sharing from 'expo-sharing';
 import Toast from 'react-native-toast-message';
 import { useTheme } from '../context/ThemeContext';
 import { CATEGORIES_CONFIG } from '../constants/categories';
-import { getMyStamps, syncPendingStamps, Stamp } from '../services/stamps';
+import { getMyStamps, getMyTitles, syncPendingStamps, Stamp, CollectorTitle, TITLE_LEVEL_LABELS } from '../services/stamps';
 
 const formatDate = (d: string) => new Date(d).toLocaleDateString('es-AR', { day: 'numeric', month: 'short', year: 'numeric' });
 
@@ -29,6 +31,8 @@ const VisitedPlacesScreen = ({ navigation }: any) => {
   const insets = useSafeAreaInsets();
   const shareCardRef = useRef<View>(null);
   const [stamps, setStamps] = useState<Stamp[]>([]);
+  const [titles, setTitles] = useState<CollectorTitle[]>([]);
+  const [showAllTitles, setShowAllTitles] = useState(false);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [sharing, setSharing] = useState(false);
@@ -37,7 +41,9 @@ const VisitedPlacesScreen = ({ navigation }: any) => {
     const { synced, rejected } = await syncPendingStamps();
     if (synced) Toast.show({ type: 'success', text1: `🏅 ${synced} sello${synced > 1 ? 's' : ''} validado${synced > 1 ? 's' : ''}`, position: 'bottom' });
     if (rejected.length) Toast.show({ type: 'error', text1: 'Algunos sellos no se pudieron validar', text2: rejected[0], position: 'bottom' });
-    setStamps(await getMyStamps());
+    const [mine, myTitles] = await Promise.all([getMyStamps(), getMyTitles()]);
+    setStamps(mine);
+    setTitles(myTitles);
   };
 
   useFocusEffect(
@@ -106,9 +112,23 @@ const VisitedPlacesScreen = ({ navigation }: any) => {
     shareChip: { backgroundColor: '#1F2937', borderRadius: 14, paddingHorizontal: 10, paddingVertical: 6 },
     shareChipText: { color: '#FFFFFF', fontSize: 13, fontWeight: '600' },
     shareRecent: { color: '#D4D4D4', fontSize: 12, marginTop: 14 },
-    shareFooter: { color: '#A3E635', fontSize: 12, fontWeight: '700', marginTop: 12 },
+    shareFooterRow: { flexDirection: 'row', alignItems: 'center', gap: 12, marginTop: 16 },
+    shareQr: { backgroundColor: '#FFFFFF', padding: 6, borderRadius: 8 },
+    shareFooter: { color: '#A3E635', fontSize: 14, fontWeight: '800' },
+    shareFooterUrl: { color: '#D4D4D4', fontSize: 11, marginTop: 2 },
     shareButton: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, backgroundColor: COLORS.primary, borderRadius: 24, paddingVertical: 12, marginBottom: 20 },
     shareButtonText: { color: COLORS.onPrimary, fontWeight: '700', fontSize: 15 },
+    shareTitleBadge: { color: '#FFFFFF', fontSize: 13, fontWeight: '700', marginTop: 10 },
+    titlesHint: { fontSize: 12, color: COLORS.gray, marginTop: 4, marginBottom: 6 },
+    titleRow: { paddingVertical: 8, borderTopWidth: 1, borderTopColor: COLORS.grayLight },
+    titleHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8 },
+    titleName: { flex: 1, fontSize: 14, fontWeight: '700', color: COLORS.text },
+    titleLevel: { fontSize: 11, fontWeight: '800', color: COLORS.primaryText, textTransform: 'uppercase' },
+    titleLevelMaster: { color: COLORS.warning || '#D97706' },
+    progressTrack: { height: 8, borderRadius: 4, backgroundColor: COLORS.grayLight, marginTop: 6, overflow: 'hidden' },
+    progressFill: { height: 8, borderRadius: 4, backgroundColor: COLORS.primary },
+    titleMeta: { fontSize: 12, color: COLORS.gray, marginTop: 4 },
+    showMore: { color: COLORS.primaryText, fontWeight: '700', marginTop: 8, textAlign: 'center' },
     categoryBlock: { backgroundColor: COLORS.white, borderRadius: 16, padding: 14, marginBottom: 14, elevation: 2, shadowColor: COLORS.shadow, shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.08, shadowRadius: 3 },
     categoryTitle: { fontSize: 17, fontWeight: '800', color: COLORS.text },
     subTitle: { fontSize: 13, fontWeight: '700', color: COLORS.primaryText, marginTop: 12, marginBottom: 4, textTransform: 'uppercase' },
@@ -172,16 +192,58 @@ const VisitedPlacesScreen = ({ navigation }: any) => {
                     </View>
                   ))}
                 </View>
+                {titles.slice(0, 2).map((t) => (
+                  <Text key={t.title} style={styles.shareTitleBadge} numberOfLines={1}>🏅 {t.title} · {t.percent}%</Text>
+                ))}
                 <Text style={styles.shareRecent} numberOfLines={2}>
                   Últimos: {stamps.slice(0, 3).map((s) => s.title).join(' · ')}
                 </Text>
-                <Text style={styles.shareFooter}>Coleccioná los tuyos: descargá GuianDo en Google Play</Text>
+                <View style={styles.shareFooterRow}>
+                  <View style={styles.shareQr}>
+                    <QRCode value={DOWNLOAD_URL} size={64} color="#0A0A0A" backgroundColor="#FFFFFF" />
+                  </View>
+                  <View style={{ flex: 1 }}>
+                    <Text style={styles.shareFooter}>Coleccioná los tuyos</Text>
+                    <Text style={styles.shareFooterUrl}>Escaneá el código o entrá a guiando.com.ar/descargar</Text>
+                  </View>
+                </View>
               </View>
 
               <TouchableOpacity style={styles.shareButton} onPress={handleShare} disabled={sharing}>
                 {sharing ? <ActivityIndicator color={COLORS.onPrimary} /> : <Ionicons name="share-social" size={20} color={COLORS.onPrimary} />}
                 <Text style={styles.shareButtonText}>Compartir mis sellos</Text>
               </TouchableOpacity>
+
+              {titles.length > 0 && (
+                <View style={styles.categoryBlock}>
+                  <Text style={styles.categoryTitle}>🏅 Tus títulos</Text>
+                  <Text style={styles.titlesHint}>
+                    Según el porcentaje de lugares visitados de cada localidad, provincia y categoría. Si se suman lugares nuevos, el porcentaje baja.
+                  </Text>
+                  {(showAllTitles ? titles : titles.slice(0, 5)).map((t) => (
+                    <View key={`${t.scope}-${t.category ?? ''}-${t.place}`} style={styles.titleRow}>
+                      <View style={styles.titleHeader}>
+                        <Text style={styles.titleName} numberOfLines={2}>{t.title}</Text>
+                        <Text style={[styles.titleLevel, t.level === 'maestro' && styles.titleLevelMaster]}>
+                          {TITLE_LEVEL_LABELS[t.level]}
+                        </Text>
+                      </View>
+                      <View style={styles.progressTrack}>
+                        <View style={[styles.progressFill, { width: `${t.percent}%` }]} />
+                      </View>
+                      <Text style={styles.titleMeta}>
+                        {t.visited} de {t.total} lugares · {t.percent}%
+                        {t.nextLevel ? ` · te ${t.missingForNext === 1 ? 'falta 1' : `faltan ${t.missingForNext}`} para ${TITLE_LEVEL_LABELS[t.nextLevel]}` : ''}
+                      </Text>
+                    </View>
+                  ))}
+                  {titles.length > 5 && (
+                    <TouchableOpacity onPress={() => setShowAllTitles(!showAllTitles)}>
+                      <Text style={styles.showMore}>{showAllTitles ? 'Ver menos' : `Ver los ${titles.length} títulos`}</Text>
+                    </TouchableOpacity>
+                  )}
+                </View>
+              )}
 
               {groups.map((g) => (
                 <View key={g.category} style={styles.categoryBlock}>

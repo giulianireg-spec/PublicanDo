@@ -31,6 +31,7 @@ import { recordView, recordContactClick, endViewSession } from '../services/stat
 import RichTextViewer from '../components/RichTextViewer';
 import StampButton from '../components/StampButton';
 import { placeLink } from '../utils/shareLinks';
+import { logAppEvent } from '../services/telemetry';
 import { ReportModal } from '../components/ReportModal';
 import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -449,6 +450,7 @@ const styles = StyleSheet.create({
   };
 
   const handleShare = async () => {
+    logAppEvent('share', { content_type: 'place', item_id: advertisement._id });
     try {
       await Share.share({
         message: `${advertisement.title} · ${advertisement.location.city}, ${advertisement.location.province}\n\nMiralo en GuianDo: ${placeLink(advertisement._id)}`,

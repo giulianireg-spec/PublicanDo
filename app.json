@@ -32,6 +32,16 @@
               "scheme": "https",
               "host": "guiando-backend-509198716878.us-east1.run.app",
               "pathPrefix": "/g/"
+            },
+            {
+              "scheme": "https",
+              "host": "guiando.com.ar",
+              "pathPrefix": "/l/"
+            },
+            {
+              "scheme": "https",
+              "host": "guiando.com.ar",
+              "pathPrefix": "/g/"
             }
           ],
           "category": [
@@ -39,7 +49,12 @@
             "DEFAULT"
           ]
         }
-      ]
+      ],
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyAAIcjN7FjE_AQHw6_CxEpn7TTNfWxq39g"
+        }
+      }
     },
     "extra": {
       "googleWebClientId": "509198716878-nvuvkcpnfb74s171pegi81cee10c7h0m.apps.googleusercontent.com",
@@ -70,7 +85,10 @@
           }
         }
       ],
-      "expo-sharing"
+      "expo-sharing",
+      "@react-native-firebase/app",
+      "@react-native-firebase/analytics",
+      "@react-native-firebase/crashlytics"
     ],
     "owner": "rgiuliani3612",
     "icon": "./assets/icon.png",

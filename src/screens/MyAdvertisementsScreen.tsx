@@ -261,8 +261,8 @@ const styles = StyleSheet.create({
   const [refreshing, setRefreshing] = useState(false);
 
   // ✅ Verificar si el usuario puede ver estadísticas
-  // Las estadísticas eran parte de los planes pagos, que GuianDo ya no tiene: quedan ocultas por ahora.
-  const canViewStats = false;
+  // Todo usuario ve las estadísticas de sus propias publicaciones (vistas, interesados, sellos)
+  const canViewStats = true;
 
   useFocusEffect(
     useCallback(() => {

@@ -144,6 +144,13 @@ const FAQ_DATA: FAQItem[] = [
     answer: 'El sello aparece habilitado solo cuando estás en condiciones de recolectarlo. Puede estar deshabilitado por alguno de estos motivos:\n\n• Todavía no estás lo bastante cerca. La distancia depende del tipo de lugar: hasta 200 m en Naturaleza, 150 m en Eventos, 100 m en Experiencias, 60 m en Compras, 40 m en Cultura y 25 m en Gastronomía, Alojamiento y Vida Nocturna.\n\n• La señal GPS es imprecisa. Dentro de edificios o entre construcciones altas el GPS puede errar decenas de metros: probá al aire libre o cerca de una ventana y esperá unos segundos.\n\n• No le diste permiso de ubicación a GuianDo, o el GPS del teléfono está apagado.\n\n• Es un festival o una feria fuera de sus días: esos sellos solo se pueden recolectar mientras el evento está en marcha.\n\n• Tenés activada una aplicación de ubicación simulada.\n\nSi estás sin señal de datos podés recolectarlo igual: queda pendiente y se valida solo cuando vuelvas a tener conexión.',
   },
 
+  {
+    id: '28',
+    category: 'sellos',
+    question: '¿Cómo funcionan los títulos?',
+    answer: 'Con tus sellos ganás títulos por cada localidad, provincia y categoría, según el porcentaje de lugares que visitaste:\n\n• 1 a 15%: Novato\n• 16 a 40%: Avezado\n• 41 a 85%: Experto\n• 86 a 99%: Supremo\n• 100%: Maestro\n\nPor ejemplo, si visitaste todos los lugares de Naturaleza de Córdoba sos "Maestro paisajista de Córdoba". Como GuianDo suma lugares nuevos todo el tiempo, el porcentaje puede bajar: ¡siempre hay algo nuevo para conocer! Tus títulos están en "Lugares visitados", en tu perfil.',
+  },
+
   // ==================== CUENTA ====================
   {
     id: '18',
