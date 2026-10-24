@@ -43,7 +43,7 @@ export const ADS_CONFIG = {
   APP_ID: platformIds.appId,
   NATIVE_AD_UNIT_ID: platformIds.nativeAdUnit,
   INTERSTITIAL_AD_UNIT_ID: platformIds.interstitialAdUnit,
-  ADS_EVERY_N_ITEMS: 20,
+  ADS_EVERY_N_ITEMS: 10,
   USE_TEST_ADS,
   IS_DEV: __DEV__,
 };
