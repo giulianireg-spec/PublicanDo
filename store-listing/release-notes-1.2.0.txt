@@ -1,0 +1,24 @@
+<es-419>
+• Más de 200 lugares turísticos en las 24 provincias y casi 400 restaurantes y alojamientos en Córdoba.
+• Títulos de coleccionista según el porcentaje de lugares que visitás.
+• Mapa de lugares y de guías, y nuevas guías de recorrido por el país.
+• La app ahora está en español, inglés y portugués.
+• Kit QR imprimible para negocios.
+• Mejoras de estabilidad.
+</es-419>
+<en-US>
+• 200+ tourist places across the 24 provinces and almost 400 restaurants and places to stay in Córdoba.
+• Collector titles based on the share of places you visit.
+• Map view for places and guides, and new itineraries across the country.
+• The app is now available in Spanish, English and Portuguese.
+• Printable QR kit for businesses.
+• Stability improvements.
+</en-US>
+<pt-BR>
+• Mais de 200 lugares turísticos nas 24 províncias e quase 400 restaurantes e hospedagens em Córdoba.
+• Títulos de colecionador conforme a porcentagem de lugares que você visita.
+• Mapa de lugares e de guias, e novos roteiros pelo país.
+• O app agora está em espanhol, inglês e português.
+• Kit QR para imprimir, para negócios.
+• Melhorias de estabilidade.
+</pt-BR>
